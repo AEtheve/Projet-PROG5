@@ -26,7 +26,7 @@ void printClass(unsigned char *entete){
 void printData(unsigned char *entete){
     printf("  Data:                              ");
     if (entete[5] == 1){
-        printf("LSB\n");
+        printf("2's complement, little endian\n");
     } else if (entete[5] == 2){
         printf("MSB\n");
     } else {
@@ -98,11 +98,11 @@ void printAbiVersion(unsigned char *entete){
 void printType(unsigned char *entete){
     printf("  Type:                              ");
     if (entete[16] == 1){
-        printf("Relocatable file\n");
+        printf("REL (Relocatable file)\n");
     } else if (entete[16] == 2){
-        printf("Executable file\n");
+        printf("EX (Executable file)\n");
     } else if (entete[16] == 3){
-        printf("Shared object file\n");
+        printf("SHA (Shared object file)\n");
     } else if (entete[16] == 4){
         printf("Core file\n");
     } else {
@@ -228,7 +228,11 @@ int main(int argc, char *argv[]){
 
     unsigned char entete[52];
 
+<<<<<<< Updated upstream
     fread(entete, 1, 52, f_bin);
+=======
+    fread(entete, 1, 40, f_bin);
+>>>>>>> Stashed changes
     printf(" ELF Header:\n ");
     printMagic(entete);
 
