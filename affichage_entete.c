@@ -2,6 +2,15 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+typedef struct{
+    int start_section;
+    int nb_sections;
+    int taille_section_header;
+    int section_header_string_table_index;
+}ElfHeader;
+
+ElfHeader h;
+
 void printMagic(unsigned char *entete){
     printf(" Magic:   ");
     for (int i = 0; i < 16; i++){
@@ -137,17 +146,17 @@ void printMachine(unsigned char *entete){
 
 void printVersion2(unsigned char *entete){
     printf("  Version:                           ");
-    printf("0x%x\n",entete[20]); // TODO  escrot #1 je ne sais pas ce que fait entete[19]
+    printf("0x%x\n",entete[20]);
 }
 
 void printPointDentree(unsigned char *entete) {
     printf("  Entry point address:               ");
-    printf("0x%x\n",entete[21]); // TODO  escrot #2 peut être pas 21
+    printf("0x%x\n",entete[21]);
 }
 
 void printStartOfProgramHeaders (unsigned char *entete) {
     printf("  Start of program headers:          ");
-    printf("0 (bytes into file)\n"); //TODO start of program à faire
+    printf("0 (bytes into file)\n");
 }
 
 void printStartOfSectionHeaders (unsigned char *entete) {
@@ -156,6 +165,7 @@ void printStartOfSectionHeaders (unsigned char *entete) {
     v = v | entete[34] <<16;
     v = v | entete[33] << 8;
     v = v | entete[32]; 
+    h.start_section=v;
     printf("%d (bytes into file)\n",v);
 }
 
@@ -165,49 +175,52 @@ void printFlags (unsigned char *entete){
     v = v | entete[38] <<16;
     v = v | entete[37] << 8;
     v = v | entete[36]; 
-    printf("0x%0x, Version5 EABI\n",v); //TODO Flags à faire
+    printf("0x%0x, Version5 EABI\n",v);
 }
 
 void printsizeOfHeaders (unsigned char *entete)  {
     printf("  Size of this header:               ");
     uint32_t v = entete[41] << 8;
     v = v | entete[40]; 
-    printf("%d (bytes)\n",v); //TODO sizeOfHeaders à faire
+    printf("%d (bytes)\n",v);
 }
 
 void printsizeOfProgramHeaders (unsigned char *entete)  {
     printf("  Size of program headers:           ");
     uint32_t v = entete[43] << 8;
     v = v | entete[42]; 
-    printf("%d (bytes)\n",v); //TODO sizeOfProgramHeaders à faire
+    printf("%d (bytes)\n",v);
 }
 
 void printNumberOfProgramHeaders (unsigned char *entete)  {
     printf("  Number of program headers:         ");
     uint32_t v = entete[45] << 8;
     v = v | entete[44]; 
-    printf("%d\n",v); //TODO NumberOfProgramHeaders à faire
+    printf("%d\n",v);
 }
 
 void printSizeOfSectionHeaders (unsigned char *entete)  {
     printf("  Size of section headers:           ");
     uint32_t v = entete[47] << 8;
     v = v | entete[46]; 
-    printf("%d (bytes)\n",v); //TODO SizeOfSectionHeaders à faire
+    h.taille_section_header=v;
+    printf("%d (bytes)\n",v);
 }
 
 void printNumberOfSectionHeaders (unsigned char *entete)  {
     printf("  Number of section headers:         ");
     uint32_t v = entete[49] << 8;
     v = v | entete[48]; 
-    printf("%d\n",v); //TODO NumberOfSectionHeaders à faire
+    h.nb_sections=v;
+    printf("%d\n",v);
 }
 
 void printSectionHeaderStringTableIndex (unsigned char *entete)  {
     printf("  Section header string table index: ");
     uint32_t v = entete[51] << 8;
     v = v | entete[50]; 
-    printf("%d\n",v); //TODO SectionHeaderStringTableIndex à faire
+    h.section_header_string_table_index=v;
+    printf("%d\n",v);
 }
 
 
@@ -228,11 +241,7 @@ int main(int argc, char *argv[]){
 
     unsigned char entete[52];
 
-<<<<<<< Updated upstream
     fread(entete, 1, 52, f_bin);
-=======
-    fread(entete, 1, 40, f_bin);
->>>>>>> Stashed changes
     printf(" ELF Header:\n ");
     printMagic(entete);
 
