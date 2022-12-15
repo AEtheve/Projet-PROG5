@@ -47,7 +47,7 @@ void printAbi(int val){
     printf("  OS/ABI:                            ");
     switch (val){
         case 0:
-            printf("UNIX System V\n");
+            printf("UNIX - System V\n");
             break;
         case 1:
             printf("HP-UX\n");
@@ -152,44 +152,62 @@ void printStartOfProgramHeaders (unsigned char *entete) {
 
 void printStartOfSectionHeaders (unsigned char *entete) {
     printf("  Start of section headers:          ");
-    uint32_t v =entete[33] << 8;
+    uint32_t v = entete[35] <<24;
+    v = v | entete[34] <<16;
+    v = v | entete[33] << 8;
     v = v | entete[32]; 
     printf("%d (bytes into file)\n",v);
 }
 
 void printFlags (unsigned char *entete){
     printf("  Flags:                             ");
-    printf("0x5000000, Version5 EABI\n"); //TODO Flags à faire
+    uint32_t v = entete[39] <<24;
+    v = v | entete[38] <<16;
+    v = v | entete[37] << 8;
+    v = v | entete[36]; 
+    printf("0x%0x, Version5 EABI\n",v); //TODO Flags à faire
 }
 
 void printsizeOfHeaders (unsigned char *entete)  {
     printf("  Size of this header:               ");
-    printf("52 (bytes)\n"); //TODO sizeOfHeaders à faire
+    uint32_t v = entete[41] << 8;
+    v = v | entete[40]; 
+    printf("%d (bytes)\n",v); //TODO sizeOfHeaders à faire
 }
 
 void printsizeOfProgramHeaders (unsigned char *entete)  {
     printf("  Size of program headers:           ");
-    printf("0 (bytes)\n"); //TODO sizeOfProgramHeaders à faire
+    uint32_t v = entete[43] << 8;
+    v = v | entete[42]; 
+    printf("%d (bytes)\n",v); //TODO sizeOfProgramHeaders à faire
 }
 
 void printNumberOfProgramHeaders (unsigned char *entete)  {
     printf("  Number of program headers:         ");
-    printf("0\n"); //TODO NumberOfProgramHeaders à faire
+    uint32_t v = entete[45] << 8;
+    v = v | entete[44]; 
+    printf("%d\n",v); //TODO NumberOfProgramHeaders à faire
 }
 
 void printSizeOfSectionHeaders (unsigned char *entete)  {
     printf("  Size of section headers:           ");
-    printf("40 (bytes)\n"); //TODO SizeOfSectionHeaders à faire
+    uint32_t v = entete[47] << 8;
+    v = v | entete[46]; 
+    printf("%d (bytes)\n",v); //TODO SizeOfSectionHeaders à faire
 }
 
 void printNumberOfSectionHeaders (unsigned char *entete)  {
     printf("  Number of section headers:         ");
-    printf("21\n"); //TODO NumberOfSectionHeaders à faire
+    uint32_t v = entete[49] << 8;
+    v = v | entete[48]; 
+    printf("%d\n",v); //TODO NumberOfSectionHeaders à faire
 }
 
 void printSectionHeaderStringTableIndex (unsigned char *entete)  {
     printf("  Section header string table index: ");
-    printf("20\n"); //TODO SectionHeaderStringTableIndex à faire
+    uint32_t v = entete[51] << 8;
+    v = v | entete[50]; 
+    printf("%d\n",v); //TODO SectionHeaderStringTableIndex à faire
 }
 
 
@@ -208,9 +226,9 @@ int main(int argc, char *argv[]){
     }
 
 
-    unsigned char entete[50];
+    unsigned char entete[52];
 
-    fread(entete, 1, 32, f_bin);
+    fread(entete, 1, 52, f_bin);
     printf(" ELF Header:\n ");
     printMagic(entete);
 
