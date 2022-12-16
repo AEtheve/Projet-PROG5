@@ -18,10 +18,8 @@ typedef struct {
 
 typedef struct {
     SectionEntree entree;
-    char* name;
+    char name[30];
 } Section ;
-
-Section section_table;
 
 
 void affichageName(uint32_t name){
@@ -165,17 +163,25 @@ int main(int argc, char *argv[]){
     int section_adress = 752;
     int section_header = 40;
     int section_number = 23;
-    Section section_table[section_number];
+    int section_header_symbole = 22;
+    Section* section_table = (Section*)malloc(sizeof(Section)*section_number);
     SectionEntree section_temp[section_number];
 
     fseek(f_bin, section_adress, SEEK_SET);    
     fread(section_temp, section_header, section_number, f_bin);
 
-    
     for(int i = 0; i < section_number; i++){
         section_table[i].entree = section_temp[i];
+        uint8_t lettre;
+        int j = 0;
+        fseek(f_bin, section_temp[section_header_symbole].offset + section_temp[i].name_adr, SEEK_SET);
+        fread(&lettre, 1, 1, f_bin);
+        while (lettre != 0){
+            section_table[i].name[j] = lettre;
+            fread(&lettre, 1, 1, f_bin);
+            j++;
+        }
     }
-
 
     printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",section_number, section_adress);
     printf("  [Nr] Name   Type      Addr     Off    Size   ES Flg Lk Inf Al\n");
