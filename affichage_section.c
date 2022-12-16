@@ -2,13 +2,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-typedef union {
-    uint32_t adr;
-    char* name;
-} NameSection ;
 
 typedef struct {
-    NameSection name_adr;
+    uint32_t name_adr;
     uint32_t type;
     uint32_t flags;
     uint32_t adress;
@@ -20,16 +16,16 @@ typedef struct {
     uint32_t entsize;
 } SectionEntree;
 
+typedef struct {
+    SectionEntree entree;
+    char* name;
+} Section ;
 
-SectionEntree section_table;
-
-void changeName(){
-    
-}
+Section section_table;
 
 
 void affichageName(uint32_t name){
-    printf("%06d\t",name);
+    printf("%06d ",name);
 }
 
 void affichageType(uint32_t type){
@@ -111,32 +107,44 @@ void affichageES(uint32_t entsize){
 }
         
 void affichageFlg(uint32_t flags){
-    switch (flags){
-    case 1:
-        printf("W ");
-        break;
-    case 2:
-        printf("A ");
-        break;
-    case 4:
-        printf("X ");
-        break;    
-    default:
-        printf("xx ");
-        break;
+    char *flag_string = (char *)malloc(sizeof(char)*33);
+    int index = 0;
+    printf(" ");
+    for (int i=0; i<32; i++) {
+        if (flags & (1<<i)) {
+            switch(i) {
+                case 0:
+                    flag_string[index++] = 'W';
+                    break;
+                case 1:
+                    flag_string[index++] = 'A';
+                    break;
+                case 2:
+                    flag_string[index++] = 'X';
+                    break;
+                case 4:
+                    flag_string[index++] = 'M';
+                    break;
+                case 5:
+                    flag_string[index++] = 'S';
+                    break;
+            }
+        }
     }
+    flag_string[index]='\0';
+    printf("%3s ", flag_string);
 }
 
 void affichageLk(uint32_t link){
-    printf("%x ",link);
+    printf("%2x ",link);
 }
         
 void affichageInf(uint32_t info){
-    printf("%x ",info);
+    printf("%3x ",info);
 }
     
 void affichageAl(uint32_t addralign){
-    printf("%x",addralign);
+    printf("%2x",addralign);
 }
 
 
@@ -154,28 +162,37 @@ int main(int argc, char *argv[]){
         return 1;
     }
     
-    int section_adress = 0x5b8;
+    int section_adress = 752;
     int section_header = 40;
     int section_number = 23;
-    SectionEntree section_table[section_number];
+    Section section_table[section_number];
+    SectionEntree section_temp[section_number];
 
     fseek(f_bin, section_adress, SEEK_SET);    
-    fread(section_table, section_header, section_number, f_bin);
+    fread(section_temp, section_header, section_number, f_bin);
+
+    
+    for(int i = 0; i < section_number; i++){
+        section_table[i].entree = section_temp[i];
+    }
+
 
     printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",section_number, section_adress);
-
+    printf("  [Nr] Name   Type      Addr     Off    Size   ES Flg Lk Inf Al\n");
     for(int i = 0; i < section_number; i++){
-            printf("  [%.*d] ", 2, i);
-        affichageName(section_table[i].name_adr.adr);
-        affichageType(section_table[i].type);
-        affichageAddr(section_table[i].adress);
-        affichageOff(section_table[i].offset);
-        affichageSize(section_table[i].size);
-        affichageES(section_table[i].entsize);
-        affichageFlg(section_table[i].flags);
-        affichageLk(section_table[i].link);
-        affichageInf(section_table[i].info);
-        affichageAl(section_table[i].addralign);
+        // printf("%x\n", section_table[i].entree.flags);
+        printf("  [%2d] ",i);
+
+        affichageName(section_table[i].entree.name_adr);
+        affichageType(section_table[i].entree.type);
+        affichageAddr(section_table[i].entree.adress);
+        affichageOff(section_table[i].entree.offset);
+        affichageSize(section_table[i].entree.size);
+        affichageES(section_table[i].entree.entsize);
+        affichageFlg(section_table[i].entree.flags);
+        affichageLk(section_table[i].entree.link);
+        affichageInf(section_table[i].entree.info);
+        affichageAl(section_table[i].entree.addralign);
         printf("\n");
     }
 
