@@ -2,13 +2,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-typedef union {
-    uint32_t adr;
-    char* name;
-} NameSection ;
 
 typedef struct {
-    NameSection name_adr;
+    uint32_t name_adr;
     uint32_t type;
     uint32_t flags;
     uint32_t adress;
@@ -20,12 +16,12 @@ typedef struct {
     uint32_t entsize;
 } SectionEntree;
 
+typedef struct {
+    SectionEntree entree;
+    char* name;
+} Section ;
 
-SectionEntree section_table;
-
-void changeName(){
-    
-}
+Section section_table;
 
 
 void affichageName(uint32_t name){
@@ -156,10 +152,17 @@ int main(int argc, char *argv[]){
     int section_adress = 0x5b8;
     int section_header = 40;
     int section_number = 23;
-    SectionEntree section_table[section_number];
+    Section section_table[section_number];
+    SectionEntree section_temp[section_number];
 
     fseek(f_bin, section_adress, SEEK_SET);    
-    fread(section_table, section_header, section_number, f_bin);
+    fread(section_temp, section_header, section_number, f_bin);
+
+    
+    for(int i = 0; i < section_number; i++){
+        section_table[i].entree = section_temp[i];
+    }
+
 
     printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",section_number, section_adress);
 
@@ -169,16 +172,16 @@ int main(int argc, char *argv[]){
         } else {
             printf("  [%d] ",i);
         }
-        affichageName(section_table[i].name_adr);
-        affichageType(section_table[i].type);
-        affichageAddr(section_table[i].adress);
-        affichageOff(section_table[i].offset);
-        affichageSize(section_table[i].size);
-        affichageES(section_table[i].entsize);
-        affichageFlg(section_table[i].flags);
-        affichageLk(section_table[i].link);
-        affichageInf(section_table[i].info);
-        affichageAl(section_table[i].addralign);
+        affichageName(section_table[i].entree.name_adr);
+        affichageType(section_table[i].entree.type);
+        affichageAddr(section_table[i].entree.adress);
+        affichageOff(section_table[i].entree.offset);
+        affichageSize(section_table[i].entree.size);
+        affichageES(section_table[i].entree.entsize);
+        affichageFlg(section_table[i].entree.flags);
+        affichageLk(section_table[i].entree.link);
+        affichageInf(section_table[i].entree.info);
+        affichageAl(section_table[i].entree.addralign);
         printf("\n");
     }
 
