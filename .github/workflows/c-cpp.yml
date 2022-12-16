@@ -8,8 +8,8 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    name: ccheck
     defaults:
       run:
         working-directory: ./elf_linker-1.0
