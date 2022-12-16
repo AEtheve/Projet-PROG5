@@ -1,25 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-
-
-typedef struct {
-    uint32_t name_adr;
-    uint32_t type;
-    uint32_t flags;
-    uint32_t adress;
-    uint32_t offset;
-    uint32_t size;
-    uint32_t link;
-    uint32_t info;
-    uint32_t addralign;
-    uint32_t entsize;
-} SectionEntree;
-
-typedef struct {
-    SectionEntree entree;
-    char name[30];
-} Section ;
+#include "affichage_section.h"
+#include "affichage_entete.h"
 
 
 void affichageNameAddr(uint32_t name){
@@ -151,8 +133,7 @@ void affichageAl(uint32_t addralign){
     printf("%2d",addralign);
 }
 
-
-void affichage_section(char* nom_fichier){
+SectionHeaderStruct* valeur_section(char* nom_fichier){
     FILE *f_bin;
 
     f_bin = fopen(nom_fichier, "rb");
@@ -161,13 +142,17 @@ void affichage_section(char* nom_fichier){
         printf("Erreur d'ouverture du fichier %s\n", nom_fichier);
         exit(1);
     }
+
+    ElfHeader* h = valeur_entete(nom_fichier);
+    int section_adress = h->start_section;
+    int section_header = h->taille_section_header;
+    int section_number = h->nb_sections;
+    int section_header_symbole = h->section_header_string_table_index;
     
-    int section_adress = 0x4fc;
-    int section_header = 40;
-    int section_number = 20;
-    int section_header_symbole = 19;
+    SectionHeaderStruct* table = (SectionHeaderStruct*)malloc(sizeof(SectionHeaderStruct));
     Section* section_table = (Section*)malloc(sizeof(Section)*section_number);
     SectionEntree section_temp[section_number];
+    
 
     fseek(f_bin, section_adress, SEEK_SET);    
     fread(section_temp, section_header, section_number, f_bin);
@@ -184,12 +169,20 @@ void affichage_section(char* nom_fichier){
             j++;
         }
     }
+    fclose(f_bin);
+    table->section_table = section_table;
+    table->section_adress = section_adress;
+    table->section_header = section_header;
+    table->section_number = section_number;
+    table->section_header_symbole = section_header_symbole;
+    return table;
+}
 
-    // TEST
-
-    printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",section_number, section_adress);
+void affichage(SectionHeaderStruct* table){
+    Section* section_table = table->section_table;
+    printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",table->section_number, table->section_adress);
     printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
-    for(int i = 0; i < section_number; i++){
+    for(int i = 0; i < table->section_number; i++){
         // printf("%x\n", section_table[i].entree.flags);
         printf("  [%2d] ",i);
 
@@ -207,6 +200,11 @@ void affichage_section(char* nom_fichier){
     }
 
     printf("Key to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  y (purecode), p (processor specific)\n");
+    
+}
 
-    fclose(f_bin);
+void affichage_section(char* nom_fichier){
+    SectionHeaderStruct* table;
+    table = valeur_section(nom_fichier);
+    affichage(table);
 }
