@@ -1,1 +1,0 @@
-void affichage_entete(char *nom_fichier);
