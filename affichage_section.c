@@ -22,8 +22,12 @@ typedef struct {
 } Section ;
 
 
-void affichageName(uint32_t name){
+void affichageNameAddr(uint32_t name){
     printf("%06d ",name);
+}
+
+void affichageName(char name[]){
+    printf("%-17.*s ", 17, name);
 }
 
 void affichageType(uint32_t type){
@@ -107,7 +111,6 @@ void affichageES(uint32_t entsize){
 void affichageFlg(uint32_t flags){
     char *flag_string = (char *)malloc(sizeof(char)*33);
     int index = 0;
-    printf(" ");
     for (int i=0; i<32; i++) {
         if (flags & (1<<i)) {
             switch(i) {
@@ -134,15 +137,15 @@ void affichageFlg(uint32_t flags){
 }
 
 void affichageLk(uint32_t link){
-    printf("%2x ",link);
+    printf("%2d ",link);
 }
         
 void affichageInf(uint32_t info){
-    printf("%3x ",info);
+    printf("%3d ",info);
 }
     
 void affichageAl(uint32_t addralign){
-    printf("%2x",addralign);
+    printf("%2d",addralign);
 }
 
 
@@ -163,7 +166,7 @@ int main(int argc, char *argv[]){
     int section_adress = 752;
     int section_header = 40;
     int section_number = 23;
-    int section_header_symbole = 22;
+    int section_header_symbole = 20;
     Section* section_table = (Section*)malloc(sizeof(Section)*section_number);
     SectionEntree section_temp[section_number];
 
@@ -186,12 +189,12 @@ int main(int argc, char *argv[]){
     // TEST
 
     printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",section_number, section_adress);
-    printf("  [Nr] Name   Type      Addr     Off    Size   ES Flg Lk Inf Al\n");
+    printf("  [Nr] Name              Type      Addr     Off    Size   ES Flg Lk Inf Al\n");
     for(int i = 0; i < section_number; i++){
         // printf("%x\n", section_table[i].entree.flags);
         printf("  [%2d] ",i);
 
-        affichageName(section_table[i].entree.name_adr);
+        affichageName(section_table[i].name);
         affichageType(section_table[i].entree.type);
         affichageAddr(section_table[i].entree.adress);
         affichageOff(section_table[i].entree.offset);
