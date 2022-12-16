@@ -1,0 +1,23 @@
+name: C CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./elf_linker-1.0
+    steps:
+    - uses: actions/checkout@v3
+    - name: configure
+      run: ./configure CFLAGS='-Wall -Werror -Wno-unused-result -g'
+    - name: make
+      run: make
+    - name: make check
+      run: make check
