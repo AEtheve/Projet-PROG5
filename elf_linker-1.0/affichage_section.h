@@ -1,0 +1,1 @@
+void affichage_section(char* nom_fichier);
