@@ -2,8 +2,13 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+typedef union {
+    uint32_t adr;
+    char* name;
+} NameSection ;
+
 typedef struct {
-    uint32_t name_adr;
+    NameSection name_adr;
     uint32_t type;
     uint32_t flags;
     uint32_t adress;
@@ -15,84 +20,93 @@ typedef struct {
     uint32_t entsize;
 } SectionEntree;
 
+
 SectionEntree section_table;
 
+void changeName(){
+    
+}
+
+
 void affichageName(uint32_t name){
-    printf("%d ",name);
+    printf("%d\t",name);
 }
 
 void affichageType(uint32_t type){
     int i = 0;
     int max = 0;
+
+
     switch (type){
     case 0:
-        printf("NULL ");
+        printf("NULL");
         break;
     case 1:
-        printf("PROGBITS ");
+        printf("PROGBITS");
         break;
     case 2:
-        printf("SYMTAB ");
+        printf("SYMTAB");
         break;
     case 3:
-        printf("STRTAB ");
+        printf("STRTAB");
         break;
     case 4:
-        printf("RELA ");
+        printf("RELA");
         break;
     case 5:
-        printf("HASH ");
+        printf("HASH");
         break;
     case 6:
-        printf("DYNAMIC ");
+        printf("DYNAMIC");
         break;
     case 7:
-        printf("NOTE ");
+        printf("NOTE");
         break;
     case 8:
-        printf("NOBITS ");
+        printf("NOBITS");
         break;
     case 9:
-        printf("REL ");
+        printf("REL");
         break;
     case 10:
-        printf("SHLIB ");
+        printf("SHLIB");
         break;
     case 11:
-        printf("DYNSYM ");
+        printf("DYNSYM");
         break;
     case 0x70000000:
-        printf("LOPROC ");
+        printf("LOPROC");
         break;
     case 0x7fffffff:
-        printf("HIPROC ");
+        printf("HIPROC");
         break;
     case 0x80000000:
-        printf("LOUSER ");
+        printf("LOUSER");
         break;
     case 0xffffffff:
-        printf("HIUSER ");
+        printf("HIUSER");
         break;
     default:
-        printf("INCONNU ");
+        printf("INCONNU");
         break;
     }
+    printf("\t");
 }
 
 void affichageAddr(uint32_t adress){
-    printf("%x ",adress);
+    printf("%08x ",adress);
 }
 
 void affichageOff(uint32_t offset){
-    printf("%x ",offset);
+    printf("%06x ",offset);
 }
 
 void affichageSize(uint32_t size){
-    printf("%x ",size);
+    printf("%06x ",size);
 }
 
 void affichageES(uint32_t entsize){
-    printf("%x ",entsize);
+    printf("%02x ",entsize);
 }
         
 void affichageFlg(uint32_t flags){
@@ -150,7 +164,11 @@ int main(int argc, char *argv[]){
     printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",section_number, section_adress);
 
     for(int i = 0; i < section_number; i++){
-        printf("  [%d] ",i);
+        if (i<10){
+            printf("  [ %d] ",i);
+        } else {
+            printf("  [%d] ",i);
+        }
         affichageName(section_table[i].name_adr);
         affichageType(section_table[i].type);
         affichageAddr(section_table[i].adress);
