@@ -1,33 +1,73 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 typedef struct {
-    u_int32_t num;
-    u_int32_t value;
-    u_int32_t size;
-    u_int32_t type;
-    u_int32_t bind;
-    u_int32_t vis;
-    u_int32_t ndx;
+    uint32_t num;
+    uint32_t value;
+    uint32_t size;
+    uint32_t type;
+    uint32_t bind;
+    uint32_t vis;
+    uint32_t ndx;
     unsigned char *name;
-
 } SymboleEntree;
 
-SymboleEntree symbole_table;
+//SymboleEntree symbole_table
 
-void affichageNum(u_int32_t num){
+typedef struct {
+    uint32_t name_adr;
+    uint32_t type;
+    uint32_t flags;
+    uint32_t adress;
+    uint32_t offset;
+    uint32_t size;
+    uint32_t link;
+    uint32_t info;
+    uint32_t addralign;
+    uint32_t entsize;
+} SectionEntree;
+
+typedef struct {
+    SectionEntree entree;
+    char name[30];
+} Section ;
+
+void traiter_symtab(Section s){
+    /*
+    Prend une section symtab et récupère les symboles pour créer la table des symboles
+    */
+
+}
+
+void find_symtab(Section *s){
+    /*
+    Prend une liste des sections et traite chaque symtab qui se trouve dedans
+    */
+    int taille; // à init avec le nb de sections visibles dans le header
+    Section tmp;
+    for (int i=0;i<taille-1;i++){
+        tmp=*(s+i);
+        if (s->entree.type==0x12){ //La section est de type symtab
+            traiter_symtab(tmp); //Traite la symtab 
+        }
+    }
+}
+
+
+void affichageNum(uint32_t num){
     printf("%d ",num);
 }
 
-void affichageValue(u_int32_t value){
+void affichageValue(uint32_t value){
     printf("%d ",value);
 }
 
-void affichageSize(u_int32_t size){
+void affichageSize(uint32_t size){
     printf("%d ",size);
 }
 
-void affichageType(u_int32_t type){
+void affichageType(uint32_t type){
     switch (type){
     case 0:
         printf("NOTYPE ");
@@ -56,7 +96,7 @@ void affichageType(u_int32_t type){
     }
 }
 
-void affichageBind(u_int32_t bind){
+void affichageBind(uint32_t bind){
     switch (bind){
     case 0:
         printf("LOCAL ");
@@ -79,7 +119,21 @@ void affichageBind(u_int32_t bind){
     }
 }
 
+int main(int argc, char* argv[]){
+    FILE *f_bin;
 
+    f_bin = fopen(argv[1], "rb");
+
+    if (f_bin == NULL){
+        printf("Erreur d'ouverture du fichier %s\n", argv[1]);
+        exit(1);
+    }
+
+    SymboleEntree *ts;
+    int t=20;//nb de symboles (taille de section/taille de entsize)
+    ts=(SymboleEntree*)malloc(sizeof(SymboleEntree)*t);
+    printf("Programme terminé\n");
+}
 
 
 
