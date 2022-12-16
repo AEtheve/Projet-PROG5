@@ -183,6 +183,8 @@ int main(int argc, char *argv[]){
         }
     }
 
+    // TEST
+
     printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",section_number, section_adress);
     printf("  [Nr] Name   Type      Addr     Off    Size   ES Flg Lk Inf Al\n");
     for(int i = 0; i < section_number; i++){
