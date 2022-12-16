@@ -29,72 +29,73 @@ void changeName(){
 
 
 void affichageName(uint32_t name){
-    printf("%d\t",name);
+    printf("%06d\t",name);
 }
 
 void affichageType(uint32_t type){
     int i = 0;
     int max = 0;
+    char *type_string = (char *)malloc(sizeof(char)*9);
 
 
     switch (type){
     case 0:
-        printf("NULL");
+        type_string = "NULL";
         break;
     case 1:
-        printf("PROGBITS");
+        type_string = "PROGBITS";
         break;
     case 2:
-        printf("SYMTAB");
+        type_string = "SYMTAB";
         break;
     case 3:
-        printf("STRTAB");
+        type_string = "STRTAB";
         break;
     case 4:
-        printf("RELA");
+        type_string = "RELA";
         break;
     case 5:
-        printf("HASH");
+        type_string = "HASH";
         break;
     case 6:
-        printf("DYNAMIC");
+        type_string = "DYNAMIC";
         break;
     case 7:
-        printf("NOTE");
+        type_string = "NOTE";
         break;
     case 8:
-        printf("NOBITS");
+        type_string = "NOBITS";
         break;
     case 9:
-        printf("REL");
+        type_string = "REL";
         break;
     case 10:
-        printf("SHLIB");
+        type_string = "SHLIB";
         break;
     case 11:
-        printf("DYNSYM");
+        type_string = "DYNSYM";
         break;
     case 0x70000000:
-        printf("LOPROC");
+        type_string = "LOPROC";
         break;
     case 0x7fffffff:
-        printf("HIPROC");
+        type_string = "HIPROC";
         break;
     case 0x80000000:
-        printf("LOUSER");
+        type_string = "LOUSER";
         break;
     case 0xffffffff:
-        printf("HIUSER");
+        type_string = "HIUSER";
         break;
     default:
-        printf("INCONNU");
+        type_string = "INCONNU";
         break;
     }
-    printf("\t");
+    printf("%-10s", type_string);
 }
 
 void affichageAddr(uint32_t adress){
-    printf("%08x ",adress);
+    printf("%08x ", adress);
 }
 
 void affichageOff(uint32_t offset){
@@ -164,12 +165,8 @@ int main(int argc, char *argv[]){
     printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",section_number, section_adress);
 
     for(int i = 0; i < section_number; i++){
-        if (i<10){
-            printf("  [ %d] ",i);
-        } else {
-            printf("  [%d] ",i);
-        }
-        affichageName(section_table[i].name_adr);
+            printf("  [%.*d] ", 2, i);
+        affichageName(section_table[i].name_adr.adr);
         affichageType(section_table[i].type);
         affichageAddr(section_table[i].adress);
         affichageOff(section_table[i].offset);
