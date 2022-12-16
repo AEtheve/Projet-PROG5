@@ -85,11 +85,14 @@ void affichageType(uint32_t type){
     case 0xffffffff:
         type_string = "HIUSER";
         break;
+    case 0x70000003:
+        type_string = "ARM_ATTRIBUTES";
+        break;
     default:
         type_string = "INCONNU";
         break;
     }
-    printf("%-10s", type_string);
+    printf("%-16s", type_string);
 }
 
 void affichageAddr(uint32_t adress){
@@ -163,10 +166,10 @@ int main(int argc, char *argv[]){
         return 1;
     }
     
-    int section_adress = 752;
+    int section_adress = 0x5b8;
     int section_header = 40;
     int section_number = 23;
-    int section_header_symbole = 20;
+    int section_header_symbole = 22;
     Section* section_table = (Section*)malloc(sizeof(Section)*section_number);
     SectionEntree section_temp[section_number];
 
@@ -189,7 +192,7 @@ int main(int argc, char *argv[]){
     // TEST
 
     printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",section_number, section_adress);
-    printf("  [Nr] Name              Type      Addr     Off    Size   ES Flg Lk Inf Al\n");
+    printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
     for(int i = 0; i < section_number; i++){
         // printf("%x\n", section_table[i].entree.flags);
         printf("  [%2d] ",i);
