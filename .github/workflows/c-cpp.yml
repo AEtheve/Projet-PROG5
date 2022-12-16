@@ -16,8 +16,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: configure
-      run: automake --add-missing && ./configure CFLAGS='-Wall -Werror -Wno-unused-result -g'
+      run:  ./configure CFLAGS='-Wall -Werror -Wno-unused-result -g'
     - name: make
-      run: make
+      run: automake --add-missing && make
     - name: make check
       run: make check
