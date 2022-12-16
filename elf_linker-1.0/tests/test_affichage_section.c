@@ -6,7 +6,7 @@
 
 void TestAffichageSection(CuTest *tc)
 {
-    FILE *expected = fopen("./tests/file2_section.expected", "r");
+    FILE *expected = fopen("./tests/file1_section.expected", "r");
     if (expected == NULL)
     {
         printf("Impossible d'ouvrir le fichier test1.expected");
