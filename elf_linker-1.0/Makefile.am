@@ -8,7 +8,7 @@ AM_CFLAGS+=-D WARNING
 # parsing might result in debug flag incorrectly set to 0 for some files
 #AM_CFLAGS+=-D CACHE_DEBUG_FLAG
 
-
+AUTOMAKE_OPTIONS = subdir-objects
 
 SUBDIRS=
 SUBDIRS+=. Examples_fusion
@@ -24,3 +24,6 @@ Options_and_debug_example_SOURCES=$(COMMON) Options_and_debug_example.c
 
 EXTRA_DIST+=
 
+check_PROGRAMS = affichage_entete
+affichage_entete_SOURCES = ./affichage_entete.c tests/test_affichage_entete.c tests/CuTest/CuTest.c 
+TESTS = $(check_PROGRAMS)
