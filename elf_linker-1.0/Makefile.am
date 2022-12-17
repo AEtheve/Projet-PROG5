@@ -25,6 +25,6 @@ Options_and_debug_example_SOURCES=$(COMMON) Options_and_debug_example.c
 EXTRA_DIST+=
 
 check_PROGRAMS = affichage_entete affichage_section
-affichage_entete_SOURCES = ./affichage_entete.c tests/test_affichage_entete.c tests/CuTest/CuTest.c 
-affichage_section_SOURCES = ./affichage_section.c ./affichage_entete.c tests/test_affichage_section.c tests/CuTest/CuTest.c 
+affichage_entete_SOURCES = ./affichage_entete.c tests/test_affichage_entete.c tests/CuTest/CuTest.c tests/utils.c
+affichage_section_SOURCES = ./affichage_section.c ./affichage_entete.c tests/test_affichage_section.c tests/CuTest/CuTest.c tests/utils.c
 TESTS = $(check_PROGRAMS)
