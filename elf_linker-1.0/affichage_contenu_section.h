@@ -1,0 +1,1 @@
+void affichage_contenu_section(char* nom_fichier, int select_section);
