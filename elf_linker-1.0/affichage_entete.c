@@ -1,15 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include "affichage_entete.h"
 
-typedef struct{
-    int start_section;
-    int nb_sections;
-    int taille_section_header;
-    int section_header_string_table_index;
-}ElfHeader;
-
-ElfHeader h;
 
 void printMagic(unsigned char *entete){
     printf(" Magic:   ");
@@ -164,8 +157,7 @@ void printStartOfSectionHeaders (unsigned char *entete) {
     uint32_t v = entete[35] <<24;
     v = v | entete[34] <<16;
     v = v | entete[33] << 8;
-    v = v | entete[32]; 
-    h.start_section=v;
+    v = v | entete[32];
     printf("%d (bytes into file)\n",v);
 }
 
@@ -203,7 +195,6 @@ void printSizeOfSectionHeaders (unsigned char *entete)  {
     printf("  Size of section headers:           ");
     uint32_t v = entete[47] << 8;
     v = v | entete[46]; 
-    h.taille_section_header=v;
     printf("%d (bytes)\n",v);
 }
 
@@ -211,7 +202,6 @@ void printNumberOfSectionHeaders (unsigned char *entete)  {
     printf("  Number of section headers:         ");
     uint32_t v = entete[49] << 8;
     v = v | entete[48]; 
-    h.nb_sections=v;
     printf("%d\n",v);
 }
 
@@ -219,11 +209,10 @@ void printSectionHeaderStringTableIndex (unsigned char *entete)  {
     printf("  Section header string table index: ");
     uint32_t v = entete[51] << 8;
     v = v | entete[50]; 
-    h.section_header_string_table_index=v;
     printf("%d\n",v);
 }
 
-void affichage_entete(char *nom_fichier){
+ElfHeader* valeur_entete(char *nom_fichier){
     FILE *f_bin;
 
     f_bin = fopen(nom_fichier, "rb");
@@ -233,10 +222,46 @@ void affichage_entete(char *nom_fichier){
         exit(1);
     }
 
+    unsigned char entete[52];
+
+    fread(entete, 1, 52, f_bin);
+    ElfHeader* h = (ElfHeader*)malloc(sizeof(ElfHeader));
+
+    uint32_t v = entete[35] <<24;
+    v = v | entete[34] <<16;
+    v = v | entete[33] << 8;
+    v = v | entete[32]; 
+    h->start_section=v;
+
+    v = entete[47] << 8;
+    v = v | entete[46]; 
+    h->taille_section_header=v;
+
+    v = entete[49] << 8;
+    v = v | entete[48]; 
+    h->nb_sections=v;
+
+    v = entete[51] << 8;
+    v = v | entete[50]; 
+    h->section_header_string_table_index=v;
+
+    return h;
+}
+
+void affichage_entete(char* nom_fichier){
+    FILE *f_bin;
+
+    f_bin = fopen(nom_fichier, "rb");
+
+    if (f_bin == NULL){
+        printf("Erreur d'ouverture du fichier %s\n", nom_fichier);
+        exit(1);
+    }
 
     unsigned char entete[52];
 
     fread(entete, 1, 52, f_bin);
+
     printf("ELF Header:\n ");
     printMagic(entete);
 
