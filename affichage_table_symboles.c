@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include "./elf_linker-1.0/affichage_section.h"
+#include "./elf_linker-1.0/affichage_entete.h"
 
 typedef struct {
     uint32_t num;
@@ -15,46 +17,41 @@ typedef struct {
 
 //SymboleEntree symbole_table
 
-typedef struct {
-    uint32_t name_adr;
-    uint32_t type;
-    uint32_t flags;
-    uint32_t adress;
-    uint32_t offset;
-    uint32_t size;
-    uint32_t link;
-    uint32_t info;
-    uint32_t addralign;
-    uint32_t entsize;
-} SectionEntree;
-
-typedef struct {
-    SectionEntree entree;
-    char name[30];
-} Section ;
-
-void traiter_symtab(Section s){
+void traiterSymtab(Section s){
     /*
     Prend une section symtab et récupère les symboles pour créer la table des symboles
     */
 
 }
 
-void find_symtab(Section *s){
+int findSymtab(SectionHeaderStruct Shs){
     /*
-    Prend une liste des sections et traite chaque symtab qui se trouve dedans
+    Prend une liste des sections et retourne le numero de la section symtab
     */
-    int taille; // à init avec le nb de sections visibles dans le header
+    int taille;
+    taille=Shs.section_number;
+    Section *s;
+    s=Shs.section_table;
     Section tmp;
     for (int i=0;i<taille-1;i++){
         tmp=*(s+i);
-        if (s->entree.type==0x12){ //La section est de type symtab
-            traiter_symtab(tmp); //Traite la symtab 
+        if (tmp.entree.type==0x2){ //La section est de type symtab
+            return i;
         }
     }
+    printf("Aucune symtab trouvée\n");
+    exit(1);
 }
 
+Section fetchSymtab(SectionHeaderStruct Shs, int numSec){
+    return *(Shs.section_table+numSec);
+}
 
+int getNbSymboles(Section s){
+    return (s.entree.size/s.entree.entsize);
+}
+
+/*
 void affichageNum(uint32_t num){
     printf("%d ",num);
 }
@@ -118,6 +115,7 @@ void affichageBind(uint32_t bind){
         break;
     }
 }
+*/
 
 int main(int argc, char* argv[]){
     FILE *f_bin;
@@ -130,9 +128,12 @@ int main(int argc, char* argv[]){
     }
 
     SymboleEntree *ts;
-    int t=20;//nb de symboles (taille de section/taille de entsize)
-    ts=(SymboleEntree*)malloc(sizeof(SymboleEntree)*t);
-    printf("Programme terminé\n");
+    SectionHeaderStruct Shs;
+    Shs=*(valeur_section(argv[1])); //Récupération de la valeur de la table des sections
+    int symtab=findSymtab(Shs); //OK fonctionne //Trouve le numéro de la section Symtab
+    Section s=fetchSymtab(Shs,symtab); //OK fonctionne //Recupère la section symtab
+    int nb_symboles=getNbSymboles(s); //OK fonctionne //Recupère le nombre de symboles présents dans la symtab
+    ts=malloc(sizeof(SymboleEntree)*nb_symboles); //Malloc de la table des symboles de la taille exacte nécessaire
 }
 
 
