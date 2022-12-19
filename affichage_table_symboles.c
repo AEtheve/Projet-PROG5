@@ -5,24 +5,19 @@
 #include "./elf_linker-1.0/affichage_entete.h"
 
 typedef struct {
-    uint32_t num;
+    uint32_t name_index;
     uint32_t value;
     uint32_t size;
-    uint32_t type;
-    uint32_t bind;
-    uint32_t vis;
-    uint32_t ndx;
-    unsigned char *name;
+    unsigned char info;
+    unsigned char other;
+    uint16_t ndx;
 } SymboleEntree;
 
-//SymboleEntree symbole_table
+typedef struct {
+    SymboleEntree entree;
+    unsigned char *name;
+} Symbole;
 
-void traiterSymtab(Section s){
-    /*
-    Prend une section symtab et récupère les symboles pour créer la table des symboles
-    */
-
-}
 
 int findSymtab(SectionHeaderStruct Shs){
     /*
@@ -49,6 +44,23 @@ Section fetchSymtab(SectionHeaderStruct Shs, int numSec){
 
 int getNbSymboles(Section s){
     return (s.entree.size/s.entree.entsize);
+}
+
+void fetchSym(char *nom_fichier,int offset,Section s,int nb_symboles,SymboleEntree *ts){
+    /*
+    Prend une section symtab et récupère les symboles pour créer la table des symboles
+    */
+    FILE *f_bin;
+
+    f_bin = fopen(nom_fichier, "rb");
+
+    if (f_bin == NULL){
+        printf("Erreur d'ouverture du fichier %s\n", nom_fichier);
+        exit(1);
+    }
+    fseek(f_bin,s.entree.offset,0);
+    fread(ts, s.entree.size , 1, f_bin);
+
 }
 
 /*
@@ -134,6 +146,7 @@ int main(int argc, char* argv[]){
     Section s=fetchSymtab(Shs,symtab); //OK fonctionne //Recupère la section symtab
     int nb_symboles=getNbSymboles(s); //OK fonctionne //Recupère le nombre de symboles présents dans la symtab
     ts=malloc(sizeof(SymboleEntree)*nb_symboles); //Malloc de la table des symboles de la taille exacte nécessaire
+    fetchSym(argv[1],valeur_entete(argv[1])->start_section,s,nb_symboles,ts); //Récupère bien la symtab
 }
 
 
