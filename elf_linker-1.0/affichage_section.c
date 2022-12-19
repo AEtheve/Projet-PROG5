@@ -3,6 +3,14 @@
 #include "affichage_section.h"
 #include "affichage_entete.h"
 
+uint32_t big_e_to_little_e(uint32_t i) {
+	uint32_t o = 0;
+	o = o | ((i << 24) & 0xFF000000);
+	o = o | ((i << 8) & 0x00FF0000);
+	o = o | ((i >> 8) & 0x0000FF00);
+	o = o | ((i >> 24) & 0x000000FF);
+	return o;
+}
 
 void affichageNameAddr(uint32_t name){
     printf("%06d ",name);
@@ -156,6 +164,19 @@ SectionHeaderStruct* valeur_section(char* nom_fichier){
 
     fseek(f_bin, section_adress, SEEK_SET);    
     fread(section_temp, section_header, section_number, f_bin);
+
+	for(int i = 0; i < section_number; i++){
+		section_temp[i].name_adr = big_e_to_little_e(section_temp[i].name_adr);
+		section_temp[i].type = big_e_to_little_e(section_temp[i].type);
+		section_temp[i].flags = big_e_to_little_e(section_temp[i].flags);
+		section_temp[i].adress = big_e_to_little_e(section_temp[i].adress);
+		section_temp[i].offset = big_e_to_little_e(section_temp[i].offset);
+		section_temp[i].size = big_e_to_little_e(section_temp[i].size);
+		section_temp[i].link = big_e_to_little_e(section_temp[i].link);
+		section_temp[i].info = big_e_to_little_e(section_temp[i].info);
+		section_temp[i].addralign = big_e_to_little_e(section_temp[i].addralign);
+		section_temp[i].entsize = big_e_to_little_e(section_temp[i].entsize);
+	}
 
     for(int i = 0; i < section_number; i++){
         section_table[i].entree = section_temp[i];
