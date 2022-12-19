@@ -13,11 +13,20 @@ uint32_t big_e_to_little_e(uint32_t i) {
 }
 
 void affichageNameAddr(uint32_t name){
-    printf("%06d ",name);
+	printf("%06d ",name);
 }
 
-void affichageName(char name[]){
-    printf("%-17.*s ", 17, name);
+void affichageName(char name[], bool arm_cmd_version){
+	if (arm_cmd_version) { // arm-none-eabi
+		if (strlen(name)>17) {
+			printf("%-12.*s", 12, name);
+			printf("[...] ");
+		} else {
+			printf("%-17.*s ", 17, name);
+		}
+	} else { // arm-eabi
+		printf("%-17.*s ", 17, name);
+	}
 }
 
 void affichageType(uint32_t type){
@@ -199,7 +208,7 @@ SectionHeaderStruct* valeur_section(char* nom_fichier){
     return table;
 }
 
-void affichage(SectionHeaderStruct* table){
+void affichage(SectionHeaderStruct* table, bool arm_cmd_version){
     Section* section_table = table->section_table;
     printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",table->section_number, table->section_adress);
     printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
@@ -207,7 +216,7 @@ void affichage(SectionHeaderStruct* table){
         // printf("%x\n", section_table[i].entree.flags);
         printf("  [%2d] ",i);
 
-        affichageName(section_table[i].name);
+        affichageName(section_table[i].name, arm_cmd_version);
         affichageType(section_table[i].entree.type);
         affichageAddr(section_table[i].entree.adress);
         affichageOff(section_table[i].entree.offset);
@@ -224,8 +233,8 @@ void affichage(SectionHeaderStruct* table){
     
 }
 
-void affichage_section(char* nom_fichier){
+void affichage_section(char* nom_fichier, bool arm_cmd_version){
     SectionHeaderStruct* table;
     table = valeur_section(nom_fichier);
-    affichage(table);
+    affichage(table, arm_cmd_version);
 }
