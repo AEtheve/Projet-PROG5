@@ -16,16 +16,16 @@ void TestAffichageContenuSection1(CuTest *tc)
 void TestAffichageContenuSection2(CuTest *tc)
 {
     writeStdout();
-    affichage_contenu_section("./tests/file1.o", 2);
-    RunTest("./tests/file1_afficher_contenu_section_2.expected", tc);
+    affichage_contenu_section("./tests/file1.o", 4);
+    RunTest("./tests/file1_afficher_contenu_section_4.expected", tc);
     clearStdout();
 }
 
 void TestAffichageContenuSection3(CuTest *tc)
 {
     writeStdout();
-    affichage_contenu_section("./tests/file1.o", 3);
-    RunTest("./tests/file1_afficher_contenu_section_3.expected", tc);
+    affichage_contenu_section("./tests/file1.o", 5);
+    RunTest("./tests/file1_afficher_contenu_section_5.expected", tc);
     clearStdout();
 }
 

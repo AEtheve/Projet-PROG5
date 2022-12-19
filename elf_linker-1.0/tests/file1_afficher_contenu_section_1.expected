@@ -1,5 +1,1 @@
-Hex dump of section '.text':
- NOTE: This section has relocations against it, but these have NOT been applied to this dump.
-  0x00000000 00482de9 04b08de2 feffffeb 0030a0e3 .H-..........0..
-  0x00000010 0300a0e1 0088bde8                   ........
-  
+Section '.text' has no data to dump.
