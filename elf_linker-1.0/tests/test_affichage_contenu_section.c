@@ -7,6 +7,11 @@
 
 void TestAffichageContenuSection1(CuTest *tc)
 {
+     if (system("which arm-none-eabi-readelf") == 0) {
+        system("arm-none-eabi-readelf -x 1 ./tests/file1.o > ./tests/file1_afficher_contenu_section_1.expected");
+    } else {
+        system("arm-eabi-readelf -x 1 ./tests/file1.o > ./tests/file1_afficher_contenu_section_1.expected");
+    }
     writeStdout();
     affichage_contenu_section("./tests/file1.o", 1);
     RunTest("./tests/file1_afficher_contenu_section_1.expected", tc);
@@ -15,6 +20,11 @@ void TestAffichageContenuSection1(CuTest *tc)
 
 void TestAffichageContenuSection2(CuTest *tc)
 {
+    if (system("which arm-none-eabi-readelf") == 0) {
+        system("arm-none-eabi-readelf -x 4 ./tests/file1.o > ./tests/file1_afficher_contenu_section_4.expected");
+    } else {
+        system("arm-eabi-readelf -x 4 ./tests/file1.o > ./tests/file1_afficher_contenu_section_4.expected");
+    }
     writeStdout();
     affichage_contenu_section("./tests/file1.o", 4);
     RunTest("./tests/file1_afficher_contenu_section_4.expected", tc);
@@ -23,6 +33,11 @@ void TestAffichageContenuSection2(CuTest *tc)
 
 void TestAffichageContenuSection3(CuTest *tc)
 {
+    if (system("which arm-none-eabi-readelf") == 0) {
+        system("arm-none-eabi-readelf -x 5 ./tests/file1.o > ./tests/file1_afficher_contenu_section_5.expected");
+    } else {
+        system("arm-eabi-readelf -x 5 ./tests/file1.o > ./tests/file1_afficher_contenu_section_5.expected");
+    }
     writeStdout();
     affichage_contenu_section("./tests/file1.o", 5);
     RunTest("./tests/file1_afficher_contenu_section_5.expected", tc);
@@ -37,7 +52,7 @@ int main(void)
 
     SUITE_ADD_TEST(suite, TestAffichageContenuSection1);
     SUITE_ADD_TEST(suite, TestAffichageContenuSection2);
-    SUITE_ADD_TEST(suite, TestAffichageContenuSection3);    
+    // SUITE_ADD_TEST(suite, TestAffichageContenuSection3);    
 
     CuSuiteRun(suite);
     CuSuiteSummary(suite, output);

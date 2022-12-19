@@ -7,8 +7,16 @@
 
 void TestAffichageSection(CuTest *tc)
 {
+    bool arm_cmd_version = 0;
+    if (system("which arm-none-eabi-readelf") == 0) {
+        system("arm-none-eabi-readelf -S ./tests/file2.o > ./tests/file2_section.expected");
+        arm_cmd_version = 1;
+    } else {
+        system("arm-eabi-readelf -S ./tests/file2.o > ./tests/file2_section.expected");
+    }
+
     writeStdout();
-    affichage_section("./tests/file2.o");
+    affichage_section("./tests/file2.o", arm_cmd_version);
     RunTest("./tests/file2_section.expected", tc);
     clearStdout();
 }

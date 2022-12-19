@@ -7,14 +7,23 @@
 
 void TestAffichageEntete1(CuTest *tc)
 {    
+     if (system("which arm-none-eabi-readelf") == 0) {
+        system("arm-none-eabi-readelf -h ./tests/file1.o > ./tests/file1.expected");
+    } else {
+        system("arm-eabi-readelf -h ./tests/file1.o > ./tests/file1.expected");
+    }
     writeStdout();
     affichage_entete("./tests/file1.o");
-    RunTest("./tests/file1.expected", tc);
     clearStdout();
 }
 
 void TestAffichageEntete2(CuTest *tc)
 {
+    if (system("which arm-none-eabi-readelf") == 0) {
+        system("arm-none-eabi-readelf -h ./tests/file2.o > ./tests/file2.expected");
+    } else {
+        system("arm-eabi-readelf -h ./tests/file2.o > ./tests/file2.expected");
+    }
     writeStdout();
     affichage_entete("./tests/file2.o");
     RunTest("./tests/file2.expected", tc);
