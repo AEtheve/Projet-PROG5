@@ -8,6 +8,8 @@
 void TestAffichageEntete(CuTest *tc)
 {    
     writeStdout();
+    affichage_entete("./tests/file1.o");
+    RunTest("./tests/file1.expected", tc);
     affichage_entete("./tests/file2.o");
     RunTest("./tests/file2.expected", tc);
     clearStdout();
