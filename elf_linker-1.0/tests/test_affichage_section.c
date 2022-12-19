@@ -8,7 +8,7 @@
 void TestAffichageSection(CuTest *tc)
 {
     writeStdout();
-    affichage_section("./tests/file1.o");
+    affichage_section("./tests/file2.o");
     RunTest("./tests/file2_section.expected", tc);
     clearStdout();
 }
