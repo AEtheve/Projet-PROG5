@@ -1,5 +1,7 @@
 
 #include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
 
 typedef struct {
     uint32_t name_adr;
@@ -32,4 +34,4 @@ typedef struct {
 SectionHeaderStruct* valeur_section(char* nom_fichier);
 
 /* Affiche les valeurs du fichier nom_fichier */
-void affichage_section(char* nom_fichier);
+void affichage_section(char* nom_fichier, bool arm_cmd_version);
