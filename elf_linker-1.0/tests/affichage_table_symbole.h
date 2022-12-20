@@ -1,0 +1,1 @@
+void affichage_table_symbole(char *nom_fichier, bool arm_cmd_version);
