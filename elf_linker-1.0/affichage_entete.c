@@ -30,7 +30,7 @@ void printData(unsigned char *entete){
     if (entete[5] == 1){
         printf("2's complement, little endian\n");
     } else if (entete[5] == 2){
-        printf("MSB\n");
+        printf("2's complement, big endian\n");
     } else {
         printf("Aucun\n");
     }
@@ -99,13 +99,13 @@ void printAbiVersion(unsigned char *entete){
 
 void printType(unsigned char *entete){
     printf("  Type:                              ");
-    if (entete[16] == 1){
+    if (entete[17] == 1){
         printf("REL (Relocatable file)\n");
-    } else if (entete[16] == 2){
+    } else if (entete[17] == 2){
         printf("EX (Executable file)\n");
-    } else if (entete[16] == 3){
+    } else if (entete[17] == 3){
         printf("SHA (Shared object file)\n");
-    } else if (entete[16] == 4){
+    } else if (entete[17] == 4){
         printf("Core file\n");
     } else {
         printf("No file type\n");
@@ -115,31 +115,34 @@ void printType(unsigned char *entete){
 
 void printMachine(unsigned char *entete){
     printf("  Machine:                           ");
-    if (entete[18] == 1){
+    if (entete[19] == 1){
         printf("AT&T WE 32100\n");
-    } else if (entete[18] == 2){
+    } else if (entete[19] == 2){
         printf("SPARC\n");
-    } else if (entete[18] == 3){
+    } else if (entete[19] == 3){
         printf("Intel Architecture\n");
-    } else if (entete[18] == 4){
+    } else if (entete[19] == 4){
         printf("Motorola 68000\n");
-    } else if (entete[18] == 5){
+    } else if (entete[19] == 5){
         printf("Motorola 88000\n");
-    } else if (entete[18] == 7){
+    } else if (entete[19] == 7){
         printf("Intel 80860\n");
-    } else if (entete[18] == 8){
+    } else if (entete[19] == 8){
         printf("MIPS RS3000 Big-endian\n");
-    } else if (entete[18] == 10){
+    } else if (entete[19] == 10){
         printf("MIPS RS4000 Big-endian\n");
     }
-    else if (entete[18] == 40){
+    else if (entete[19] == 40){
         printf("ARM\n");
+    }
+    else {
+        printf("\n");
     }
 }
 
 void printVersion2(unsigned char *entete){
     printf("  Version:                           ");
-    printf("0x%x\n",entete[20]);
+    printf("0x%x\n",entete[23]);
 }
 
 void printPointDentree(unsigned char *entete) {
@@ -154,61 +157,61 @@ void printStartOfProgramHeaders (unsigned char *entete) {
 
 void printStartOfSectionHeaders (unsigned char *entete) {
     printf("  Start of section headers:          ");
-    uint32_t v = entete[35] <<24;
-    v = v | entete[34] <<16;
-    v = v | entete[33] << 8;
-    v = v | entete[32];
+    uint32_t v = entete[32] <<24;
+    v = v | entete[33] <<16;
+    v = v | entete[34] << 8;
+    v = v | entete[35];
     printf("%d (bytes into file)\n",v);
 }
 
 void printFlags (unsigned char *entete){
     printf("  Flags:                             ");
-    uint32_t v = entete[39] <<24;
-    v = v | entete[38] <<16;
-    v = v | entete[37] << 8;
-    v = v | entete[36]; 
+    uint32_t v = entete[36] <<24;
+    v = v | entete[37] <<16;
+    v = v | entete[38] << 8;
+    v = v | entete[39]; 
     printf("0x%0x, Version5 EABI\n",v);
 }
 
 void printsizeOfHeaders (unsigned char *entete)  {
     printf("  Size of this header:               ");
-    uint32_t v = entete[41] << 8;
-    v = v | entete[40]; 
+    uint32_t v = entete[40] << 8;
+    v = v | entete[41]; 
     printf("%d (bytes)\n",v);
 }
 
 void printsizeOfProgramHeaders (unsigned char *entete)  {
     printf("  Size of program headers:           ");
-    uint32_t v = entete[43] << 8;
-    v = v | entete[42]; 
+    uint32_t v = entete[42] << 8;
+    v = v | entete[43]; 
     printf("%d (bytes)\n",v);
 }
 
 void printNumberOfProgramHeaders (unsigned char *entete)  {
     printf("  Number of program headers:         ");
-    uint32_t v = entete[45] << 8;
-    v = v | entete[44]; 
+    uint32_t v = entete[44] << 8;
+    v = v | entete[45]; 
     printf("%d\n",v);
 }
 
 void printSizeOfSectionHeaders (unsigned char *entete)  {
     printf("  Size of section headers:           ");
-    uint32_t v = entete[47] << 8;
-    v = v | entete[46]; 
+    uint32_t v = entete[46] << 8;
+    v = v | entete[47]; 
     printf("%d (bytes)\n",v);
 }
 
 void printNumberOfSectionHeaders (unsigned char *entete)  {
     printf("  Number of section headers:         ");
-    uint32_t v = entete[49] << 8;
-    v = v | entete[48]; 
+    uint32_t v = entete[48] << 8;
+    v = v | entete[49]; 
     printf("%d\n",v);
 }
 
 void printSectionHeaderStringTableIndex (unsigned char *entete)  {
     printf("  Section header string table index: ");
-    uint32_t v = entete[51] << 8;
-    v = v | entete[50]; 
+    uint32_t v = entete[50] << 8;
+    v = v | entete[51]; 
     printf("%d\n",v);
 }
 
@@ -227,28 +230,28 @@ ElfHeader* valeur_entete(char *nom_fichier){
     fread(entete, 1, 52, f_bin);
     ElfHeader* h = (ElfHeader*)malloc(sizeof(ElfHeader));
 
-    uint32_t v = entete[35] <<24;
-    v = v | entete[34] <<16;
-    v = v | entete[33] << 8;
-    v = v | entete[32]; 
+    uint32_t v = entete[32] <<24;
+    v = v | entete[33] <<16;
+    v = v | entete[34] << 8;
+    v = v | entete[35]; 
     h->start_section=v;
 
-    v = entete[47] << 8;
-    v = v | entete[46]; 
+    v = entete[46] << 8;
+    v = v | entete[47]; 
     h->taille_section_header=v;
 
-    v = entete[49] << 8;
-    v = v | entete[48]; 
+    v = entete[48] << 8;
+    v = v | entete[49]; 
     h->nb_sections=v;
 
-    v = entete[51] << 8;
-    v = v | entete[50]; 
+    v = entete[50] << 8;
+    v = v | entete[51]; 
     h->section_header_string_table_index=v;
 
     return h;
 }
 
-void affichage_entete(char* nom_fichier){
+void affichage_entete(char *nom_fichier){
     FILE *f_bin;
 
     f_bin = fopen(nom_fichier, "rb");

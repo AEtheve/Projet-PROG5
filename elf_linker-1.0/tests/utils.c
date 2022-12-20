@@ -45,7 +45,7 @@ void compare_files(FILE *expected, FILE *stdout_fopen, CuTest *tc)
     {
         ligne1[strlen(ligne1) - 1] = '\0';
         ligne2[strlen(ligne2) - 1] = '\0';
-        CuAssertStrEquals(tc, ligne1, ligne2);
+        CuAssertStrEquals(tc, ligne2, ligne1);
     }
 }
 

@@ -10,11 +10,11 @@ ELF Header:
   Version:                           0x1
   Entry point address:               0x0
   Start of program headers:          0 (bytes into file)
-  Start of section headers:          1788 (bytes into file)
+  Start of section headers:          1444 (bytes into file)
   Flags:                             0x5000000, Version5 EABI
   Size of this header:               52 (bytes)
   Size of program headers:           0 (bytes)
   Number of program headers:         0
   Size of section headers:           40 (bytes)
-  Number of section headers:         21
-  Section header string table index: 20
+  Number of section headers:         23
+  Section header string table index: 22
