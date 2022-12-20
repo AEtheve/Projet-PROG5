@@ -52,7 +52,7 @@ int main(void)
 
     SUITE_ADD_TEST(suite, TestAffichageContenuSection1);
     SUITE_ADD_TEST(suite, TestAffichageContenuSection2);
-    // SUITE_ADD_TEST(suite, TestAffichageContenuSection3);    
+    SUITE_ADD_TEST(suite, TestAffichageContenuSection3);    
 
     CuSuiteRun(suite);
     CuSuiteSummary(suite, output);

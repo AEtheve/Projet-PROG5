@@ -42,7 +42,7 @@ void affichage_contenu_section(char* nom_fichier, int select_section){
     printf("Section '%s' has no data to dump.\n",
            section_header->section_table[select_section].name);
   } else {
-    printf("Hex dump of section '%s':\n",
+    printf("\nHex dump of section '%s':\n",
            section_header->section_table[select_section].name);
     for (int i = 0; i < section_header->section_number; i++) {
       if (section_header->section_table[i].entree.type == 9) { // REL
