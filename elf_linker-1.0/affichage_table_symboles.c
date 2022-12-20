@@ -1,6 +1,6 @@
-#include "./elf_linker-1.0/affichage_entete.h"
-#include "./elf_linker-1.0/affichage_section.h"
-#include "./elf_linker-1.0/util.h"
+#include "affichage_entete.h"
+#include "affichage_section.h"
+#include "util.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
