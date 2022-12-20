@@ -149,11 +149,11 @@ void afficherNumValueSize(SymboleEntree *symTab, int num) {
          reverse_4((symTab + num)->size));
 }
 
-int main(int argc, char *argv[]) {
-  SectionHeaderStruct *section_header = valeur_section(argv[1]);
+void affichage_table_symboles(char *nom_fichier, bool arm_cmd_version){
+  SectionHeaderStruct *section_header = valeur_section(nom_fichier);
 
   FILE *f_bin;
-  f_bin = fopen(argv[1], "rb");
+  f_bin = fopen(nom_fichier, "rb");
   if (f_bin == NULL) {
     printf("Erreur ouverture fichier");
     exit(1);
@@ -170,8 +170,7 @@ int main(int argc, char *argv[]) {
 
   fread(strtab, strTab.entree.size, 1, f_bin);
 
-  printf("Symbol table '%s' contains %d entries:\n", strTab.name,
-         section_header->section_table[index_symtab].entree.size / 16);
+  printf("\nSymbol table '.symtab' contains %d entries:\n", section_header->section_table[index_symtab].entree.size / 16);
 
   printf("   Num:    Value  Size Type    Bind   Vis      Ndx Name\n");
 
@@ -187,11 +186,22 @@ int main(int argc, char *argv[]) {
     afficheBind(symtab, i);
     affichageVis(symtab, i);
     afficherNdx(reverse_2((symtab + i)->ndx));
-    if ((symtab + i)->info == 3) {
-      afficherNameSection(symtab, section_header, i);
-    } else {
+    // if ((symtab + i)->info == 3) {
+      // afficherNameSection(symtab, section_header, i);
+    // } else {
       afficherNameOther(symtab, strtab, i);
-    }
+    // }
     printf("\n");
   }
 }
+
+
+  // int main(int argc, char *argv[]) {
+  //   if (argc < 2) {
+  //     printf("Usage: %s <fichier ELF>", argv[0]);
+  //     exit(1);
+  //   }
+  //   affichage_table_symboles(argv[1], false);
+  //   return 0;
+  // }
+
