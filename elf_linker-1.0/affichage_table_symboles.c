@@ -187,21 +187,10 @@ void affichage_table_symboles(char *nom_fichier, bool arm_cmd_version){
     affichageVis(symtab, i);
     afficherNdx(reverse_2((symtab + i)->ndx));
     // if ((symtab + i)->info == 3) {
-      // afficherNameSection(symtab, section_header, i);
+      // afficherNFTestAffichageContenuSection2ameSection(symtab, section_header, i);
     // } else {
       afficherNameOther(symtab, strtab, i);
     // }
     printf("\n");
   }
 }
-
-
-  // int main(int argc, char *argv[]) {
-  //   if (argc < 2) {
-  //     printf("Usage: %s <fichier ELF>", argv[0]);
-  //     exit(1);
-  //   }
-  //   affichage_table_symboles(argv[1], false);
-  //   return 0;
-  // }
-
