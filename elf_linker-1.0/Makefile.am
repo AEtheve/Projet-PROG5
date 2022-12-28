@@ -24,9 +24,16 @@ Options_and_debug_example_SOURCES=$(COMMON) Options_and_debug_example.c
 
 EXTRA_DIST+=
 
-check_PROGRAMS = test_affichage_entete test_affichage_section test_affichage_contenu_section test_affichage_ts
+check_PROGRAMS =
+check_PROGRAMS += test_affichage_entete
+check_PROGRAMS += test_affichage_section
+check_PROGRAMS += test_affichage_contenu_section
+check_PROGRAMS += test_affichage_ts
+check_PROGRAMS += test_affichage_tr
+
 test_affichage_entete_SOURCES = ./affichage_entete.c tests/test_affichage_entete.c tests/CuTest/CuTest.c tests/utils.c
 test_affichage_section_SOURCES = ./affichage_section.c ./affichage_entete.c tests/test_affichage_section.c tests/CuTest/CuTest.c tests/utils.c
 test_affichage_contenu_section_SOURCES = ./affichage_contenu_section.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_contenu_section.c tests/CuTest/CuTest.c tests/utils.c
 test_affichage_ts_SOURCES = ./affichage_table_symboles.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_ts.c tests/CuTest/CuTest.c tests/utils.c
+test_affichage_tr_SOURCES = ./affichage_tr.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_tr.c tests/CuTest/CuTest.c tests/utils.c
 TESTS = $(check_PROGRAMS)
