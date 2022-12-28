@@ -1,5 +1,5 @@
-#include "elf_linker-1.0/affichage_section.h"
-#include "elf_linker-1.0/util.h"
+#include "affichage_section.h"
+#include "util.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -185,7 +185,7 @@ void afficherNameSection(SymboleEntree *symTab,
            section_header->section_table[reverse_2((symTab + num)->ndx)].name);
 }
 
-void affichage_reloc(char *nom_fichier)
+void affichage_table_reimplentation(char *nom_fichier)
 {
     SectionHeaderStruct *section_header = valeur_section(nom_fichier);
 
@@ -261,9 +261,4 @@ void affichage_reloc(char *nom_fichier)
             }
         }
     }
-}
-
-int main(int argc, char *argv[])
-{
-    affichage_reloc(argv[1]);
 }
