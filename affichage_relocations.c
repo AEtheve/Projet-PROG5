@@ -1,10 +1,12 @@
 #include "elf_linker-1.0/affichage_section.h"
+#include "elf_linker-1.0/util.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-char* reloc_type(uint32_t valeur){
+char *reloc_type(uint32_t valeur)
+{
     char *type;
-    switch ((uint8_t)big_e_to_little_e(valeur))
+    switch ((uint8_t)reverse_4(valeur))
     {
     case 0:
         type = "R_ARM_NONE";
@@ -71,7 +73,7 @@ char* reloc_type(uint32_t valeur){
         break;
     case 21:
         type = "R_ARM_GLOB_DAT";
-        break;  
+        break;
     case 22:
         type = "R_ARM_JUMP_SLOT";
         break;
@@ -136,49 +138,132 @@ char* reloc_type(uint32_t valeur){
     return type;
 }
 
+int findSymTab(SectionHeaderStruct *Shs)
+{
+    for (int i = 0; i < Shs->section_number; i++)
+    {
+        if (Shs->section_table[i].entree.type == 2)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
 
-void affichage_reloc(char* nom_fichier){
+Section fetchSection(SectionHeaderStruct Shs, int numSec)
+{
+    return *(Shs.section_table + numSec);
+}
+
+typedef struct
+{
+    uint32_t name_index;
+    uint32_t value;
+    uint32_t size;
+    unsigned char info;
+    unsigned char other;
+    uint16_t ndx;
+} SymboleEntree;
+
+typedef struct
+{
+    SymboleEntree entree;
+    unsigned char *name;
+} Symbole;
+
+typedef char *StrTab;
+
+void afficherNameOther(SymboleEntree *symTab, StrTab strtab, int num)
+{
+    printf(" %s", strtab + reverse_4((symTab + num)->name_index));
+}
+
+void afficherNameSection(SymboleEntree *symTab,
+                         SectionHeaderStruct *section_header, int num)
+{
+    printf(" %s",
+           section_header->section_table[reverse_2((symTab + num)->ndx)].name);
+}
+
+void affichage_reloc(char *nom_fichier)
+{
     SectionHeaderStruct *section_header = valeur_section(nom_fichier);
 
     FILE *f_bin;
     f_bin = fopen(nom_fichier, "rb");
-    if (f_bin == NULL) {
+    if (f_bin == NULL)
+    {
         printf("Erreur ouverture fichier");
         exit(1);
     }
 
+    int index_symtab = findSymTab(section_header);
+    int index_strtab = section_header->section_table[index_symtab].entree.link;
 
-    for (int i = 0; i < section_header->section_number; i++){
-        if (section_header->section_table[i].entree.type == 9){
-            printf("\nRelocation section '%s' at offset 0x%x contains %d entry:\n",
-                section_header->section_table[i].name, 
-                section_header->section_table[i].entree.offset,
-                section_header->section_table[i].entree.size/8);
+    Section symTab = fetchSection(*section_header, index_symtab);
+    Section strTab = fetchSection(*section_header, index_strtab);
+
+    fseek(f_bin, strTab.entree.offset, SEEK_SET);
+    StrTab strtab = malloc(strTab.entree.size);
+
+    fread(strtab, strTab.entree.size, 1, f_bin);
+
+    fseek(f_bin, symTab.entree.offset, SEEK_SET);
+    SymboleEntree *symtab = malloc(symTab.entree.size);
+    fread(symtab, symTab.entree.size, 1, f_bin);
+
+    for (int i = 0; i < section_header->section_number; i++)
+    {
+        if (section_header->section_table[i].entree.type == 9)
+        {
+            if (section_header->section_table[i].entree.size / 8 > 1)
+            {
+                printf("\nRelocation section '%s' at offset 0x%x contains %d entries:\n",
+                       section_header->section_table[i].name,
+                       section_header->section_table[i].entree.offset,
+                       section_header->section_table[i].entree.size / 8);
+            }
+            else
+            {
+                printf("\nRelocation section '%s' at offset 0x%x contains %d entry:\n",
+                       section_header->section_table[i].name,
+                       section_header->section_table[i].entree.offset,
+                       section_header->section_table[i].entree.size / 8);
+            }
             // on se place au début de la section
             fseek(f_bin, section_header->section_table[i].entree.offset, SEEK_SET);
-            
+
             printf(" Offset     Info    Type            Sym.Value  Sym. Name\n");
 
             uint32_t valeur;
-            for (int j = 0; j < section_header->section_table[i].entree.size/8; j++){
+            for (int j = 0; j < section_header->section_table[i].entree.size / 8; j++)
+            {
                 fread(&valeur, 4, 1, f_bin);
-                printf("%-10.8x", big_e_to_little_e(valeur));
+                printf("%-10.8x", reverse_4(valeur));
                 fread(&valeur, 4, 1, f_bin);
-                printf("%-9.8x", big_e_to_little_e(valeur));
+                printf("%-9.8x", reverse_4(valeur));
 
                 printf("%-17.16s ", reloc_type(valeur));
-                printf("%-10.8x", big_e_to_little_e(valeur)>>8);
 
+                int symval = reverse_4(valeur) >> 8;
+                printf("%-10.8x", reverse_4((symtab + symval)->value));
+
+                if ((symtab + symval)->info == 3)
+                {
+                    afficherNameSection(symtab, section_header, symval);
+                }
+                else
+                {
+                    afficherNameOther(symtab, strtab, symval);
+                }
 
                 printf("\n");
             }
-            
         }
-
     }
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     affichage_reloc(argv[1]);
 }
-
