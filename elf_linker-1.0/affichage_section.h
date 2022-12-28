@@ -29,6 +29,7 @@ typedef struct {
     int section_header_symbole;
 } SectionHeaderStruct;
 
+uint32_t big_e_to_little_e(uint32_t i);
 
 /* Recupere les valeurs de toutes les sections du fichier nom_fichier */
 SectionHeaderStruct* valeur_section(char* nom_fichier);
