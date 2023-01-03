@@ -1,4 +1,5 @@
 #include "affichage_section.h"
+#include "elf32.h"
 #include "util.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -157,12 +158,12 @@ Section fetchSection(SectionHeaderStruct Shs, int numSec)
 
 typedef struct
 {
-    uint32_t name_index;
-    uint32_t value;
-    uint32_t size;
+    Elf_Word_32b name;
+    Elf_Addr_32b value;
+    Elf_Word_32b size;
     unsigned char info;
     unsigned char other;
-    uint16_t ndx;
+    Elf_Half_16b ndx;
 } SymboleEntree;
 
 typedef struct
@@ -175,7 +176,7 @@ typedef char *StrTab;
 
 void afficherNameOther(SymboleEntree *symTab, StrTab strtab, int num)
 {
-    printf(" %s", strtab + reverse_4((symTab + num)->name_index));
+    printf(" %s", strtab + reverse_4((symTab + num)->name));
 }
 
 void afficherNameSection(SymboleEntree *symTab,

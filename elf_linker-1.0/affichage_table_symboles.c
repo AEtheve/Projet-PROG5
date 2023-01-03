@@ -1,17 +1,18 @@
 #include "affichage_entete.h"
 #include "affichage_section.h"
+#include "elf32.h"
 #include "util.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef struct {
-  uint32_t name_index;
-  uint32_t value;
-  uint32_t size;
+  Elf_Word_32b name;
+  Elf_Addr_32b value;
+  Elf_Word_32b size;
   unsigned char info;
   unsigned char other;
-  uint16_t ndx;
+  Elf_Half_16b ndx;
 } SymboleEntree;
 
 typedef struct {
@@ -133,7 +134,7 @@ void afficherNdx(int num) {
 }
 
 void afficherNameOther(SymboleEntree *symTab, StrTab strtab, int num) {
-  printf(" %s", strtab + reverse_4((symTab + num)->name_index));
+  printf(" %s", strtab + reverse_4((symTab + num)->name));
 }
 
 void afficherNameSection(SymboleEntree *symTab,
@@ -186,11 +187,7 @@ void affichage_table_symboles(char *nom_fichier, bool arm_cmd_version){
     afficheBind(symtab, i);
     affichageVis(symtab, i);
     afficherNdx(reverse_2((symtab + i)->ndx));
-    // if ((symtab + i)->info == 3) {
-      // afficherNFTestAffichageContenuSection2ameSection(symtab, section_header, i);
-    // } else {
-      afficherNameOther(symtab, strtab, i);
-    // }
+    afficherNameOther(symtab, strtab, i);
     printf("\n");
   }
 }

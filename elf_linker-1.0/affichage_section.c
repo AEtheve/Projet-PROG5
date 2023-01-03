@@ -2,15 +2,7 @@
 #include <stdlib.h>
 #include "affichage_section.h"
 #include "affichage_entete.h"
-
-uint32_t big_e_to_little_e(uint32_t i) {
-	uint32_t o = 0;
-	o = o | ((i << 24) & 0xFF000000);
-	o = o | ((i << 8) & 0x00FF0000);
-	o = o | ((i >> 8) & 0x0000FF00);
-	o = o | ((i >> 24) & 0x000000FF);
-	return o;
-}
+#include "util.h"
 
 void affichageNameAddr(uint32_t name){
 	printf("%06d ",name);
@@ -161,37 +153,38 @@ SectionHeaderStruct* valeur_section(char* nom_fichier){
     }
 
     ElfHeader* h = valeur_entete(nom_fichier);
-    int section_adress = h->start_section;
-    int section_header = h->taille_section_header;
-    int section_number = h->nb_sections;
-    int section_header_symbole = h->section_header_string_table_index;
+    // int section_adress = h->start_section;
+    int section_adress = h->e_section_header_off;
+    int section_header = h->e_section_header_entry_size;
+    int section_number = h->e_section_header_entry_count;
+    int section_header_symbole = h->e_section_header_string_table_index;
     
     SectionHeaderStruct* table = (SectionHeaderStruct*)malloc(sizeof(SectionHeaderStruct));
     Section* section_table = (Section*)malloc(sizeof(Section)*section_number);
-    SectionEntree section_temp[section_number];
+    ElfSectionHeader section_temp[section_number];
     
 
     fseek(f_bin, section_adress, SEEK_SET);    
     fread(section_temp, section_header, section_number, f_bin);
 
 	for(int i = 0; i < section_number; i++){
-		section_temp[i].name_adr = big_e_to_little_e(section_temp[i].name_adr);
-		section_temp[i].type = big_e_to_little_e(section_temp[i].type);
-		section_temp[i].flags = big_e_to_little_e(section_temp[i].flags);
-		section_temp[i].adress = big_e_to_little_e(section_temp[i].adress);
-		section_temp[i].offset = big_e_to_little_e(section_temp[i].offset);
-		section_temp[i].size = big_e_to_little_e(section_temp[i].size);
-		section_temp[i].link = big_e_to_little_e(section_temp[i].link);
-		section_temp[i].info = big_e_to_little_e(section_temp[i].info);
-		section_temp[i].addralign = big_e_to_little_e(section_temp[i].addralign);
-		section_temp[i].entsize = big_e_to_little_e(section_temp[i].entsize);
+		section_temp[i].name = reverse_4(section_temp[i].name);
+		section_temp[i].type = reverse_4(section_temp[i].type);
+		section_temp[i].flags = reverse_4(section_temp[i].flags);
+		section_temp[i].adress = reverse_4(section_temp[i].adress);
+		section_temp[i].offset = reverse_4(section_temp[i].offset);
+		section_temp[i].size = reverse_4(section_temp[i].size);
+		section_temp[i].link = reverse_4(section_temp[i].link);
+		section_temp[i].info = reverse_4(section_temp[i].info);
+		section_temp[i].addralign = reverse_4(section_temp[i].addralign);
+		section_temp[i].entsize = reverse_4(section_temp[i].entsize);
 	}
 
     for(int i = 0; i < section_number; i++){
         section_table[i].entree = section_temp[i];
         uint8_t lettre;
         int j = 0;
-        fseek(f_bin, section_temp[section_header_symbole].offset + section_temp[i].name_adr, SEEK_SET);
+        fseek(f_bin, section_temp[section_header_symbole].offset + section_temp[i].name, SEEK_SET);
         fread(&lettre, 1, 1, f_bin);
         while (lettre != 0){
             section_table[i].name[j] = lettre;
