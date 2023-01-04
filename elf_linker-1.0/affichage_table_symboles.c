@@ -187,7 +187,11 @@ void affichage_table_symboles(char *nom_fichier, bool arm_cmd_version){
     afficheBind(symtab, i);
     affichageVis(symtab, i);
     afficherNdx(reverse_2((symtab + i)->ndx));
-    afficherNameOther(symtab, strtab, i);
+    if ((symtab + i)->info == 3) {
+       afficherNameSection(symtab, section_header, i);
+     } else {
+      afficherNameOther(symtab, strtab, i);
+     }
     printf("\n");
   }
 }
