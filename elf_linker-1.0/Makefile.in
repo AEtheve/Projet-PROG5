@@ -92,7 +92,7 @@ bin_PROGRAMS = Options_and_debug_example$(EXEEXT)
 check_PROGRAMS = test_affichage_entete$(EXEEXT) \
 	test_affichage_section$(EXEEXT) \
 	test_affichage_contenu_section$(EXEEXT) \
-	test_affichage_ts$(EXEEXT)
+	test_affichage_ts$(EXEEXT) test_affichage_tr$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/hostsubdir.m4 \
@@ -134,6 +134,12 @@ am_test_affichage_section_OBJECTS = ./affichage_section.$(OBJEXT) \
 	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT)
 test_affichage_section_OBJECTS = $(am_test_affichage_section_OBJECTS)
 test_affichage_section_LDADD = $(LDADD)
+am_test_affichage_tr_OBJECTS = ./affichage_tr.$(OBJEXT) \
+	./affichage_section.$(OBJEXT) ./affichage_entete.$(OBJEXT) \
+	tests/test_affichage_tr.$(OBJEXT) \
+	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT)
+test_affichage_tr_OBJECTS = $(am_test_affichage_tr_OBJECTS)
+test_affichage_tr_LDADD = $(LDADD)
 am_test_affichage_ts_OBJECTS = ./affichage_table_symboles.$(OBJEXT) \
 	./affichage_section.$(OBJEXT) ./affichage_entete.$(OBJEXT) \
 	tests/test_affichage_ts.$(OBJEXT) \
@@ -159,11 +165,13 @@ am__depfiles_remade = ./$(DEPDIR)/Options_and_debug_example.Po \
 	./$(DEPDIR)/affichage_contenu_section.Po \
 	./$(DEPDIR)/affichage_entete.Po \
 	./$(DEPDIR)/affichage_section.Po \
-	./$(DEPDIR)/affichage_table_symboles.Po ./$(DEPDIR)/debug.Po \
+	./$(DEPDIR)/affichage_table_symboles.Po \
+	./$(DEPDIR)/affichage_tr.Po ./$(DEPDIR)/debug.Po \
 	./$(DEPDIR)/util.Po \
 	tests/$(DEPDIR)/test_affichage_contenu_section.Po \
 	tests/$(DEPDIR)/test_affichage_entete.Po \
 	tests/$(DEPDIR)/test_affichage_section.Po \
+	tests/$(DEPDIR)/test_affichage_tr.Po \
 	tests/$(DEPDIR)/test_affichage_ts.Po tests/$(DEPDIR)/utils.Po \
 	tests/CuTest/$(DEPDIR)/CuTest.Po
 am__mv = mv -f
@@ -182,11 +190,13 @@ am__v_CCLD_1 =
 SOURCES = $(Options_and_debug_example_SOURCES) \
 	$(test_affichage_contenu_section_SOURCES) \
 	$(test_affichage_entete_SOURCES) \
-	$(test_affichage_section_SOURCES) $(test_affichage_ts_SOURCES)
+	$(test_affichage_section_SOURCES) $(test_affichage_tr_SOURCES) \
+	$(test_affichage_ts_SOURCES)
 DIST_SOURCES = $(Options_and_debug_example_SOURCES) \
 	$(test_affichage_contenu_section_SOURCES) \
 	$(test_affichage_entete_SOURCES) \
-	$(test_affichage_section_SOURCES) $(test_affichage_ts_SOURCES)
+	$(test_affichage_section_SOURCES) $(test_affichage_tr_SOURCES) \
+	$(test_affichage_ts_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
 	ctags-recursive dvi-recursive html-recursive info-recursive \
 	install-data-recursive install-dvi-recursive \
@@ -602,6 +612,7 @@ test_affichage_entete_SOURCES = ./affichage_entete.c tests/test_affichage_entete
 test_affichage_section_SOURCES = ./affichage_section.c ./affichage_entete.c tests/test_affichage_section.c tests/CuTest/CuTest.c tests/utils.c
 test_affichage_contenu_section_SOURCES = ./affichage_contenu_section.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_contenu_section.c tests/CuTest/CuTest.c tests/utils.c
 test_affichage_ts_SOURCES = ./affichage_table_symboles.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_ts.c tests/CuTest/CuTest.c tests/utils.c
+test_affichage_tr_SOURCES = ./affichage_tr.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_tr.c tests/CuTest/CuTest.c tests/utils.c
 TESTS = $(check_PROGRAMS)
 all: all-recursive
 
@@ -735,6 +746,13 @@ tests/test_affichage_section.$(OBJEXT): tests/$(am__dirstamp) \
 test_affichage_section$(EXEEXT): $(test_affichage_section_OBJECTS) $(test_affichage_section_DEPENDENCIES) $(EXTRA_test_affichage_section_DEPENDENCIES) 
 	@rm -f test_affichage_section$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_affichage_section_OBJECTS) $(test_affichage_section_LDADD) $(LIBS)
+./affichage_tr.$(OBJEXT): ./$(am__dirstamp) $(DEPDIR)/$(am__dirstamp)
+tests/test_affichage_tr.$(OBJEXT): tests/$(am__dirstamp) \
+	tests/$(DEPDIR)/$(am__dirstamp)
+
+test_affichage_tr$(EXEEXT): $(test_affichage_tr_OBJECTS) $(test_affichage_tr_DEPENDENCIES) $(EXTRA_test_affichage_tr_DEPENDENCIES) 
+	@rm -f test_affichage_tr$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_affichage_tr_OBJECTS) $(test_affichage_tr_LDADD) $(LIBS)
 ./affichage_table_symboles.$(OBJEXT): ./$(am__dirstamp) \
 	$(DEPDIR)/$(am__dirstamp)
 tests/test_affichage_ts.$(OBJEXT): tests/$(am__dirstamp) \
@@ -758,11 +776,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/affichage_entete.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/affichage_section.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/affichage_table_symboles.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/affichage_tr.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_affichage_contenu_section.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_affichage_entete.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_affichage_section.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_affichage_tr.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_affichage_ts.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/utils.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/CuTest/$(DEPDIR)/CuTest.Po@am__quote@ # am--include-marker
@@ -1064,6 +1084,13 @@ test_affichage_ts.log: test_affichage_ts$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test_affichage_tr.log: test_affichage_tr$(EXEEXT)
+	@p='test_affichage_tr$(EXEEXT)'; \
+	b='test_affichage_tr'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -1336,11 +1363,13 @@ distclean: distclean-recursive
 	-rm -f ./$(DEPDIR)/affichage_entete.Po
 	-rm -f ./$(DEPDIR)/affichage_section.Po
 	-rm -f ./$(DEPDIR)/affichage_table_symboles.Po
+	-rm -f ./$(DEPDIR)/affichage_tr.Po
 	-rm -f ./$(DEPDIR)/debug.Po
 	-rm -f ./$(DEPDIR)/util.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_contenu_section.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_entete.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_section.Po
+	-rm -f tests/$(DEPDIR)/test_affichage_tr.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_ts.Po
 	-rm -f tests/$(DEPDIR)/utils.Po
 	-rm -f tests/CuTest/$(DEPDIR)/CuTest.Po
@@ -1396,11 +1425,13 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f ./$(DEPDIR)/affichage_entete.Po
 	-rm -f ./$(DEPDIR)/affichage_section.Po
 	-rm -f ./$(DEPDIR)/affichage_table_symboles.Po
+	-rm -f ./$(DEPDIR)/affichage_tr.Po
 	-rm -f ./$(DEPDIR)/debug.Po
 	-rm -f ./$(DEPDIR)/util.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_contenu_section.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_entete.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_section.Po
+	-rm -f tests/$(DEPDIR)/test_affichage_tr.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_ts.Po
 	-rm -f tests/$(DEPDIR)/utils.Po
 	-rm -f tests/CuTest/$(DEPDIR)/CuTest.Po
