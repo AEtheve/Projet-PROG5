@@ -265,7 +265,7 @@ void printType(ElfHeader *header)
 
 void printMachine(ElfHeader *header)
 {
-    printf("  Machine:                           ");
+    printf("  Mache:                           ");
     switch (header->e_machine)
     {
     case 1:
