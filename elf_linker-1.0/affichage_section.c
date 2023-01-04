@@ -191,6 +191,7 @@ SectionHeaderStruct* valeur_section(char* nom_fichier){
             fread(&lettre, 1, 1, f_bin);
             j++;
         }
+        section_table[i].name[j] = '\0';
     }
     fclose(f_bin);
     table->section_table = section_table;
@@ -222,7 +223,7 @@ void affichage(SectionHeaderStruct* table, bool arm_cmd_version){
         printf("\n");
     }
 
-    printf("Key to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  y (purecode), p (processor specific)\n");
+    printf("Key to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), y (purecode), p (processor specific)\n");
     
 }
 
