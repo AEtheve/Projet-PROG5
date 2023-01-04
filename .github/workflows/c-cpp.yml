@@ -12,7 +12,7 @@ jobs:
     name: ccheck
     defaults:
       run:
-        working-directory: ./elf_linker-1.0
+        working-directory: ./elf_linker-1.0_1
     steps:
     - uses: actions/checkout@v3
     - name: configure
