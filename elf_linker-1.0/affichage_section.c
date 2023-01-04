@@ -203,7 +203,7 @@ SectionHeaderStruct* valeur_section(char* nom_fichier){
 
 void affichage(SectionHeaderStruct* table, bool arm_cmd_version){
     Section* section_table = table->section_table;
-    printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",table->section_number, table->section_adress);
+    printf("There are %d section heades, starting at offset 0x%x:\n\nSection Headers:\n",table->section_number, table->section_adress);
     printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
     for(int i = 0; i < table->section_number; i++){
         // printf("%x\n", section_table[i].entree.flags);
