@@ -1,9 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
 #include "affichage_entete.h"
-#include "elf32.h"
-#include "util.h"
+
 
 void printMagic(ElfHeader *header)
 {
@@ -368,20 +364,10 @@ void printSectionHeaderStringTableIndex(ElfHeader *header)
     printf("%d\n", header->e_section_header_string_table_index);
 }
 
-Elf *valeur_entete(char *nom_fichier) {
-    ElfHeader *h = malloc(sizeof(ElfHeader));
-    FILE *f_bin;
-
-    f_bin = fopen(nom_fichier, "rb");
-
-    if (f_bin == NULL)
-    {
-        printf("Erreur d'ouverture du fichier %s\n", nom_fichier);
-        exit(1);
-    }
+Elf *valeurEntete(FILE* f_bin) {
+    ElfHeader *h = allocElfHeader();
 
     fread(h, 1, sizeof(ElfHeader), f_bin);
-    fclose(f_bin);
 
     h->e_type = reverse_2(h->e_type);
     h->e_machine = reverse_2(h->e_machine);
@@ -398,7 +384,7 @@ Elf *valeur_entete(char *nom_fichier) {
     h->e_section_header_string_table_index = reverse_2(h->e_section_header_string_table_index);
 
 
-    Elf* elf = malloc(sizeof(Elf));
+    Elf* elf = allocElf();
     elf->header = h;
 
     return elf;
@@ -428,8 +414,10 @@ void affichageEntete(Elf* elf){
 }
 
 void affichage_entete(char *nom_fichier){
-    Elf* elf = valeur_entete(nom_fichier);
+    FILE* f = ouvertureFichier(nom_fichier, "rb");
+    Elf* elf = valeurEntete(f);
     affichageEntete(elf);
+    fermetureFichier(f);
 }
 
 // int main(int argc, char *argv[])

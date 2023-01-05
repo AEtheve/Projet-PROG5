@@ -1,8 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "affichage_section.h"
-#include "affichage_entete.h"
-#include "util.h"
+
 
 void affichageNameAddr(uint32_t name){
 	printf("%06d ",name);
@@ -142,27 +139,15 @@ void affichageAl(uint32_t addralign){
     printf("%2d",addralign);
 }
 
-Elf* valeur_section(char* nom_fichier){
-    Elf* elf = valeur_entete(nom_fichier);
-
-    FILE *f_bin;
-
-    f_bin = fopen(nom_fichier, "rb");
-
-    if (f_bin == NULL){
-        printf("Erreur d'ouverture du fichier %s\n", nom_fichier);
-        exit(1);
-    }
+Elf* valeurSection(Elf* elf, FILE* f_bin){
 
     int section_adress = elf->header->e_section_header_off;
     int section_header = elf->header->e_section_header_entry_size;
     int section_number = elf->header->e_section_header_entry_count;
     int section_header_symbole = elf->header->e_section_header_string_table_index;
-    
 
-
-    Section* section_table = (Section*)malloc(sizeof(Section)*section_number);
-    ElfSectionHeader section_temp[section_number];
+    ElfSection* section_table = allocElfSection(section_number);
+    SectionHeader section_temp[section_number];
     
 
     fseek(f_bin, section_adress, SEEK_SET);    
@@ -195,13 +180,11 @@ Elf* valeur_section(char* nom_fichier){
     }
 
     elf->section_header = section_table;
-    
-    fclose(f_bin);
     return elf;
 }
 
 void affichageSection(Elf* elf, bool arm_cmd_version){
-    Section* section_table = elf->section_header;
+    ElfSection* section_table = elf->section_header;
 
     printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",elf->header->e_section_header_entry_count, elf->header->e_section_header_off);
     printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
@@ -225,13 +208,16 @@ void affichageSection(Elf* elf, bool arm_cmd_version){
 }
 
 void affichage_section(char* nom_fichier, bool arm_cmd_version){
-    Elf* elf = valeur_section(nom_fichier);
+    FILE* f = ouvertureFichier(nom_fichier, "rb");
+    Elf* elf = valeurEntete(f);
+    elf = valeurSection(elf, f);
     affichageSection(elf, arm_cmd_version);
+    fermetureFichier(f);
 }
 
-int main(int argc, char* argv[]){
+// int main(int argc, char* argv[]){
     
-    affichage_section(argv[1],false);
+//     affichage_section(argv[1],false);
     
-    return 0;
-}
+//     return 0;
+// }

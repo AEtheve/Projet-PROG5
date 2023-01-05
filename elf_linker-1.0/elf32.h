@@ -1,7 +1,11 @@
-#include <stdint.h>
-
 #ifndef __ELF32_H__
 #define __ELF32_H__
+
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+
 
 #define HEADER_IDENT_SIZE 16
 
@@ -40,12 +44,12 @@ typedef struct {
     Elf_Word_32b info;
     Elf_Word_32b addralign;
     Elf_Word_32b entsize;
-} ElfSectionHeader;
+} SectionHeader;
 
 typedef struct {
-    ElfSectionHeader entree;
+    SectionHeader entree;
     char name[30];
-} Section;
+} ElfSection;
 
 // typedef struct {
 //     Section* section_table;
@@ -57,8 +61,20 @@ typedef struct {
 
 typedef struct {
     ElfHeader* header;
-    Section* section_header;
-    
+    ElfSection* section_header;
+
 } Elf;
+
+FILE* ouvertureFichier(char* nomFichier, char* mode);
+
+void fermetureFichier(FILE* fichier);
+
+Elf* allocElf();
+
+ElfHeader* allocElfHeader();
+
+SectionHeader* allocElfSectionHeader();
+
+ElfSection* allocElfSection(int size);
 
 #endif
