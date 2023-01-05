@@ -7,6 +7,13 @@
 // }ElfHeader;
 #include "elf32.h"
 
-ElfHeader* valeur_entete(char *nom_fichier);
+/* Recupere les valeurs d'entete du fichier au format ELF et renvoi
+un pointeur elf contenant ses valeurs */
+Elf* valeur_entete(char *nom_fichier);
 
+/* Affiche les élément de l'entete contenu dans elf */
+void affichageEntete(Elf* elf);
+
+/* Appel la fonction valeur_entere, recupere la valeur et
+la renvoie dans la fonction affichageEntete */
 void affichage_entete(char *nom_fichier);

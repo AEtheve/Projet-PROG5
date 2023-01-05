@@ -47,12 +47,18 @@ typedef struct {
     char name[30];
 } Section;
 
+// typedef struct {
+//     Section* section_table;
+//     int section_adress;
+//     int section_header;
+//     int section_number;
+//     int section_header_symbole;
+// } SectionHeaderStruct;
+
 typedef struct {
-    Section* section_table;
-    int section_adress;
-    int section_header;
-    int section_number;
-    int section_header_symbole;
-} SectionHeaderStruct;
+    ElfHeader* header;
+    Section* section_header;
+    
+} Elf;
 
 #endif

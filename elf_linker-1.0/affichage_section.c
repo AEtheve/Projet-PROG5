@@ -142,7 +142,9 @@ void affichageAl(uint32_t addralign){
     printf("%2d",addralign);
 }
 
-SectionHeaderStruct* valeur_section(char* nom_fichier){
+Elf* valeur_section(char* nom_fichier){
+    Elf* elf = valeur_entete(nom_fichier);
+
     FILE *f_bin;
 
     f_bin = fopen(nom_fichier, "rb");
@@ -152,14 +154,13 @@ SectionHeaderStruct* valeur_section(char* nom_fichier){
         exit(1);
     }
 
-    ElfHeader* h = valeur_entete(nom_fichier);
-    // int section_adress = h->start_section;
-    int section_adress = h->e_section_header_off;
-    int section_header = h->e_section_header_entry_size;
-    int section_number = h->e_section_header_entry_count;
-    int section_header_symbole = h->e_section_header_string_table_index;
+    int section_adress = elf->header->e_section_header_off;
+    int section_header = elf->header->e_section_header_entry_size;
+    int section_number = elf->header->e_section_header_entry_count;
+    int section_header_symbole = elf->header->e_section_header_string_table_index;
     
-    SectionHeaderStruct* table = (SectionHeaderStruct*)malloc(sizeof(SectionHeaderStruct));
+
+
     Section* section_table = (Section*)malloc(sizeof(Section)*section_number);
     ElfSectionHeader section_temp[section_number];
     
@@ -168,23 +169,22 @@ SectionHeaderStruct* valeur_section(char* nom_fichier){
     fread(section_temp, section_header, section_number, f_bin);
 
 	for(int i = 0; i < section_number; i++){
-		section_temp[i].name = reverse_4(section_temp[i].name);
-		section_temp[i].type = reverse_4(section_temp[i].type);
-		section_temp[i].flags = reverse_4(section_temp[i].flags);
-		section_temp[i].adress = reverse_4(section_temp[i].adress);
-		section_temp[i].offset = reverse_4(section_temp[i].offset);
-		section_temp[i].size = reverse_4(section_temp[i].size);
-		section_temp[i].link = reverse_4(section_temp[i].link);
-		section_temp[i].info = reverse_4(section_temp[i].info);
-		section_temp[i].addralign = reverse_4(section_temp[i].addralign);
-		section_temp[i].entsize = reverse_4(section_temp[i].entsize);
+        section_table[i].entree.name = reverse_4(section_temp[i].name);
+		section_table[i].entree.type = reverse_4(section_temp[i].type);
+		section_table[i].entree.flags = reverse_4(section_temp[i].flags);
+		section_table[i].entree.adress = reverse_4(section_temp[i].adress);
+		section_table[i].entree.offset = reverse_4(section_temp[i].offset);
+		section_table[i].entree.size = reverse_4(section_temp[i].size);
+		section_table[i].entree.link = reverse_4(section_temp[i].link);
+		section_table[i].entree.info = reverse_4(section_temp[i].info);
+		section_table[i].entree.addralign = reverse_4(section_temp[i].addralign);
+		section_table[i].entree.entsize = reverse_4(section_temp[i].entsize);
 	}
 
+    uint8_t lettre;
     for(int i = 0; i < section_number; i++){
-        section_table[i].entree = section_temp[i];
-        uint8_t lettre;
         int j = 0;
-        fseek(f_bin, section_temp[section_header_symbole].offset + section_temp[i].name, SEEK_SET);
+        fseek(f_bin, section_table[section_header_symbole].entree.offset + section_table[i].entree.name, SEEK_SET);
         fread(&lettre, 1, 1, f_bin);
         while (lettre != 0){
             section_table[i].name[j] = lettre;
@@ -193,21 +193,19 @@ SectionHeaderStruct* valeur_section(char* nom_fichier){
         }
         section_table[i].name[j] = '\0';
     }
+
+    elf->section_header = section_table;
+    
     fclose(f_bin);
-    table->section_table = section_table;
-    table->section_adress = section_adress;
-    table->section_header = section_header;
-    table->section_number = section_number;
-    table->section_header_symbole = section_header_symbole;
-    return table;
+    return elf;
 }
 
-void affichage(SectionHeaderStruct* table, bool arm_cmd_version){
-    Section* section_table = table->section_table;
-    printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",table->section_number, table->section_adress);
+void affichageSection(Elf* elf, bool arm_cmd_version){
+    Section* section_table = elf->section_header;
+
+    printf("There are %d section headers, starting at offset 0x%x:\n\nSection Headers:\n",elf->header->e_section_header_entry_count, elf->header->e_section_header_off);
     printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
-    for(int i = 0; i < table->section_number; i++){
-        // printf("%x\n", section_table[i].entree.flags);
+    for(int i = 0; i < elf->header->e_section_header_entry_count; i++){
         printf("  [%2d] ",i);
 
         affichageName(section_table[i].name, arm_cmd_version);
@@ -222,13 +220,18 @@ void affichage(SectionHeaderStruct* table, bool arm_cmd_version){
         affichageAl(section_table[i].entree.addralign);
         printf("\n");
     }
-
     printf("Key to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), y (purecode), p (processor specific)\n");
     
 }
 
 void affichage_section(char* nom_fichier, bool arm_cmd_version){
-    SectionHeaderStruct* table;
-    table = valeur_section(nom_fichier);
-    affichage(table, arm_cmd_version);
+    Elf* elf = valeur_section(nom_fichier);
+    affichageSection(elf, arm_cmd_version);
+}
+
+int main(int argc, char* argv[]){
+    
+    affichage_section(argv[1],false);
+    
+    return 0;
 }

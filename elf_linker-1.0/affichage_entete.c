@@ -368,8 +368,8 @@ void printSectionHeaderStringTableIndex(ElfHeader *header)
     printf("%d\n", header->e_section_header_string_table_index);
 }
 
-ElfHeader *valeur_entete(char *nom_fichier)
-{
+Elf *valeur_entete(char *nom_fichier) {
+    ElfHeader *h = malloc(sizeof(ElfHeader));
     FILE *f_bin;
 
     f_bin = fopen(nom_fichier, "rb");
@@ -380,8 +380,8 @@ ElfHeader *valeur_entete(char *nom_fichier)
         exit(1);
     }
 
-    ElfHeader *h = malloc(sizeof(ElfHeader));
     fread(h, 1, sizeof(ElfHeader), f_bin);
+    fclose(f_bin);
 
     h->e_type = reverse_2(h->e_type);
     h->e_machine = reverse_2(h->e_machine);
@@ -397,42 +397,50 @@ ElfHeader *valeur_entete(char *nom_fichier)
     h->e_section_header_entry_count = reverse_2(h->e_section_header_entry_count);
     h->e_section_header_string_table_index = reverse_2(h->e_section_header_string_table_index);
 
-    fclose(f_bin);
-    return h;
+
+    Elf* elf = malloc(sizeof(Elf));
+    elf->header = h;
+
+    return elf;
 }
 
-void affichage_entete(char *nom_fichier)
-{
-    FILE *f_bin;
-
-    f_bin = fopen(nom_fichier, "rb");
-
-    if (f_bin == NULL)
-    {
-        printf("Erreur d'ouverture du fichier %s\n", nom_fichier);
-        exit(1);
-    }
-
-    ElfHeader *header = valeur_entete(nom_fichier);
-
+void affichageEntete(Elf* elf){
     printf("ELF Header:\n ");
-    printMagic(header);
-    printClass(header);
-    printData(header);
-    printVersion(header);
-    printAbi(header);
-    printAbiVersion(header);
-    printType(header);
-    printMachine(header);
-    printVersion2(header);
-    printPointDentree(header);
-    printStartOfProgramHeaders(header);
-    printStartOfSectionHeaders (header);
-    printFlags(header);
-    printsizeOfHeaders(header);
-    printsizeOfProgramHeaders(header);
-    printNumberOfProgramHeaders(header);
-    printSizeOfSectionHeaders(header);
-    printNumberOfSectionHeaders(header);
-    printSectionHeaderStringTableIndex(header);
+    printMagic(elf->header);
+    printClass(elf->header);
+    printData(elf->header);
+    printVersion(elf->header);
+    printAbi(elf->header);
+    printAbiVersion(elf->header);
+    printType(elf->header);
+    printMachine(elf->header);
+    printVersion2(elf->header);
+    printPointDentree(elf->header);
+    printStartOfProgramHeaders(elf->header);
+    printStartOfSectionHeaders (elf->header);
+    printFlags(elf->header);
+    printsizeOfHeaders(elf->header);
+    printsizeOfProgramHeaders(elf->header);
+    printNumberOfProgramHeaders(elf->header);
+    printSizeOfSectionHeaders(elf->header);
+    printNumberOfSectionHeaders(elf->header);
+    printSectionHeaderStringTableIndex(elf->header);
 }
+
+void affichage_entete(char *nom_fichier){
+    Elf* elf = valeur_entete(nom_fichier);
+    affichageEntete(elf);
+}
+
+// int main(int argc, char *argv[])
+// {
+//     if (argc != 2)
+//     {
+//         printf("Usage: %s <fichier ELF>\n", argv[0]);
+//         exit(1);
+//     }
+
+//     affichage_entete(argv[1]);
+
+//     return 0;
+// }
