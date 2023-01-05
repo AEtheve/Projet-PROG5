@@ -86,4 +86,6 @@ ElfSection* allocElfSection(int size);
 
 ElfSymbole* allocElfSymbole(int size);
 
+Elf* addSection(Elf* elf, ElfSection section);
+
 #endif
