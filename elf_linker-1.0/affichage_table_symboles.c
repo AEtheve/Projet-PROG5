@@ -1,234 +1,192 @@
-#include "affichage_entete.h"
-#include "affichage_section.h"
-#include "elf32.h"
-#include "util.h"
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "affichage_table_symboles.h"
 
-typedef struct {
-  Elf_Word_32b name;
-  Elf_Addr_32b value;
-  Elf_Word_32b size;
-  unsigned char info;
-  unsigned char other;
-  Elf_Half_16b ndx;
-} SymboleEntree;
-
-typedef struct {
-  SymboleEntree entree;
-  unsigned char *name;
-} Symbole;
-
-typedef char *StrTab;
-
-int findSymTab(Elf *elf) {
-  ElfSection* s=elf->section_header;
-  for (int i = 0; i < elf->header->e_section_header_entry_count; i++) {
-    if (s[i].entree.type == 2) {
-      return i;
+int findSymTab(Elf *elf)
+{
+    for (int i = 0; i < elf->header->e_section_header_entry_count; i++)
+    {
+        if (elf->section_header[i].entree.type == 2)
+        {
+            return i;
+        }
     }
-  }
-  return -1;
+    return -1;
 }
 
-ElfSection fetchSection(Elf* elf, int numSec) {
-  return *(elf->section_header + numSec);
+char* afficheType(ElfSymbole *ts, int num) {
+	char* type = malloc(10);
+	switch ((ts + num)->info & 0x0f)
+	{
+	case 0:
+		strcpy(type, "NOTYPE");
+		break;
+	case 1:
+		strcpy(type, "OBJECT");
+		break;
+	case 2:
+		strcpy(type, "FUNC");
+		break;
+	case 3:
+		strcpy(type, "SECTION");
+		break;
+	case 4:
+		strcpy(type, "FILE");
+		break;
+	case 13:
+		strcpy(type, "LOPROC");
+		break;
+	case 15:
+		strcpy(type, "HIPROC");
+		break;	
+	default:
+		strcpy(type, "Inconnu");
+		break;
+	}
+	return type;
 }
 
-void afficheType(SymboleEntree *ts, int num) {
-  switch ((ts + num)->info & 0x0f) {
-  case 0:
-    printf(" NOTYPE ");
-    break;
-  case 1:
-    printf(" OBJECT ");
-    break;
-  case 2:
-    printf(" FUNC   ");
-    break;
-  case 3:
-    printf(" SECTION");
-    break;
-  case 4:
-    printf(" FILE   ");
-    break;
-  case 13:
-    printf(" LOPROC ");
-    break;
-  case 15:
-    printf(" HIPROC ");
-    break;
-  default:
-    printf(" Inconnu");
-    break;
-  }
+char* afficheBind(ElfSymbole *ts, int num) {
+	char* bind = malloc(10);
+	switch ((ts + num)->info >> 4){
+		case 0:
+			strcpy(bind, "LOCAL");
+			break;
+		case 1:
+			strcpy(bind, "GLOBAL");
+			break;
+		case 2:
+			strcpy(bind, "WEAK");
+			break;
+		case 13:
+			strcpy(bind, "LOPROC");
+			break;
+		case 15:
+			strcpy(bind, "HIPROC");
+			break;
+		default:
+			strcpy(bind, "Inconnu");
+			break;
+	}
+	return bind;
 }
 
-void afficheBind(SymboleEntree *ts, int num) {
-  switch ((ts + num)->info >> 4) {
-  case 0:
-    printf(" LOCAL ");
-    break;
-  case 1:
-    printf(" GLOBAL");
-    break;
-  case 2:
-    printf(" WEAK  ");
-    break;
-  case 13:
-    printf(" LOPROC");
-    break;
-  case 15:
-    printf(" HIPROC");
-    break;
-  default:
-    printf(" Inconnu");
-    break;
-  }
+char* afficheVis(ElfSymbole *ts, int num) {
+	char* vis = malloc(10);
+	switch ((ts + num)->other) {
+	case 0:
+		strcpy(vis, "DEFAULT");
+		break;
+	case 1:
+		strcpy(vis, "INTERNAL");
+		break;
+	case 2:
+		strcpy(vis, "HIDDEN");
+		break;
+	case 3:
+		strcpy(vis, "PROTECTED");
+		break;
+	case 4:
+		strcpy(vis, "EXPORTED");
+		break;
+	case 5:	
+		strcpy(vis, "SINGLETON");
+		break;
+	case 6: 
+		strcpy(vis, "ELIMINATE");
+		break; 
+	default:
+		strcpy(vis, "Inconnu");
+		break;
+	}
+	return vis;
 }
 
-void affichageVis(SymboleEntree *ts, int num) {
-  switch ((ts + num)->other) {
-  case 0:
-    printf(" DEFAULT");
-    break;
-  case 1:
-    printf(" INTERNAL");
-    break;
-  case 2:
-    printf(" HIDDEN");
-    break;
-  case 3:
-    printf(" PROTECTED");
-    break;
-  case 4:
-    printf(" EXPORTED");
-    break;
-  case 5:
-    printf(" SINGLETON");
-    break;
-  case 6:
-    printf(" ELIMINATE");
-    break;
-  default:
-    printf(" Inconnu");
-    break;
-  }
+char* afficheNdx(int num) {
+	char *ndx = malloc(10);
+	switch (num) {
+	case 0:
+		strcpy(ndx, "UND");
+		break;
+	case 0xfff1:
+		strcpy(ndx, "ABS");
+		break;
+	case 0xfff2:	
+		strcpy(ndx, "COMMON");
+		break;
+	default:
+		sprintf(ndx, "%d", num);
+		break;
+	}
+	return ndx;
 }
 
-void afficherNdx(int num) {
-  switch (num) {
-  case 0:
-    printf("  UND");
-    break;
-  case 0xfff1:
-    printf("  ABS");
-    break;
-  case 0xfff2:
-    printf(" COMMON");
-    break;
-  default:
-    printf(" %4d", num);
-    break;
-  }
-}
+Elf* getTableSymboles(Elf* elf, FILE* f_bin){
+	int index_symbol = findSymTab(elf);
+	int index_string = elf->section_header[index_symbol].entree.link;
 
-void afficherNameOther(SymboleEntree *symTab, StrTab strtab, int num) {
-  printf(" %s", strtab + reverse_4((symTab + num)->name));
-}
+	if (index_symbol == -1)
+	{
+		printf("Pas de table de symbole\n");
+		return elf;
+	}
 
-void afficherNameSection(SymboleEntree *symTab,Elf *elf, int num) {
-  printf(" %s",elf->section_header[reverse_2((symTab + num)->ndx)].name);
-}
+	SectionHeader* symbol_header = &elf->section_header[index_symbol].entree;
+	SectionHeader* string_header = &elf->section_header[index_string].entree;
 
-int getNbSymboles(ElfSection s) { return (s.entree.size / s.entree.entsize); }
+	ElfSymbole* symbol = allocElfSymbole(symbol_header->size);
+	StrTab string = malloc(string_header->size * sizeof(char));//allocStrTab(string_header->size);
 
-void afficherNumValueSize(SymboleEntree *symTab, int num) {
-  printf("    %2d: %08X  %4d", num, reverse_4((symTab + num)->value),
-         reverse_4((symTab + num)->size));
+	fseek(f_bin, symbol_header->offset, SEEK_SET);
+	fread(symbol, symbol_header->size, 1, f_bin);
+	
+	fseek(f_bin, string_header->offset, SEEK_SET);
+	fread(string, string_header->size, 1, f_bin);
+
+
+	elf->symbol_header = symbol;
+	elf->nb_symbol = symbol_header->size / symbol_header->entsize;
+	elf->string_header = &string;
+
+	return elf;
 }
 
 
-void get_table_symboles(char *nom_fichier,Elf* elf){
-  FILE *f=fopen(nom_fichier,"r");
+void affichageTableSymbole(Elf* elf){
+	
+	printf("\nSymbol table '.symtab' contains %d entries:\n", 
+			elf->nb_symbol);
+  	printf("   Num:    Value  Size Type    Bind   Vis      Ndx Name\n");
 
-  FILE *f_bin;
-  f_bin = fopen(nom_fichier, "rb");
-  if (f_bin == NULL) {
-    printf("Erreur ouverture fichier");
-    exit(1);
-  }
-  int index_symtab = findSymTab(elf);
-  int index_strtab = elf->section_header[index_symtab].entree.link;
-
-  ElfSection secSymTab = fetchSection(elf, index_symtab);
-  ElfSection secStrTab = fetchSection(elf, index_strtab);
-
-  fseek(f_bin, secStrTab.entree.offset, SEEK_SET);
-  StrTab strtab = malloc(secStrTab.entree.size);
-
-  fread(strtab, secStrTab.entree.size, 1, f_bin);
-
-  fseek(f_bin, secSymTab.entree.offset, SEEK_SET);
-  SymboleEntree *symtab = malloc(secSymTab.entree.size);
-  fread(symtab, secSymTab.entree.size, 1, f_bin);
-
-
+	for (int i = 0; i < elf->nb_symbol; i++){
+		printf("   %3d: %08x %5d %-7s %-6s %-8s %3s ", 
+				i, 
+				elf->symbol_header[i].value, 
+				reverse_4(elf->symbol_header[i].size),
+				afficheType(elf->symbol_header, i),
+				afficheBind(elf->symbol_header, i),
+				afficheVis(elf->symbol_header, i),
+				afficheNdx(reverse_2((elf->symbol_header + i)->ndx))); //   %s
+		if ((elf->symbol_header + i)->info == 3) {
+			printf("%s",elf->section_header[reverse_2((elf->symbol_header + i)->ndx)].name);
+		} else {
+			printf("%s", *elf->string_header + (reverse_4((elf->symbol_header + i)->name)));
+		}
+		printf("\n");
+	}
 }
 
-/*void affichage_table_symboles(Elf *elf){
-  SectionHeaderStruct *section_header = valeur_section(nom_fichier);
 
-  FILE *f_bin;
-  f_bin = fopen(nom_fichier, "rb");
-  if (f_bin == NULL) {
-    printf("Erreur ouverture fichier");
-    exit(1);
-  }
+void affichage_table_symboles(char* nom_fichier, bool arm_cmd_version){
+	FILE* f = ouvertureFichier(nom_fichier, "rb");
+	Elf* elf = valeurEntete(f);
+	elf = valeurSection(elf,f);
 
-  int index_symtab = findSymTab(section_header);
-  int index_strtab = section_header->section_table[index_symtab].entree.link;
+	elf = getTableSymboles(elf, f);
+	affichageTableSymbole(elf);
 
-  Section symTab = fetchSection(*section_header, index_symtab);
-  Section strTab = fetchSection(*section_header, index_strtab);
+	fermetureFichier(f);
+}
 
-  fseek(f_bin, strTab.entree.offset, SEEK_SET);
-  StrTab strtab = malloc(strTab.entree.size);
-
-  fread(strtab, strTab.entree.size, 1, f_bin);
-
-  printf("\nSymbol table '.symtab' contains %d entries:\n", secSymTab->entree.size / 16);
-
-  printf("   Num:    Value  Size Type    Bind   Vis      Ndx Name\n");
-
-  fseek(f_bin, symTab.entree.offset, SEEK_SET);
-  SymboleEntree *symtab = malloc(symTab.entree.size);
-  fread(symtab, symTab.entree.size, 1, f_bin);
-
-  int nb_symboles = getNbSymboles(*secSymTab);
-
-  for (int i = 0; i < nb_symboles; i++) {
-    afficherNumValueSize(symTab, i);
-    afficheType(symTab, i);
-    afficheBind(symTab, i);
-    affichageVis(symTab, i);
-    afficherNdx(reverse_2((symTab + i)->ndx));
-    if ((symTab + i)->info == 3) {
-       afficherNameSection(symTab, entete, i);
-     } else {
-      afficherNameOther(symTab, *strTab, i);
-     }
-    printf("\n");
-  }
-}*/
-
-int main(int argc,char * argv[]){
-  ElfSection secSymTab;
-  SymboleEntree *symTab;
-  StrTab *strTab;
-  FILE *f=fopen(argv[1],"r");
-  Elf *elf=valeurEntete(f);
-  elf=valeurSection(elf,f);
-  get_table_symboles(argv[1],elf);
+int main(int argc, char** argv){
+	affichage_table_symboles(argv[1], false);
+	return 0;
 }
