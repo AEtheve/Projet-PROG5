@@ -74,29 +74,29 @@ void affichage_contenu_section(char* nom_fichier, int select_section){
   fermetureFichier(f);
 }
 
-// int main(int argc, char** argv){
-//   affichage_contenu_section(argv[1], 0);
-//   affichage_contenu_section(argv[1], 1);
-//   affichage_contenu_section(argv[1], 2);
-//   affichage_contenu_section(argv[1], 3);
-//   affichage_contenu_section(argv[1], 4);
-//   affichage_contenu_section(argv[1], 5);
-//   affichage_contenu_section(argv[1], 6);
-//   affichage_contenu_section(argv[1], 7);
-//   affichage_contenu_section(argv[1], 8);
-//   affichage_contenu_section(argv[1], 9);
-//   affichage_contenu_section(argv[1], 10);
-//   affichage_contenu_section(argv[1], 11);
-//   affichage_contenu_section(argv[1], 12);
-//   affichage_contenu_section(argv[1], 13);
-//   affichage_contenu_section(argv[1], 14);
-//   affichage_contenu_section(argv[1], 15);
-//   affichage_contenu_section(argv[1], 16);
-//   affichage_contenu_section(argv[1], 17);
-//   affichage_contenu_section(argv[1], 18);
-//   affichage_contenu_section(argv[1], 19);
-//   affichage_contenu_section(argv[1], 20);
-//   affichage_contenu_section(argv[1], 21);
-//   affichage_contenu_section(argv[1], 22);
-//   return 0;
-// }
+int main(int argc, char** argv){
+  affichage_contenu_section(argv[1], 0);
+  affichage_contenu_section(argv[1], 1);
+  affichage_contenu_section(argv[1], 2);
+  affichage_contenu_section(argv[1], 3);
+  affichage_contenu_section(argv[1], 4);
+  affichage_contenu_section(argv[1], 5);
+  affichage_contenu_section(argv[1], 6);
+  affichage_contenu_section(argv[1], 7);
+  affichage_contenu_section(argv[1], 8);
+  affichage_contenu_section(argv[1], 9);
+  affichage_contenu_section(argv[1], 10);
+  affichage_contenu_section(argv[1], 11);
+  affichage_contenu_section(argv[1], 12);
+  affichage_contenu_section(argv[1], 13);
+  affichage_contenu_section(argv[1], 14);
+  affichage_contenu_section(argv[1], 15);
+  affichage_contenu_section(argv[1], 16);
+  affichage_contenu_section(argv[1], 17);
+  affichage_contenu_section(argv[1], 18);
+  affichage_contenu_section(argv[1], 19);
+  affichage_contenu_section(argv[1], 20);
+  affichage_contenu_section(argv[1], 21);
+  affichage_contenu_section(argv[1], 22);
+  return 0;
+}

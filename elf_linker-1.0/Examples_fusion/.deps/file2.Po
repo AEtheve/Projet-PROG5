@@ -1,0 +1,52 @@
+file2.o: file2.c \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/stdio.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/_ansi.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/newlib.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/config.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/machine/ieeefp.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/features.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/include/stddef.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/include/stdarg.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/reent.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/_ansi.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/_types.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/machine/_types.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/machine/_default_types.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/lock.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/types.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/machine/types.h \
+ /opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/stdio.h
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/stdio.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/_ansi.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/newlib.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/config.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/machine/ieeefp.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/features.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/include/stddef.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/include/stdarg.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/reent.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/_ansi.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/_types.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/machine/_types.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/machine/_default_types.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/lock.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/types.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/machine/types.h:
+
+/opt/gnu/arm/lib/gcc/arm-eabi/4.5.3/../../../../arm-eabi/sys-include/sys/stdio.h:

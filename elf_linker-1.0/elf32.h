@@ -48,21 +48,28 @@ typedef struct {
 
 typedef struct {
     SectionHeader entree;
+    uint8_t* data;
     char name[30];
 } ElfSection;
 
-// typedef struct {
-//     Section* section_table;
-//     int section_adress;
-//     int section_header;
-//     int section_number;
-//     int section_header_symbole;
-// } SectionHeaderStruct;
+typedef struct {
+  Elf_Word_32b name;
+  Elf_Addr_32b value;
+  Elf_Word_32b size;
+  unsigned char info;
+  unsigned char other;
+  Elf_Half_16b ndx;
+} SymboleHeader;
+
+typedef struct {
+  SymboleHeader entree;
+  unsigned char *name;
+} ElfSymbole;
 
 typedef struct {
     ElfHeader* header;
     ElfSection* section_header;
-
+    ElfSymbole* symbole_header;
 } Elf;
 
 FILE* ouvertureFichier(char* nomFichier, char* mode);
@@ -76,5 +83,7 @@ ElfHeader* allocElfHeader();
 SectionHeader* allocElfSectionHeader();
 
 ElfSection* allocElfSection(int size);
+
+ElfSymbole* allocElfSymbole(int size);
 
 #endif
