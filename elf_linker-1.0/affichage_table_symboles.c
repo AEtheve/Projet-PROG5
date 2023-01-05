@@ -22,17 +22,18 @@ typedef struct {
 
 typedef char *StrTab;
 
-int findSymTab(SectionHeaderStruct *Shs) {
-  for (int i = 0; i < Shs->section_number; i++) {
-    if (Shs->section_table[i].entree.type == 2) {
+int findSymTab(Elf *elf) {
+  ElfSection* s=elf->section_header;
+  for (int i = 0; i < elf->header->e_section_header_entry_count; i++) {
+    if (s[i].entree.type == 2) {
       return i;
     }
   }
   return -1;
 }
 
-Section fetchSection(SectionHeaderStruct Shs, int numSec) {
-  return *(Shs.section_table + numSec);
+ElfSection fetchSection(Elf* elf, int numSec) {
+  return *(elf->section_header + numSec);
 }
 
 void afficheType(SymboleEntree *ts, int num) {
@@ -137,20 +138,46 @@ void afficherNameOther(SymboleEntree *symTab, StrTab strtab, int num) {
   printf(" %s", strtab + reverse_4((symTab + num)->name));
 }
 
-void afficherNameSection(SymboleEntree *symTab,
-                         SectionHeaderStruct *section_header, int num) {
-  printf(" %s",
-         section_header->section_table[reverse_2((symTab + num)->ndx)].name);
+void afficherNameSection(SymboleEntree *symTab,Elf *elf, int num) {
+  printf(" %s",elf->section_header[reverse_2((symTab + num)->ndx)].name);
 }
 
-int getNbSymboles(Section s) { return (s.entree.size / s.entree.entsize); }
+int getNbSymboles(ElfSection s) { return (s.entree.size / s.entree.entsize); }
 
 void afficherNumValueSize(SymboleEntree *symTab, int num) {
   printf("    %2d: %08X  %4d", num, reverse_4((symTab + num)->value),
          reverse_4((symTab + num)->size));
 }
 
-void affichage_table_symboles(char *nom_fichier, bool arm_cmd_version){
+
+void get_table_symboles(char *nom_fichier,Elf* elf){
+  FILE *f=fopen(nom_fichier,"r");
+
+  FILE *f_bin;
+  f_bin = fopen(nom_fichier, "rb");
+  if (f_bin == NULL) {
+    printf("Erreur ouverture fichier");
+    exit(1);
+  }
+  int index_symtab = findSymTab(elf);
+  int index_strtab = elf->section_header[index_symtab].entree.link;
+
+  ElfSection secSymTab = fetchSection(elf, index_symtab);
+  ElfSection secStrTab = fetchSection(elf, index_strtab);
+
+  fseek(f_bin, secStrTab.entree.offset, SEEK_SET);
+  StrTab strtab = malloc(secStrTab.entree.size);
+
+  fread(strtab, secStrTab.entree.size, 1, f_bin);
+
+  fseek(f_bin, secSymTab.entree.offset, SEEK_SET);
+  SymboleEntree *symtab = malloc(secSymTab.entree.size);
+  fread(symtab, secSymTab.entree.size, 1, f_bin);
+
+
+}
+
+/*void affichage_table_symboles(Elf *elf){
   SectionHeaderStruct *section_header = valeur_section(nom_fichier);
 
   FILE *f_bin;
@@ -171,7 +198,7 @@ void affichage_table_symboles(char *nom_fichier, bool arm_cmd_version){
 
   fread(strtab, strTab.entree.size, 1, f_bin);
 
-  printf("\nSymbol table '.symtab' contains %d entries:\n", section_header->section_table[index_symtab].entree.size / 16);
+  printf("\nSymbol table '.symtab' contains %d entries:\n", secSymTab->entree.size / 16);
 
   printf("   Num:    Value  Size Type    Bind   Vis      Ndx Name\n");
 
@@ -179,19 +206,29 @@ void affichage_table_symboles(char *nom_fichier, bool arm_cmd_version){
   SymboleEntree *symtab = malloc(symTab.entree.size);
   fread(symtab, symTab.entree.size, 1, f_bin);
 
-  int nb_symboles = getNbSymboles(symTab);
+  int nb_symboles = getNbSymboles(*secSymTab);
 
   for (int i = 0; i < nb_symboles; i++) {
-    afficherNumValueSize(symtab, i);
-    afficheType(symtab, i);
-    afficheBind(symtab, i);
-    affichageVis(symtab, i);
-    afficherNdx(reverse_2((symtab + i)->ndx));
-    if ((symtab + i)->info == 3) {
-       afficherNameSection(symtab, section_header, i);
+    afficherNumValueSize(symTab, i);
+    afficheType(symTab, i);
+    afficheBind(symTab, i);
+    affichageVis(symTab, i);
+    afficherNdx(reverse_2((symTab + i)->ndx));
+    if ((symTab + i)->info == 3) {
+       afficherNameSection(symTab, entete, i);
      } else {
-      afficherNameOther(symtab, strtab, i);
+      afficherNameOther(symTab, *strTab, i);
      }
     printf("\n");
   }
+}*/
+
+int main(int argc,char * argv[]){
+  ElfSection secSymTab;
+  SymboleEntree *symTab;
+  StrTab *strTab;
+  FILE *f=fopen(argv[1],"r");
+  Elf *elf=valeurEntete(f);
+  elf=valeurSection(elf,f);
+  get_table_symboles(argv[1],elf);
 }
