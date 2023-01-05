@@ -1,6 +1,3 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "affichage_section.h"
 
 void printAsciiLine(uint8_t *line, int size) {
@@ -22,31 +19,23 @@ void printIndent(int n) {
   }
 }
 
-void affichage_contenu_section(char* nom_fichier, int select_section){
-  SectionHeaderStruct *section_header = valeur_section(nom_fichier);
+void affichageContenuSection(Elf* elf, FILE* f_bin, int select_section){;
 
-  FILE *f_bin;
-  f_bin = fopen(nom_fichier, "rb");
-  if (f_bin == NULL) {
-    printf("Erreur ouverture fichier");
-    exit(1);
-  }
-  fseek(f_bin, section_header->section_table[select_section].entree.offset,
-        SEEK_SET);
+  fseek(f_bin, elf->section_header[select_section].entree.offset, SEEK_SET);
 
   uint8_t lettre;
   int j = 0;
   uint8_t ligne[1000];
 
-  if (section_header->section_table[select_section].entree.size == 0) {
+  if (elf->section_header[select_section].entree.size == 0) {
     printf("Section '%s' has no data to dump.\n",
-           section_header->section_table[select_section].name);
+           elf->section_header[select_section].name);
   } else {
     printf("\nHex dump of section '%s':\n",
-           section_header->section_table[select_section].name);
-    for (int i = 0; i < section_header->section_number; i++) {
-      if (section_header->section_table[i].entree.type == 9) { // REL
-        if (section_header->section_table[i].entree.info == select_section) {
+           elf->section_header[select_section].name);
+    for (int i = 0; i < elf->header->e_section_header_entry_count; i++) {
+      if (elf->section_header[i].entree.type == 9) { // REL
+        if (elf->section_header[i].entree.info == select_section) {
           printf(" NOTE: This section has relocations against it, but these "
                  "have NOT been applied to this dump.\n");
         }
@@ -54,7 +43,7 @@ void affichage_contenu_section(char* nom_fichier, int select_section){
     }
   }
 
-  while (j < section_header->section_table[select_section].entree.size) {
+  while (j < elf->section_header[select_section].entree.size) {
     if (j % 16 == 0) {
       printf("  0x%08x ", j);
     }
@@ -76,3 +65,38 @@ void affichage_contenu_section(char* nom_fichier, int select_section){
     printf("\n");
   }
 }
+
+void affichage_contenu_section(char* nom_fichier, int select_section){
+  FILE* f = ouvertureFichier(nom_fichier, "rb");
+  Elf* elf = valeurEntete(f);
+  elf = valeurSection(elf, f);
+  affichageContenuSection(elf, f, select_section);
+  fermetureFichier(f);
+}
+
+// int main(int argc, char** argv){
+//   affichage_contenu_section(argv[1], 0);
+//   affichage_contenu_section(argv[1], 1);
+//   affichage_contenu_section(argv[1], 2);
+//   affichage_contenu_section(argv[1], 3);
+//   affichage_contenu_section(argv[1], 4);
+//   affichage_contenu_section(argv[1], 5);
+//   affichage_contenu_section(argv[1], 6);
+//   affichage_contenu_section(argv[1], 7);
+//   affichage_contenu_section(argv[1], 8);
+//   affichage_contenu_section(argv[1], 9);
+//   affichage_contenu_section(argv[1], 10);
+//   affichage_contenu_section(argv[1], 11);
+//   affichage_contenu_section(argv[1], 12);
+//   affichage_contenu_section(argv[1], 13);
+//   affichage_contenu_section(argv[1], 14);
+//   affichage_contenu_section(argv[1], 15);
+//   affichage_contenu_section(argv[1], 16);
+//   affichage_contenu_section(argv[1], 17);
+//   affichage_contenu_section(argv[1], 18);
+//   affichage_contenu_section(argv[1], 19);
+//   affichage_contenu_section(argv[1], 20);
+//   affichage_contenu_section(argv[1], 21);
+//   affichage_contenu_section(argv[1], 22);
+//   return 0;
+// }

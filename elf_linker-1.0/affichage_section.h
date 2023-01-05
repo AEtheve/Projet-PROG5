@@ -13,7 +13,7 @@
 
 /* Recupere les valeurs de toutes les sections et de l'entete du fichier
 nom_fichier et renvoie leurs valeur au format Elf */
-Elf* valeur_section(Elf* elf, FILE* f_bin);
+Elf* valeurSection(Elf* elf, FILE* f_bin);
 
 /* Affiche les sections contenu dans le fichier elf */
 void affichageSection(Elf* elf, bool arm_cmd_version);
