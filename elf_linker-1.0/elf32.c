@@ -43,3 +43,14 @@ StrTab* allocStrTab(int size){
     return strTab;
 }
 
+ElfRelocation* allocElfRelocation(int size){
+    ElfRelocation* relocation = (ElfRelocation*)malloc(sizeof(ElfRelocation)*size);
+    return relocation;
+}
+
+RelocationHeader* allocRelocationHeader(int size){
+    RelocationHeader* header = (RelocationHeader*) malloc(sizeof(RelocationHeader) * size);
+    return header;
+}
+
+

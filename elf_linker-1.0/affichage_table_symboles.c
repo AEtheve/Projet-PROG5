@@ -146,6 +146,14 @@ Elf *getTableSymboles(Elf *elf, FILE *f_bin)
     fseek(f_bin, symbol_header->offset, SEEK_SET);
     fread(symbol, symbol_header->size, 1, f_bin);
 
+    for(int i = 0; i < symbol_header->size / symbol_header->entsize; i++)
+    {
+        symbol[i].name = reverse_4(symbol[i].name);
+        symbol[i].value = reverse_4(symbol[i].value);
+        symbol[i].size = reverse_4(symbol[i].size);
+        symbol[i].ndx = reverse_2(symbol[i].ndx);
+    }
+
     fseek(f_bin, string_header->offset, SEEK_SET);
     fread(string, string_header->size, 1, f_bin);
 
@@ -169,18 +177,18 @@ void affichageTableSymbole(Elf *elf)
         printf("   %3d: %08x %5d %-7s %-6s %-8s %3s ",
                i,
                elf->symbol_header[i].value,
-               reverse_4(elf->symbol_header[i].size),
+               elf->symbol_header[i].size,
                afficheType(elf->symbol_header, i),
                afficheBind(elf->symbol_header, i),
                afficheVis(elf->symbol_header, i),
-               afficheNdx(reverse_2((elf->symbol_header + i)->ndx))); //   %s
+               afficheNdx((elf->symbol_header + i)->ndx)); //   %s
         if ((elf->symbol_header + i)->info == 3)
-        {
-            printf("%s", elf->section_header[reverse_2((elf->symbol_header + i)->ndx)].name);
+        {	
+            printf("%s", elf->section_header[(elf->symbol_header + i)->ndx].name);
         }
         else
         {
-            printf("%s", elf->string_header + (reverse_4((elf->symbol_header + i)->name)));
+            printf("%s", elf->string_header + ((elf->symbol_header + i)->name));
         }
         printf("\n");
     }
@@ -198,8 +206,8 @@ void affichage_table_symboles(char *nom_fichier, bool arm_cmd_version)
     fermetureFichier(f);
 }
 
-int main(int argc, char **argv)
-{
-    affichage_table_symboles(argv[1], false);
-    return 0;
-}
+// int main(int argc, char **argv)
+// {
+//     affichage_table_symboles(argv[1], false);
+//     return 0;
+// }

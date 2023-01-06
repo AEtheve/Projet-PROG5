@@ -61,6 +61,15 @@ typedef struct {
   Elf_Half_16b ndx;
 } ElfSymbole;
 
+typedef struct {
+    Elf_Word_32b offset;
+    Elf_Word_32b info;
+} RelocationHeader;
+
+typedef struct {
+    RelocationHeader entree;
+} ElfRelocation;
+
 typedef char *StrTab;
 
 typedef struct {
@@ -68,6 +77,7 @@ typedef struct {
     ElfSection* section_header;
     ElfSymbole* symbol_header;
     StrTab string_header;
+    ElfRelocation* relocation_header;
     int nb_symbol;
 } Elf;
 
@@ -86,5 +96,9 @@ ElfSection* allocElfSection(int size);
 ElfSymbole* allocElfSymbole(int size);
 
 StrTab* allocStrTab(int size);
+
+ElfRelocation* allocElfRelocation(int size);
+
+RelocationHeader* allocRelocationHeader(int size);
 
 #endif
