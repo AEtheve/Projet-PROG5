@@ -67,7 +67,7 @@ typedef struct {
 } RelocationHeader;
 
 typedef struct {
-    RelocationHeader entree;
+    RelocationHeader* entree;
 } ElfRelocation;
 
 typedef char *StrTab;
