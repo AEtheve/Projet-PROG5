@@ -141,7 +141,7 @@ Elf *getTableSymboles(Elf *elf, FILE *f_bin)
     SectionHeader *string_header = &elf->section_header[index_string].entree;
 
     ElfSymbole *symbol = allocElfSymbole(symbol_header->size);
-    StrTab string = malloc(string_header->size * sizeof(char)); // allocStrTab(string_header->size);
+    StrTab string = allocStrTab(string_header->size);
 
     fseek(f_bin, symbol_header->offset, SEEK_SET);
     fread(symbol, symbol_header->size, 1, f_bin);

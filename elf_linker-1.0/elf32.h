@@ -95,7 +95,7 @@ ElfSection* allocElfSection(int size);
 
 ElfSymbole* allocElfSymbole(int size);
 
-StrTab* allocStrTab(int size);
+StrTab allocStrTab(int size);
 
 ElfRelocation* allocElfRelocation(int size);
 

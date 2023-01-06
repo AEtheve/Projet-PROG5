@@ -38,8 +38,8 @@ ElfSymbole* allocElfSymbole(int size){
     return symbole;
 }
 
-StrTab* allocStrTab(int size){
-    StrTab* strTab = (StrTab*)malloc(sizeof(StrTab)*size);
+StrTab allocStrTab(int size){
+    StrTab strTab = (StrTab)malloc(sizeof(StrTab)*size);
     return strTab;
 }
 
