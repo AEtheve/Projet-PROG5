@@ -5,12 +5,12 @@ int findSection(Elf* elf, const char* name) {
     int sec_num = elf->header->e_section_header_entry_count;
 
     for(int i=0; i<sec_num; i++) {
-        printf("comparing %s with %s: ", name, elf->section_header[i].name);
+        // printf("comparing %s with %s: ", name, elf->section_header[i].name);
         if (!strcmp(elf->section_header[i].name, name)) {
-            printf("1\n");
+            // printf("1\n");
             return i;
         }
-        printf("0\n");
+        // printf("0\n");
     }
 
     // On peut retourner 0, l'index 0 etant tjrs utilisé pour la section nulle
@@ -36,6 +36,7 @@ Elf* fusionSection(Elf* elf1, Elf* elf2) {
                 }
             case 1:
             case 8:
+            case 0x70000003:
             {
                 // Chercher la section correspondante dans elf2
                 int j = findSection(elf2, elf1->section_header[i].name);
