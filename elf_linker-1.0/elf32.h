@@ -67,7 +67,7 @@ typedef struct {
     ElfHeader* header;
     ElfSection* section_header;
     ElfSymbole* symbol_header;
-	StrTab* string_header;
+    StrTab string_header;
     int nb_symbol;
 } Elf;
 
