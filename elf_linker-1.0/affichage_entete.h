@@ -1,12 +1,21 @@
+#ifndef _AFFICHAGE_ENTETE_H_
+#define _AFFICHAGE_ENTETE_H_
 
-// typedef struct{
-//     int start_section;
-//     int nb_sections;
-//     int taille_section_header;
-//     int section_header_string_table_index;
-// }ElfHeader;
+#include "util.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include "elf32.h"
 
-ElfHeader* valeur_entete(char *nom_fichier);
+/* Recupere les valeurs d'entete du fichier au format ELF et renvoi
+un pointeur elf contenant ses valeurs */
+Elf* valeurEntete(FILE* f_bin);
 
+/* Affiche les élément de l'entete contenu dans elf */
+void affichageEntete(Elf* elf);
+
+/* Appel la fonction valeur_entere, recupere la valeur et
+la renvoie dans la fonction affichageEntete */
 void affichage_entete(char *nom_fichier);
+
+#endif
