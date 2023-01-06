@@ -54,3 +54,21 @@ RelocationHeader* allocRelocationHeader(int size){
 }
 
 
+Elf* addSection(Elf* elf, ElfSection section) {
+    // Recuperer l'indice de la nouvelle section
+
+    int index = elf->header->e_section_header_entry_count;
+    elf->header->e_section_header_entry_count++;
+
+    // Allouer la mémoire supplémentaire
+    ElfSection* res = realloc(elf->section_header, sizeof(ElfSection)*elf->header->e_section_header_entry_count);
+    if (res==NULL) {
+        exit(1);
+    }
+    elf->section_header=res;
+
+    // Copier le contenu de section en bout de tableau
+    elf->section_header[index]=section;
+
+    return elf;
+}
