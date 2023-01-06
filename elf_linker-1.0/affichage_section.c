@@ -223,9 +223,9 @@ void affichage_section(char* nom_fichier, bool arm_cmd_version){
     fermetureFichier(f);
 }
 
-int main(int argc, char* argv[]){
+/* int main(int argc, char* argv[]){
     
     affichage_section(argv[1],false);
     
     return 0;
-}
+} */

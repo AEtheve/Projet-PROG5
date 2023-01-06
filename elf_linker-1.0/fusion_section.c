@@ -1,22 +1,27 @@
 #include "fusion_section.h"
 
-int find_section(Elf* elf, const char* name) {
+int findSection(Elf* elf, const char* name) {
 
     int sec_num = elf->header->e_section_header_entry_count;
 
     for(int i=0; i<sec_num; i++) {
+        printf("comparing %s with %s: ", name, elf->section_header[i].name);
         if (!strcmp(elf->section_header[i].name, name)) {
+            printf("1\n");
             return i;
         }
+        printf("0\n");
     }
 
     // On peut retourner 0, l'index 0 etant tjrs utilisé pour la section nulle
     return 0;
 }
 
-Elf* fusion_section(Elf* elf1, Elf* elf2) {
+Elf* fusionSection(Elf* elf1, Elf* elf2) {
 
     Elf* elf_o = allocElf();
+    elf_o->header = allocElfHeader();
+    elf_o->header->e_section_header_entry_count=0;
 
     int sec_num1 = elf1->header->e_section_header_entry_count;
     int strtab_offset;
@@ -26,12 +31,14 @@ Elf* fusion_section(Elf* elf1, Elf* elf2) {
         // si la section est fusionnable
         switch(elf1->section_header[i].entree.type) {
             case 3:
-                strtab_offset = elf1->section_header[i].entree.size;
+                if(!strcmp(elf1->section_header[i].name, ".strtab")) {
+                    strtab_offset = elf1->section_header[i].entree.size;
+                }
             case 1:
             case 8:
             {
                 // Chercher la section correspondante dans elf2
-                int j = find_section(elf2, elf1->section_header[i].name);
+                int j = findSection(elf2, elf1->section_header[i].name);
 
                 ElfSection new_section;
 
@@ -78,7 +85,7 @@ Elf* fusion_section(Elf* elf1, Elf* elf2) {
             case 3:
             case 8:
             {
-                int i = find_section(elf2, elf1->section_header[j].name);
+                int i = findSection(elf1, elf2->section_header[j].name);
 
                 // Si on trouve une correspondance, on ne traite pas la section
                 if (i) {
@@ -104,6 +111,27 @@ Elf* fusion_section(Elf* elf1, Elf* elf2) {
 }
 
 
-int main() {
-    printf("Hello World\n");
+int main(int argc, char **argv) {
+    if (argc!=3) {
+        printf("Usage: fusion <file1> <file2>\n");
+        exit(1);
+    }
+
+    FILE* file1 = ouvertureFichier(argv[1], "rb");
+    FILE* file2 = ouvertureFichier(argv[2], "rb");
+
+    Elf* elf1 = valeurEntete(file1);
+    Elf* elf2 = valeurEntete(file2);
+
+
+    
+
+    valeurSection(elf1, file1);
+    valeurSection(elf2, file2);
+
+    Elf* result = fusionSection(elf1, elf2);
+
+    affichageSection(result, 1);
+
+    return 0;
 }

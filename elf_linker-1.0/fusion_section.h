@@ -4,10 +4,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "affichage_section.h"
 #include "elf32.h"
 
 
-Elf* fusion_section(Elf* elf1, Elf* elf2);
+Elf* fusionSection(Elf* elf1, Elf* elf2);
 
 
 
