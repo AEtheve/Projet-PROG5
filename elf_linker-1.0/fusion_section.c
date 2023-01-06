@@ -19,13 +19,15 @@ Elf* fusion_section(Elf* elf1, Elf* elf2) {
     Elf* elf_o = allocElf();
 
     int sec_num1 = elf1->header->e_section_header_entry_count;
+    int strtab_offset;
 
     // Boucle sur les sections de File1
     for(int i=0; i<sec_num1; i++) {
         // si la section est fusionnable
         switch(elf1->section_header[i].entree.type) {
-            case 1:
             case 3:
+                strtab_offset = elf1->section_header[i].entree.size;
+            case 1:
             case 8:
             {
                 // Chercher la section correspondante dans elf2
@@ -85,6 +87,7 @@ Elf* fusion_section(Elf* elf1, Elf* elf2) {
                     ElfSection new_section;
                     // Sinon on copie la section trouvée
                     memcpy(&(new_section.entree), &(elf2->section_header[j].entree), sizeof(SectionHeader));
+                    new_section.entree.name+=strtab_offset;
                     new_section.data = (uint8_t *)malloc(sizeof(uint8_t)*new_section.entree.size);
                     memcpy(new_section.data, elf2->section_header[j].data, new_section.entree.size);
                     strcpy(new_section.name, elf2->section_header[j].name);
