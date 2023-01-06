@@ -48,9 +48,9 @@ typedef struct {
 
 typedef struct {
     SectionHeader entree;
+    uint8_t* data;
     char name[30];
 } ElfSection;
-
 
 typedef struct {
   Elf_Word_32b name;
@@ -100,5 +100,7 @@ StrTab allocStrTab(int size);
 ElfRelocation* allocElfRelocation(int size);
 
 RelocationHeader* allocRelocationHeader(int size);
+
+Elf* addSection(Elf* elf, ElfSection section);
 
 #endif

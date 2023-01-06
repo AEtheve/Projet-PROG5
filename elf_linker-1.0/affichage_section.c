@@ -179,6 +179,14 @@ Elf* valeurSection(Elf* elf, FILE* f_bin){
         section_table[i].name[j] = '\0';
     }
 
+    for(int i = 0; i < section_number; i++) {
+        if(section_table[i].entree.size!=0) {
+            section_table[i].data = (uint8_t *)malloc(sizeof(uint8_t)*section_table[i].entree.size);
+            fseek(f_bin, section_table[i].entree.offset, SEEK_SET);
+            fread(section_table[i].data, 1, section_table[i].entree.size, f_bin);
+        }
+    }
+
     elf->section_header = section_table;
     return elf;
 }
@@ -215,9 +223,9 @@ void affichage_section(char* nom_fichier, bool arm_cmd_version){
     fermetureFichier(f);
 }
 
-// int main(int argc, char* argv[]){
+/* int main(int argc, char* argv[]){
     
-//     affichage_section(argv[1],false);
+    affichage_section(argv[1],false);
     
-//     return 0;
-// }
+    return 0;
+} */
