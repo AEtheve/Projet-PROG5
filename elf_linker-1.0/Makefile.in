@@ -119,31 +119,36 @@ am_test_affichage_contenu_section_OBJECTS =  \
 	./affichage_contenu_section.$(OBJEXT) \
 	./affichage_section.$(OBJEXT) ./affichage_entete.$(OBJEXT) \
 	tests/test_affichage_contenu_section.$(OBJEXT) \
-	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT)
+	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT) \
+	elf32.$(OBJEXT)
 test_affichage_contenu_section_OBJECTS =  \
 	$(am_test_affichage_contenu_section_OBJECTS)
 test_affichage_contenu_section_LDADD = $(LDADD)
 am_test_affichage_entete_OBJECTS = ./affichage_entete.$(OBJEXT) \
 	tests/test_affichage_entete.$(OBJEXT) \
-	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT)
+	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT) \
+	elf32.$(OBJEXT)
 test_affichage_entete_OBJECTS = $(am_test_affichage_entete_OBJECTS)
 test_affichage_entete_LDADD = $(LDADD)
 am_test_affichage_section_OBJECTS = ./affichage_section.$(OBJEXT) \
 	./affichage_entete.$(OBJEXT) \
 	tests/test_affichage_section.$(OBJEXT) \
-	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT)
+	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT) \
+	elf32.$(OBJEXT)
 test_affichage_section_OBJECTS = $(am_test_affichage_section_OBJECTS)
 test_affichage_section_LDADD = $(LDADD)
 am_test_affichage_tr_OBJECTS = ./affichage_tr.$(OBJEXT) \
 	./affichage_section.$(OBJEXT) ./affichage_entete.$(OBJEXT) \
 	tests/test_affichage_tr.$(OBJEXT) \
-	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT)
+	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT) \
+	elf32.$(OBJEXT) affichage_table_symboles.$(OBJEXT)
 test_affichage_tr_OBJECTS = $(am_test_affichage_tr_OBJECTS)
 test_affichage_tr_LDADD = $(LDADD)
 am_test_affichage_ts_OBJECTS = ./affichage_table_symboles.$(OBJEXT) \
 	./affichage_section.$(OBJEXT) ./affichage_entete.$(OBJEXT) \
 	tests/test_affichage_ts.$(OBJEXT) \
-	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT)
+	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT) \
+	elf32.$(OBJEXT)
 test_affichage_ts_OBJECTS = $(am_test_affichage_ts_OBJECTS)
 test_affichage_ts_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -167,7 +172,7 @@ am__depfiles_remade = ./$(DEPDIR)/Options_and_debug_example.Po \
 	./$(DEPDIR)/affichage_section.Po \
 	./$(DEPDIR)/affichage_table_symboles.Po \
 	./$(DEPDIR)/affichage_tr.Po ./$(DEPDIR)/debug.Po \
-	./$(DEPDIR)/util.Po \
+	./$(DEPDIR)/elf32.Po ./$(DEPDIR)/util.Po \
 	tests/$(DEPDIR)/test_affichage_contenu_section.Po \
 	tests/$(DEPDIR)/test_affichage_entete.Po \
 	tests/$(DEPDIR)/test_affichage_section.Po \
@@ -608,11 +613,11 @@ SUBDIRS = . Examples_fusion
 COMMON = debug.h debug.c util.h util.c
 EXTRA_DIST = filtre.pl
 Options_and_debug_example_SOURCES = $(COMMON) Options_and_debug_example.c
-test_affichage_entete_SOURCES = ./affichage_entete.c tests/test_affichage_entete.c tests/CuTest/CuTest.c tests/utils.c
-test_affichage_section_SOURCES = ./affichage_section.c ./affichage_entete.c tests/test_affichage_section.c tests/CuTest/CuTest.c tests/utils.c
-test_affichage_contenu_section_SOURCES = ./affichage_contenu_section.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_contenu_section.c tests/CuTest/CuTest.c tests/utils.c
-test_affichage_ts_SOURCES = ./affichage_table_symboles.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_ts.c tests/CuTest/CuTest.c tests/utils.c
-test_affichage_tr_SOURCES = ./affichage_tr.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_tr.c tests/CuTest/CuTest.c tests/utils.c
+test_affichage_entete_SOURCES = ./affichage_entete.c tests/test_affichage_entete.c tests/CuTest/CuTest.c tests/utils.c elf32.c
+test_affichage_section_SOURCES = ./affichage_section.c ./affichage_entete.c tests/test_affichage_section.c tests/CuTest/CuTest.c tests/utils.c elf32.c
+test_affichage_contenu_section_SOURCES = ./affichage_contenu_section.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_contenu_section.c tests/CuTest/CuTest.c tests/utils.c elf32.c
+test_affichage_ts_SOURCES = ./affichage_table_symboles.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_ts.c tests/CuTest/CuTest.c tests/utils.c elf32.c
+test_affichage_tr_SOURCES = ./affichage_tr.c ./affichage_section.c ./affichage_entete.c tests/test_affichage_tr.c tests/CuTest/CuTest.c tests/utils.c elf32.c affichage_table_symboles.c
 TESTS = $(check_PROGRAMS)
 all: all-recursive
 
@@ -778,6 +783,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/affichage_table_symboles.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/affichage_tr.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/elf32.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_affichage_contenu_section.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_affichage_entete.Po@am__quote@ # am--include-marker
@@ -1365,6 +1371,7 @@ distclean: distclean-recursive
 	-rm -f ./$(DEPDIR)/affichage_table_symboles.Po
 	-rm -f ./$(DEPDIR)/affichage_tr.Po
 	-rm -f ./$(DEPDIR)/debug.Po
+	-rm -f ./$(DEPDIR)/elf32.Po
 	-rm -f ./$(DEPDIR)/util.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_contenu_section.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_entete.Po
@@ -1427,6 +1434,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f ./$(DEPDIR)/affichage_table_symboles.Po
 	-rm -f ./$(DEPDIR)/affichage_tr.Po
 	-rm -f ./$(DEPDIR)/debug.Po
+	-rm -f ./$(DEPDIR)/elf32.Po
 	-rm -f ./$(DEPDIR)/util.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_contenu_section.Po
 	-rm -f tests/$(DEPDIR)/test_affichage_entete.Po
