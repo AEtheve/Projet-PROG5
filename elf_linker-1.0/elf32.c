@@ -72,3 +72,49 @@ Elf* addSection(Elf* elf, ElfSection section) {
 
     return elf;
 }
+
+void freeElfHeader(ElfHeader* elf_header){
+    free(elf_header);
+}
+
+void freeSymbolHeader(ElfSymbole *elf_symbole){
+    free(elf_symbole);
+}
+
+
+void freeElfSectionHeader(SectionHeader* section_header) {
+    free(section_header);
+}
+
+void freeElfSection(ElfSection* section){
+    free(section->data);
+    free(section);
+}
+
+
+void freeStrTab(StrTab string){
+    free(string);
+}
+
+void freeRelocationHeader(RelocationHeader* rel){
+    free(rel);
+}
+
+void freeElfRelocation(ElfRelocation* rel){
+    freeRelocationHeader(rel->entree);
+    free(rel);
+}
+
+void freeElf(Elf* elf){
+    
+    freeStrTab(elf->string_header);
+    for (int i=0;i<elf->nb_reloc;i++){
+        freeElfRelocation(&(elf->relocation_header[i]));
+    }
+    for (int i=0;i<elf->header->e_section_header_entry_count;i++){
+        freeElfSection(&(elf->section_header[i]));
+    }
+    freeElfHeader(elf->header);
+    freeSymbolHeader(elf->symbol_header);
+    free(elf);
+}

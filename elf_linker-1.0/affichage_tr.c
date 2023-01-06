@@ -178,7 +178,7 @@ Elf* getTableRelocation(Elf *elf, FILE* f_bin){
             compt++;
         }
     }
-
+    elf->nb_reloc = nb_relloc;
     elf->relocation_header = reloc;
     return elf;
 }
@@ -245,11 +245,13 @@ void affichage_table_reimplentation(char* nom_fichier){
     elf = getTableRelocation(elf, f);
     affichageTableReimplentation(elf);
 
+    freeElf(elf);
+
     fermetureFichier(f);
 }
 
-/*int main(int argc, char** argv){
+int main(int argc, char** argv){
 
      affichage_table_reimplentation(argv[1]);
      return 0;
-}*/
+}

@@ -420,15 +420,15 @@ void affichage_entete(char *nom_fichier){
     fermetureFichier(f);
 }
 
-/* int main(int argc, char *argv[])
-{
-    if (argc != 2)
-    {
-        printf("Usage: %s <fichier ELF>\n", argv[0]);
-        exit(1);
-    }
+// int main(int argc, char *argv[])
+// {
+//     if (argc != 2)
+//     {
+//         printf("Usage: %s <fichier ELF>\n", argv[0]);
+//         exit(1);
+//     }
 
-    affichage_entete(argv[1]);
+//     affichage_entete(argv[1]);
 
-    return 0;
-} */
+//     return 0;
+// }

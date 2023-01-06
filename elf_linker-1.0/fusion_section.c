@@ -31,7 +31,7 @@ Elf* fusionSection(Elf* elf1, Elf* elf2) {
         // si la section est fusionnable
         switch(elf1->section_header[i].entree.type) {
             case 3:
-                if(!strcmp(elf1->section_header[i].name, ".strtab")) {
+                if(!strcmp(elf1->section_header[i].name, ".shstrtab")) {
                     strtab_offset = elf1->section_header[i].entree.size;
                 }
             case 1:
