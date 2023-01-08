@@ -111,14 +111,14 @@ void freeSymbolHeader(ElfSymbole *elf_symbole);
 
 void freeElfSectionHeader(SectionHeader* section_header);
 
-void freeElfSection(ElfSection* section);
+void freeElfSection(ElfSection* section, Elf_Half_16b count);
 
 
 void freeStrTab(StrTab string);
 
 void freeRelocationHeader(RelocationHeader* rel);
 
-void freeElfRelocation(ElfRelocation* rel);
+void freeElfRelocation(ElfRelocation* rel, int count);
 
 void freeElf(Elf* elf);
 

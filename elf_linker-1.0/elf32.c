@@ -108,12 +108,14 @@ void freeElfSectionHeader(SectionHeader* section_header) {
     free(section_header);
 }
 
-void freeElfSection(ElfSection* section){
+void freeElfSection(ElfSection* section, Elf_Half_16b count){
     if(section==NULL) {
         return;
     }
-    if(section->data!=NULL) {
-        free(section->data);
+    for (int i=0; i<count; i++) {
+        if(section[i].data!=NULL) {
+            free(section[i].data);
+        }
     }
     free(section);
 }
@@ -133,13 +135,15 @@ void freeRelocationHeader(RelocationHeader* rel){
     free(rel);
 }
 
-void freeElfRelocation(ElfRelocation* rel){
+void freeElfRelocation(ElfRelocation* rel, int count){
     if(rel==NULL) {
         return;
     }
     // printf("elf relocation ptr: %p\n", rel);
-    if(rel->entree!=NULL) {
-        freeRelocationHeader(rel->entree);
+    for (int i=0; i<count; i++) {
+        if(rel[i].entree!=NULL) {
+            freeRelocationHeader(rel[i].entree);
+        }
     }
     free(rel);
 }
@@ -155,13 +159,13 @@ void freeElf(Elf* elf){
         /* for (int i=elf->nb_reloc-1;i>=0;i--){
             freeElfRelocation(&(elf->relocation_header[i]));
         } */
-        freeElfRelocation(elf->relocation_header);
+        freeElfRelocation(elf->relocation_header, elf->nb_reloc);
     }
     if(elf->section_header!=NULL) {
         /* for (int i=elf->header->e_program_header_entry_count-1;i>=0;i--){
             freeElfSection(&(elf->section_header[i]));
         } */
-        freeElfSection(elf->section_header);
+        freeElfSection(elf->section_header, elf->header->e_section_header_entry_count);
     }
     if(elf->header!=NULL) {
         freeElfHeader(elf->header);
