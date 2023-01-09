@@ -14,7 +14,7 @@ SUBDIRS=
 SUBDIRS+=. Examples_fusion
 
 bin_PROGRAMS=
-bin_PROGRAMS+=Options_and_debug_example
+bin_PROGRAMS+=Options_and_debug_example readelf
 
 
 COMMON=debug.h debug.c util.h util.c
@@ -23,6 +23,8 @@ EXTRA_DIST=filtre.pl
 Options_and_debug_example_SOURCES=$(COMMON) Options_and_debug_example.c
 
 EXTRA_DIST+=
+
+readelf_SOURCES = ./readelf.c affichage_entete.c elf32.c affichage_section.c affichage_table_symboles.c affichage_tr.c
 
 check_PROGRAMS =
 check_PROGRAMS += test_affichage_entete
