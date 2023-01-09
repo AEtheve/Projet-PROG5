@@ -3,6 +3,8 @@
 #include "affichage_table_symboles.h"
 #include "affichage_section.h"
 #include "util.h"
+#include "fusion_section.h"
+#include "fusion_ts.h"
 
 char *getName(ElfSymbole *symTab, StrTab strtab, int num)
 {
@@ -10,158 +12,140 @@ char *getName(ElfSymbole *symTab, StrTab strtab, int num)
   return name;
 }
 
-// char *getNameSection(ElfSymbole *symTab,
-//                      ElfSection *section_header, int num)
-// {
-//   char *name = section_header[(symTab + num)->ndx].name;
-//   return name;
-// }
-
-
-int sameName(ElfSymbole *symbole1, StrTab strtab1, int i, ElfSymbole *symbole2, StrTab strtab2, int j)
+char *getNameSection(ElfSymbole *symTab,
+                     ElfSection *section_header, int num)
 {
-  return strcmp(getName(symbole1, strtab1, i), getName(symbole2, strtab2, j)) == 0;
+  char *name = section_header[(symTab + num)->ndx].name;
+  return name;
 }
 
-
-void addSymbol(ElfSymbole *symtabFusion, int *index, int i, ElfSymbole *symtab, StrTab strtab, int *indexStrTab, int *indexShstrtab, ElfSection *section_header, StrTab shstrtabFusion, StrTab strtabFusion)
-{
-  symtabFusion[*index].name = symtab[i].name;
-  symtabFusion[*index].value = symtab[i].value;
-  symtabFusion[*index].size = symtab[i].size;
-  symtabFusion[*index].info = symtab[i].info;
-  symtabFusion[*index].other = symtab[i].other;
-  symtabFusion[*index].ndx = symtab[i].ndx;
-
-  *index += 1;
-
-  if ((symtab[i].info & 0x0f) == 3) // section
+void addSymboleOther(Elf *dest, Elf *source, ElfSymbole symbol, StrTab strtab, int index, int *indexStrTab)
   {
-    strcpy(shstrtabFusion + *indexShstrtab, getName(symtab, strtab, i));
-    *indexShstrtab += strlen(getName(symtab, strtab, i)) + 1;
-    symtabFusion[*index - 1].name = *indexShstrtab - strlen(getName(symtab, strtab, i)) - 1;
-  }
-  else
-  {
-    strcpy(strtabFusion + *indexStrTab, getName(symtab, strtab, i));
-    *indexStrTab += strlen(getName(symtab, strtab, i)) + 1;
-    symtabFusion[*index - 1].name = *indexStrTab - strlen(getName(symtab, strtab, i)) - 1;
-  }
+  symbol.name = source->symbol_header[index].name;
+  symbol.value = source->symbol_header[index].value;
+  symbol.size = source->symbol_header[index].size;
+  symbol.info = source->symbol_header[index].info;
+  symbol.other = source->symbol_header[index].other;
+  symbol.ndx = source->symbol_header[index].ndx;
+
+  char *name = getName(source->symbol_header, source->string_header, index);
+  strcpy(strtab + *indexStrTab, name);
+  symbol.name = *indexStrTab;
+  *indexStrTab += strlen(name) + 1;
+  addSymbol(dest, symbol);
 }
 
-int exactSameSymbol(ElfSymbole *symbole1, ElfSymbole *symbole2)
-{
-  if (symbole1->value == symbole2->value && symbole1->size == symbole2->size && symbole1->info == symbole2->info && symbole1->other == symbole2->other && symbole1->ndx == symbole2->ndx)
+void addSymboleSection(Elf *dest, Elf *source, ElfSymbole symbol, StrTab strtab, int index, int section)
   {
-    return 1;
-  }
-  return 0;
+  symbol.name = source->symbol_header[index].name;
+  symbol.value = source->symbol_header[index].value;
+  symbol.size = source->symbol_header[index].size;
+  symbol.info = source->symbol_header[index].info;
+  symbol.other = source->symbol_header[index].other;
+  symbol.ndx = section;
+  addSymbol(dest, symbol);
 }
 
-
-Elf *fusion_table_symboles(Elf *file1, Elf *file2)
+Elf *fusion_table_symboles(Elf *file1, Elf *file2, Elf *elf_fusion)
 {
+  elf_fusion->nb_symbol = 0;
   StrTab strtab1 = file1->string_header;
   StrTab strtab2 = file2->string_header;
+  StrTab strtabFusion = allocStrTab(1000);
 
-  // FICHIER FUSION
-  Elf *fileFusion = allocElf();
-  fileFusion->nb_symbol = 0;
-  fileFusion->symbol_header = allocElfSymbole(10000);
-  StrTab strtabsFusion = allocStrTab(10000);
-  StrTab shstrtabsFusion = allocStrTab(10000);
-
-  int index = 0;
+  
+  ElfSymbole symbol;
 
   int indexStrTab = 0;
-  int indexShstrtab = 0;
 
-  // on ajoute les symboles de symtab1:
+  // on ajoute tous les locaux de file1
   for (int i = 0; i < file1->nb_symbol; i++)
   {
-    if (file1->symbol_header[i].info >> 4 == 0) // local
+    if (file1->symbol_header[i].info >> 4 == 0) // locaux
     {
-      addSymbol(fileFusion->symbol_header, &index, i, file1->symbol_header, strtab1, &indexStrTab, &indexShstrtab, file1->section_header, shstrtabsFusion, strtabsFusion);
-      fileFusion->nb_symbol++;
-    }
-    else
-    {
-      if (sameName(file1->symbol_header, strtab1, i, file2->symbol_header, strtab2, i))
+        // si c'est une section on ajoute une section sinon on ajoute un symbole
+        if (file1->symbol_header[i].info == 3) {
+          char *section = getNameSection(file1->symbol_header, file1->section_header, i);
+          addSymboleSection(elf_fusion, file1, symbol, strtabFusion, i, findSection(elf_fusion, section));
+        }
+        else {
+          addSymboleOther(elf_fusion, file1, symbol, strtabFusion, i, &indexStrTab);
+        }
+    } else{
+      // les globaux de file1
+      // on parcours les globaux de file2, si on trouve un symbole avec le meme nom,
+      // si le symbole est défini dans file1 et file2 on affiche une erreur,
+      // si le symbole n'est pas défini dans file1 on ajoute celui de file2,
+      // sinon on ajoute celui de file1
+      for (int j = 0; j < file2->nb_symbol; j++)
       {
-        if (file1->symbol_header[i].ndx != 0) // def dans 1
+        if (file2->symbol_header[j].info >> 4 == 1) // globaux
         {
-          if (file2->symbol_header[i].ndx != 0) // def dans 2
+          char *name1 = getName(file1->symbol_header, strtab1, i);
+          char *name2 = getName(file2->symbol_header, strtab2, j);
+          if (strcmp(name1, name2) == 0)
           {
-            printf("Erreur: symbole %s defini dans les deux fichiers", getName(file1->symbol_header, strtab1, i));
-            exit(1);
-          }
-          else // def dans 1 et non def dans 2
-          {
-            addSymbol(fileFusion->symbol_header, &index, i, file1->symbol_header, strtab1, &indexStrTab, &indexShstrtab, file1->section_header, shstrtabsFusion, strtabsFusion);
-            fileFusion->nb_symbol++;
+            if (file1->symbol_header[i].info == 2 && file2->symbol_header[j].info == 2)
+            {
+              printf("Erreur : symbole %s défini dans les deux fichiers \r \n", name1);
+              exit(1);
+            }
+            else if (file1->symbol_header[i].info != 2)
+            {
+              addSymboleOther(elf_fusion, file2, symbol, strtabFusion, j, &indexStrTab);
+            }
+            else
+            {
+              addSymboleOther(elf_fusion, file1, symbol, strtabFusion, i, &indexStrTab);
+            }
           }
         }
-        else
-        { // on ajoute dans fusion element de fichier 2
-          addSymbol(fileFusion->symbol_header, &index, i, file2->symbol_header, strtab2, &indexStrTab, &indexShstrtab, file2->section_header, shstrtabsFusion, strtabsFusion);
-          fileFusion->nb_symbol++;
-        }
-      }
-      else
-      {
-        addSymbol(fileFusion->symbol_header, &index, i, file1->symbol_header, strtab1, &indexStrTab, &indexShstrtab, file1->section_header, shstrtabsFusion, strtabsFusion);
-        fileFusion->nb_symbol++;
       }
     }
   }
 
-  // On va ajouter les locaux de symtab2 qui ne sont pas déjà dans symtabFusion
+  // on ajoute les locaux de file2 qui ne sont pas des sections
   for (int i = 0; i < file2->nb_symbol; i++)
   {
-    if (file2->symbol_header[i].info >> 4 == 0) // local
+    if (file2->symbol_header[i].info >> 4 == 0) // locaux
     {
-      // On vérifie que le symbole n'est pas déjà dans symtabFusion
-      int dejaPresent = 0;
-      for (int j = 0; j < fileFusion->nb_symbol; j++)
+      if (file2->symbol_header[i].info != 3) {
+        addSymboleOther(elf_fusion, file2, symbol, strtabFusion, i, &indexStrTab);
+      } else{
+        char *section = getNameSection(file2->symbol_header, file2->section_header, i);
+         // si cette section n'existe pas dans fusion (findsection = 0) on l'ajoute (symbole) dans fusion 
+         if (findSection(elf_fusion, section) == 0) {
+          addSymboleSection(elf_fusion, file2, symbol, strtabFusion, i, findSection(elf_fusion, section));
+         }
+
+      }
+    } else{
+      // Les globaux de file2:
+      // on ajoute les globaux qui n'existe pas dans fusion:
+      int present = 0;
+      for (int j = 0; j < elf_fusion->nb_symbol; j++)
       {
-        // if (sameName(file2->symbol_header, strtab2, i, fileFusion->symbol_header, strtabsFusion, j))
-        if (exactSameSymbol(file2->symbol_header + i, fileFusion->symbol_header + j))
+        if (elf_fusion->symbol_header[j].info >> 4 == 1) // globaux
         {
-          dejaPresent = 1;
-          break;
+          char *name1 = getName(elf_fusion->symbol_header, strtabFusion, j);
+          char *name2 = getName(file2->symbol_header, strtab2, i);
+          if (strcmp(name1, name2) == 0)
+          {
+            present = 1;
+          }
         }
       }
-      if (dejaPresent == 0)
+      if (present == 0)
       {
-        addSymbol(fileFusion->symbol_header, &index, i, file2->symbol_header, strtab2, &indexStrTab, &indexShstrtab, file2->section_header, shstrtabsFusion, strtabsFusion);
-        fileFusion->nb_symbol++;
-      }
-    }
-    else
-    {
-      // On vérifie que le symbole n'est pas déjà dans symtabFusion
-      int dejaPresent = 0;
-      for (int j = 0; j < fileFusion->nb_symbol; j++)
-      {
-        if (sameName(file2->symbol_header, strtab2, i, fileFusion->symbol_header, strtabsFusion, j))
-        {
-          dejaPresent = 1;
-          break;
-        }
-      }
-      if (dejaPresent == 0)
-      {
-        addSymbol(fileFusion->symbol_header, &index, i, file2->symbol_header, strtab2, &indexStrTab, &indexShstrtab, file2->section_header, shstrtabsFusion, strtabsFusion);
-        fileFusion->nb_symbol++;
+        addSymboleOther(elf_fusion, file2, symbol, strtabFusion, i, &indexStrTab);
       }
     }
   }
+  
 
-  fileFusion->section_header = file1->section_header;
-  // printf("sectionheader %d", fileFusion->section_header == NULL);
-  // exit(1);
-  fileFusion->string_header = strtabsFusion;
-  return fileFusion;
+
+  elf_fusion->string_header = strtabFusion;
+  return elf_fusion;
 }
 
 int main(int argc, char *argv[])
@@ -184,7 +168,10 @@ int main(int argc, char *argv[])
   elf1 = getTableSymboles(elf1, f1);
   elf2 = getTableSymboles(elf2, f2);
 
-  Elf *fusion = fusion_table_symboles(elf1, elf2);
+
+  Elf* elf_fusion = fusionSection(elf1, elf2);
+
+  Elf *fusion = fusion_table_symboles(elf1, elf2, elf_fusion);
 
   affichageTableSymbole(fusion);
 

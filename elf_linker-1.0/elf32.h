@@ -78,6 +78,7 @@ typedef struct {
     ElfSymbole* symbol_header;
     StrTab string_header;
     ElfRelocation* relocation_header;
+    int nb_reloc;
     int nb_symbol;
 } Elf;
 
@@ -102,5 +103,25 @@ ElfRelocation* allocElfRelocation(int size);
 RelocationHeader* allocRelocationHeader(int size);
 
 Elf* addSection(Elf* elf, ElfSection section);
+
+Elf* addSymbol(Elf* elf, ElfSymbole symbol);
+
+void freeElfHeader(ElfHeader* elf_header);
+
+void freeSymbolHeader(ElfSymbole *elf_symbole);
+
+
+void freeElfSectionHeader(SectionHeader* section_header);
+
+void freeElfSection(ElfSection* section, Elf_Half_16b count);
+
+
+void freeStrTab(StrTab string);
+
+void freeRelocationHeader(RelocationHeader* rel);
+
+void freeElfRelocation(ElfRelocation* rel, int count);
+
+void freeElf(Elf* elf);
 
 #endif
