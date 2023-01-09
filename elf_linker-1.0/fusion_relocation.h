@@ -3,6 +3,10 @@
 
 #include "util.h"
 #include "elf32.h"
+#include "stdbool.h"
+#include "string.h"
+#include "affichage_tr.h"
+#include "fusion_section.h"
 
 Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2);
 
