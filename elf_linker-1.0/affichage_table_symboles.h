@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-
+int findSymTab(Elf *elf);
 
 Elf* getTableSymboles(Elf* elf, FILE* f_bin);
 

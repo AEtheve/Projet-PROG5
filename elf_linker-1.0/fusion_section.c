@@ -117,7 +117,7 @@ Elf* fusionSection(Elf* elf1, Elf* elf2) {
 }
 
 
-int main(int argc, char **argv) {
+/*int main(int argc, char **argv) {
     if (argc!=3) {
         printf("Usage: fusion <file1> <file2>\n");
         exit(1);
@@ -140,4 +140,4 @@ int main(int argc, char **argv) {
     affichageSection(result, 1);
 
     return 0;
-}
+}*/

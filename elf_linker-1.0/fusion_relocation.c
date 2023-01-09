@@ -10,6 +10,27 @@ int isTheSectionInSecondTable(Elf* elf, char *name){
     return -1;
 }
 
+char* removePrefix(char *name){
+    char * res=malloc(sizeof(char)*(strlen(name)-4));
+    for(int i=3;i<strlen(name);i++){
+        res[i-3]=name[i+1];
+    }
+    return res;
+
+}
+
+int positionSectionWithoutRel(Elf* elf, char* name){
+    char * prefix = removePrefix(name);
+    for(int i = 0; i < elf->header->e_section_header_entry_count; i++){
+        if (!strcmp(elf->section_header[i].name,prefix)){
+            free(prefix);
+            return i;
+        }
+    }
+    free(prefix);
+    return -1;
+}
+
 int whereIsBryansSection(Elf *elf, char *name){
     int compt = 0;
     for (int i=0;i<elf->header->e_section_header_entry_count; i++){
@@ -29,6 +50,8 @@ Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2) {
     memcpy(result->relocation_header, elf1->relocation_header, elf1->nb_reloc*sizeof(ElfRelocation));
     result->nb_reloc = elf1->nb_reloc;
 
+    int compt = 0;
+
     for(int i = 0; i < elf2->header->e_section_header_entry_count; i++){
         if (elf2->section_header[i].entree.type == 9){
             ElfSection* section2 = &elf2->section_header[i];
@@ -43,32 +66,54 @@ Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2) {
                 result->relocation_header = tmp;
                 result->relocation_header[result->nb_reloc].entree = elf2->relocation_header[i].entree;
                 result->nb_reloc++;
-            } else { // Fusion de ELF1 et ELF2
-                
-                int size1 = sizeof(elf1->section_header[testElf1].data);
-                int size2 = sizeof(section2->data);
+                section2->entree.link = findSymTab(result);
+                section2->entree.info = positionSectionWithoutRel(result, section2->name);
+                addSection(result, *section2);
+            } else { // Fusion de ELF1 et ELF2tmp 
+
+                int size1 = elf1->section_header[testElf1].entree.size;
+                int size2 = section2->entree.size;
+
 
                 result->section_header[testElf1].entree.size = size1 + size2;
 
+                // printf("size : %d - %d\n",size1, size2);
+
                 int index_relocation_elf1 = whereIsBryansSection(elf1, section2->name);
 
-                RelocationHeader* tmp = realloc(result->relocation_header[index_relocation_elf1].entree, 
-                    (size1 + size2));
+                RelocationHeader* tmp;
+                tmp = (RelocationHeader*)malloc((size1 + size2)*sizeof(RelocationHeader));
+                //realloc(result->relocation_header[index_relocation_elf1].entree, (size1 + size2));
                 if (tmp == NULL){
                     printf("Erreur\n");
                     exit(1);
                 }
-
-                memcpy(tmp + size1, elf2->relocation_header[i].entree, size2);
-
-                result->relocation_header[index_relocation_elf1].entree = tmp;
                 
-                for(int j = size1 / result->section_header[testElf1].entree.entsize; j < (section2->entree.size / section2->entree.entsize) ; j++){
-                    result->relocation_header[index_relocation_elf1].entree[j].offset += size1;
+
+                
+                memcpy(tmp, elf1->relocation_header[index_relocation_elf1].entree, size1);
+
+                // printf("La : %d %d\n",size1,size2);
+                memcpy(tmp + size1, elf2->relocation_header[compt].entree, size2); 
+
+                              
+                // printf("ICI : %d\n",size1 / elf1->section_header[testElf1].entree.entsize);
+
+
+                int cmp_tmp = 0;
+                for(int j = size1 / elf1->section_header[testElf1].entree.entsize; j < (section2->entree.size / section2->entree.entsize) ; j++){
+                    // printf("COMPT : %d - %d\n",cmp_tmp, j);
+                    // tmp[j] = elf2->relocation_header[i].entree[cmp_tmp];
+                    tmp[j].offset += size1;
+                    cmp_tmp++;
                 }
 
-
+                result->relocation_header[index_relocation_elf1].entree = tmp;
+                elf1->section_header[testElf1].entree.link = findSymTab(result);
+                elf1->section_header[testElf1].entree.info = positionSectionWithoutRel(result, elf1->section_header[testElf1].name);
+                addSection(result, elf1->section_header[testElf1]);
             }
+            compt++;
         }
     }
 
@@ -96,12 +141,13 @@ int main (int argc, char** argv){
     printf("\n\n\nPartie 2 : \n");
     affichageTableReimplentation(elf2);
 
-    Elf* result = malloc(sizeof(Elf));
+    Elf* result;
     result = fusionSection(elf1, elf2);
     printf("\n\n\nPartie res : \n");
     result = fusionRelocation(result, elf1, elf2);
 
-    
+    affichageSection(result,false);
+
     affichageTableReimplentation(result);
 
     freeElf(elf1);
