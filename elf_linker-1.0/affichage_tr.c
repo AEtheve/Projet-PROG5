@@ -252,8 +252,8 @@ void affichage_table_reimplentation(char* nom_fichier){
     fermetureFichier(f);
 }
 
-int main(int argc, char** argv){
+/* int main(int argc, char** argv){
 
      affichage_table_reimplentation(argv[1]);
      return 0;
-}
+} */
