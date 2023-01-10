@@ -9,7 +9,10 @@ Elf* fusionElf(Elf* elf1, Elf* elf2) {
     result = fusionTableSymboles(elf1, elf2, result);
 
     // fusion tables de reimplantation
-    // result = fusionRelocation(result, elf1, elf2);
+    result = fusionRelocation(result, elf1, elf2);
+
+    affichageSection(result, false);
+
 
     //  Remplissage header
     memcpy(result->header->e_ident, elf1->header->e_ident, HEADER_IDENT_SIZE);
@@ -87,6 +90,9 @@ int main(int argc, char **argv) {
 
     elf1 = getTableSymboles(elf1, f1);
     elf2 = getTableSymboles(elf2, f2);
+
+    elf1 = getTableRelocation(elf1, f1);
+    elf2 = getTableRelocation(elf2, f2);
 
 
 
