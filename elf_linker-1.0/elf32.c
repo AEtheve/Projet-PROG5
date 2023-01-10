@@ -198,3 +198,61 @@ void freeElf(Elf* elf){
     }
     free(elf);
 }
+
+void writeHeader(ElfHeader* header, FILE* f_out) {
+    header->e_type = reverse_2(header->e_type);
+    header->e_machine = reverse_2(header->e_machine);
+    header->e_version = reverse_4(header->e_version);
+    header->e_entry = reverse_4(header->e_entry);
+    header->e_program_header_off = reverse_4(header->e_program_header_off);
+    header->e_section_header_off = reverse_4(header->e_section_header_off);
+    header->e_flags = reverse_4(header->e_flags);
+    header->e_header_size = reverse_2(header->e_header_size);
+    header->e_program_header_entry_size = reverse_2(header->e_program_header_entry_size);
+    header->e_program_header_entry_count = reverse_2(header->e_program_header_entry_count);
+    header->e_section_header_entry_size = reverse_2(header->e_section_header_entry_size);
+    header->e_section_header_entry_count = reverse_2(header->e_section_header_entry_count);
+    header->e_section_header_string_table_index = reverse_2(header->e_section_header_string_table_index);
+
+    fwrite(header, sizeof(ElfHeader), 1, f_out);
+
+    header->e_type = reverse_2(header->e_type);
+    header->e_machine = reverse_2(header->e_machine);
+    header->e_version = reverse_4(header->e_version);
+    header->e_entry = reverse_4(header->e_entry);
+    header->e_program_header_off = reverse_4(header->e_program_header_off);
+    header->e_section_header_off = reverse_4(header->e_section_header_off);
+    header->e_flags = reverse_4(header->e_flags);
+    header->e_header_size = reverse_2(header->e_header_size);
+    header->e_program_header_entry_size = reverse_2(header->e_program_header_entry_size);
+    header->e_program_header_entry_count = reverse_2(header->e_program_header_entry_count);
+    header->e_section_header_entry_size = reverse_2(header->e_section_header_entry_size);
+    header->e_section_header_entry_count = reverse_2(header->e_section_header_entry_count);
+    header->e_section_header_string_table_index = reverse_2(header->e_section_header_string_table_index);
+}
+
+void writeSectionHeader(SectionHeader* section_header, FILE* f_out) {
+    section_header->name = reverse_4(section_header->name);
+    section_header->type = reverse_4(section_header->type);
+    section_header->flags = reverse_4(section_header->flags);
+    section_header->adress = reverse_4(section_header->adress);
+    section_header->offset = reverse_4(section_header->offset);
+    section_header->size = reverse_4(section_header->size);
+    section_header->link = reverse_4(section_header->link);
+    section_header->info = reverse_4(section_header->info);
+    section_header->addralign = reverse_4(section_header->addralign);
+    section_header->entsize = reverse_4(section_header->entsize);
+
+    fwrite(section_header, 40, 1, f_out);
+
+    section_header->name = reverse_4(section_header->name);
+    section_header->type = reverse_4(section_header->type);
+    section_header->flags = reverse_4(section_header->flags);
+    section_header->adress = reverse_4(section_header->adress);
+    section_header->offset = reverse_4(section_header->offset);
+    section_header->size = reverse_4(section_header->size);
+    section_header->link = reverse_4(section_header->link);
+    section_header->info = reverse_4(section_header->info);
+    section_header->addralign = reverse_4(section_header->addralign);
+    section_header->entsize = reverse_4(section_header->entsize);
+}

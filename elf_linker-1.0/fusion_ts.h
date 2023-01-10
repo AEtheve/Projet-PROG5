@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "elf32.h"
 
-
+Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion);
 
 
 

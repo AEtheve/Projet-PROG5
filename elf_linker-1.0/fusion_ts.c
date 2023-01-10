@@ -81,7 +81,7 @@ void addSymboleSection(Elf *dest, Elf *source, ElfSymbole symbol, StrTab strtab,
   addSymbol(dest, symbol);
 }
 
-Elf *fusion_table_symboles(Elf *file1, Elf *file2, Elf *elf_fusion)
+Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion)
 {
   elf_fusion->nb_symbol = 0;
   StrTab strtab1 = file1->string_header;
@@ -201,13 +201,13 @@ Elf *fusion_table_symboles(Elf *file1, Elf *file2, Elf *elf_fusion)
   new_section.entree.size = elf_fusion->nb_symbol * sizeof(ElfSymbole);
   new_section.entree.offset = getNextOffset(elf_fusion);
  
-  elf_fusion = addSection(elf_fusion, new_section);
+  // elf_fusion = addSection(elf_fusion, new_section);
 
 
   return elf_fusion;
 }
 
-int main(int argc, char *argv[])
+/* int main(int argc, char *argv[])
 {
   if (argc != 3)
   {
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
 
   Elf* elf_fusion = fusionSection(elf1, elf2);
 
-  Elf *fusion = fusion_table_symboles(elf1, elf2, elf_fusion);
+  Elf *fusion = fusionTableSymboles(elf1, elf2, elf_fusion);
 
   affichageTableSymbole(fusion);
 
@@ -239,5 +239,5 @@ int main(int argc, char *argv[])
   fermetureFichier(f1);
   fermetureFichier(f2);
   return 0;
-}
+} */
 

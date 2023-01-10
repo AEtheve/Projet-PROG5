@@ -27,6 +27,25 @@ Elf* fusionSection(Elf* elf1, Elf* elf2) {
     int strtab_offset;
     int offset=0x34;
 
+    ElfSection null_section = {
+        {
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        },
+        NULL,
+        "NULL"
+    };
+
+    addSection(elf_o, null_section);
+
     // Boucle sur les sections de File1
     for(int i=0; i<sec_num1; i++) {
         // si la section est fusionnable
@@ -117,7 +136,7 @@ Elf* fusionSection(Elf* elf1, Elf* elf2) {
 }
 
 
-int main(int argc, char **argv) {
+/* int main(int argc, char **argv) {
     if (argc!=3) {
         printf("Usage: fusion <file1> <file2>\n");
         exit(1);
@@ -140,4 +159,4 @@ int main(int argc, char **argv) {
     affichageSection(result, 1);
 
     return 0;
-}
+} */

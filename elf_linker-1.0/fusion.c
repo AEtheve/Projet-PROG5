@@ -6,10 +6,10 @@ Elf* fusionElf(Elf* elf1, Elf* elf2) {
     Elf* result = fusionSection(elf1, elf2);
 
     // fusion table des symboles
-    
+    result = fusionTableSymboles(elf1, elf2, result);
 
     // fusion tables de reimplantation
-    result = fusionRelocation(result, elf1, elf2);
+    // result = fusionRelocation(result, elf1, elf2);
 
     //  Remplissage header
     memcpy(result->header->e_ident, elf1->header->e_ident, HEADER_IDENT_SIZE);
@@ -47,29 +47,82 @@ WriteError writeElf(FILE* f_out, Elf* content, bool strict_mode) {
     if (strict_mode && (content->header==NULL)) {
         return MISSING_HEADER;
     }
-    content->header->e_section_header_string_table_index+=1;
-    fwrite(content->header, sizeof(ElfHeader), 1, f_out);
+    // content->header->e_section_header_entry_count++;
+    writeHeader(content->header, f_out);
 
     // Ecriture du contenu des sections
+
+    int debug_offset = 0X34;
     if (strict_mode && (content->section_header==NULL)) {
         return MISSING_SECTION_HEADER;
     }
-    for (int i=0; i<content->header->e_section_header_entry_count-1; i++) {
+    for (int i=0; i<content->header->e_section_header_entry_count; i++) {
         if (strict_mode && (content->section_header[i].data==NULL) && (content->section_header[i].entree.size > 0)) {
             return MISSING_SECTION_DATA;
         }
-        fwrite(content->section_header[i].data, content->section_header[i].entree.size, 1, f_out);
+        // printf("[%d]: Write data of size %x at offset %x - offset is now %x\n", i, content->section_header[i].entree.size, debug_offset, content->section_header[i].entree.size + debug_offset);
+        //if ((content->section_header[i].entree.size!=0)) {// && (content->section_header[i].data!=NULL)) {
+            printf("[%d]: Write data of size %x at offset %x - offset is now %x\n", i, content->section_header[i].entree.size, debug_offset, content->section_header[i].entree.size + debug_offset);
+            fwrite(content->section_header[i].data, content->section_header[i].entree.size, 1, f_out);
+        debug_offset+=content->section_header[i].entree.size;
+        //}
     }
 
     // Ecriture de la table des sections
     // - Ecriture de la section vide
-    uint8_t null_entry = 0;
-    fwrite(&null_entry, 1, content->header->e_section_header_entry_size, f_out);
     // - Ecriture des sections du fichier
-    for (int i=0; i<content->header->e_section_header_entry_count-1; i++) {
-        fwrite(&(content->section_header[i].entree), sizeof(SectionHeader), 1, f_out);
+    // printf("shnum: %d\n", content->header->e_section_header_entry_count);
+    for (int i=0; i<content->header->e_section_header_entry_count; i++) {
+        writeSectionHeader(&(content->section_header[i].entree), f_out);
     }
 
     return WRITE_OK;
 }
 
+int main(int argc, char **argv) {
+    if (argc != 3)
+    {
+        printf("Usage: %s <fichier1> <fichier2> \r \n", argv[0]);
+        exit(1);
+    }
+
+    FILE *f1 = ouvertureFichier(argv[1], "rb");
+    FILE *f2 = ouvertureFichier(argv[2], "rb");
+
+    Elf *elf1 = valeurEntete(f1);
+    Elf *elf2 = valeurEntete(f2);
+
+    elf1 = valeurSection(elf1, f1);
+    elf2 = valeurSection(elf2, f2);
+
+    elf1 = getTableSymboles(elf1, f1);
+    elf2 = getTableSymboles(elf2, f2);
+
+
+
+    Elf *fusion = fusionElf(elf1, elf2);
+
+    affichageSection(fusion, 0);
+
+    FILE* f_out = ouvertureFichier("out.o", "wb");
+    WriteError err =writeElf(f_out, fusion, false);
+
+    if (err!=WRITE_OK) {
+        printf("ERROR WHILE WRITING TO FILE\n");
+        exit(1);
+    }
+
+    fermetureFichier(f1);
+    fermetureFichier(f2);
+    fermetureFichier(f_out);
+
+    /* FILE* check_f = ouvertureFichier("out.o", "rb");
+
+    Elf* out = valeurEntete(check_f);
+    out = valeurSection(out, check_f);
+
+    affichageSection(out, 1);
+
+    fermetureFichier(check_f); */
+    return 0;
+}

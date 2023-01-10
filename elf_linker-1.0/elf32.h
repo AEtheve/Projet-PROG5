@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "util.h"
 
 
 
@@ -123,5 +124,9 @@ void freeRelocationHeader(RelocationHeader* rel);
 void freeElfRelocation(ElfRelocation* rel, int count);
 
 void freeElf(Elf* elf);
+
+void writeHeader(ElfHeader* header, FILE* f_out);
+
+void writeSectionHeader(SectionHeader* section_header, FILE* f_out);
 
 #endif
