@@ -47,12 +47,10 @@ WriteError writeElf(FILE* f_out, Elf* content, bool strict_mode) {
     if (strict_mode && (content->header==NULL)) {
         return MISSING_HEADER;
     }
-    // content->header->e_section_header_entry_count++;
     writeHeader(content->header, f_out);
 
     // Ecriture du contenu des sections
 
-    int debug_offset = 0X34;
     if (strict_mode && (content->section_header==NULL)) {
         return MISSING_SECTION_HEADER;
     }
@@ -60,18 +58,10 @@ WriteError writeElf(FILE* f_out, Elf* content, bool strict_mode) {
         if (strict_mode && (content->section_header[i].data==NULL) && (content->section_header[i].entree.size > 0)) {
             return MISSING_SECTION_DATA;
         }
-        // printf("[%d]: Write data of size %x at offset %x - offset is now %x\n", i, content->section_header[i].entree.size, debug_offset, content->section_header[i].entree.size + debug_offset);
-        //if ((content->section_header[i].entree.size!=0)) {// && (content->section_header[i].data!=NULL)) {
-            printf("[%d]: Write data of size %x at offset %x - offset is now %x\n", i, content->section_header[i].entree.size, debug_offset, content->section_header[i].entree.size + debug_offset);
-            fwrite(content->section_header[i].data, content->section_header[i].entree.size, 1, f_out);
-        debug_offset+=content->section_header[i].entree.size;
-        //}
+        fwrite(content->section_header[i].data, content->section_header[i].entree.size, 1, f_out);
     }
 
     // Ecriture de la table des sections
-    // - Ecriture de la section vide
-    // - Ecriture des sections du fichier
-    // printf("shnum: %d\n", content->header->e_section_header_entry_count);
     for (int i=0; i<content->header->e_section_header_entry_count; i++) {
         writeSectionHeader(&(content->section_header[i].entree), f_out);
     }
@@ -102,8 +92,6 @@ int main(int argc, char **argv) {
 
     Elf *fusion = fusionElf(elf1, elf2);
 
-    affichageSection(fusion, 0);
-
     FILE* f_out = ouvertureFichier("out.o", "wb");
     WriteError err =writeElf(f_out, fusion, false);
 
@@ -115,14 +103,5 @@ int main(int argc, char **argv) {
     fermetureFichier(f1);
     fermetureFichier(f2);
     fermetureFichier(f_out);
-
-    /* FILE* check_f = ouvertureFichier("out.o", "rb");
-
-    Elf* out = valeurEntete(check_f);
-    out = valeurSection(out, check_f);
-
-    affichageSection(out, 1);
-
-    fermetureFichier(check_f); */
     return 0;
 }
