@@ -6,6 +6,44 @@
 #include "fusion_section.h"
 #include "fusion_ts.h"
 
+<<<<<<< Updated upstream
+=======
+int getOffsetMax(Elf *elf_fusion){
+  int offsetMax = 0;
+  for (int i = 0; i < (elf_fusion)->header->e_section_header_entry_count; i++)
+  {
+    if (elf_fusion->section_header[i].entree.offset > offsetMax)
+    {
+      offsetMax = elf_fusion->section_header[i].entree.offset;
+    }
+  }
+  return offsetMax;
+}
+
+int getSizeofOffsetMax(Elf *elf_fusion){
+  int offsetMax = getOffsetMax(elf_fusion);
+  int size = 0;
+  for (int i = 0; i < (elf_fusion)->header->e_section_header_entry_count && size == 0; i++)
+  {
+    if (elf_fusion->section_header[i].entree.offset == offsetMax)
+    {
+      size = elf_fusion->section_header[i].entree.size;
+    }
+  }
+  return size;
+}
+
+
+int getNextOffset(Elf *elf)
+{
+  int offset = 0;
+  int offsetMax = getOffsetMax(elf);
+  int size = getSizeofOffsetMax(elf);
+  offset = offsetMax + size;
+  return offset;
+}
+
+>>>>>>> Stashed changes
 char *getName(ElfSymbole *symTab, StrTab strtab, int num)
 {
   char *name = strtab + (symTab + num)->name;
@@ -85,12 +123,20 @@ Elf *fusion_table_symboles(Elf *file1, Elf *file2, Elf *elf_fusion)
           char *name2 = getName(file2->symbol_header, strtab2, j);
           if (strcmp(name1, name2) == 0)
           {
+<<<<<<< Updated upstream
             if (file1->symbol_header[i].info == 2 && file2->symbol_header[j].info == 2)
+=======
+            if (file1->symbol_header[i].ndx == 0 && file2->symbol_header[j].ndx == 0)
+>>>>>>> Stashed changes
             {
               printf("Erreur : symbole %s défini dans les deux fichiers \r \n", name1);
               exit(1);
             }
+<<<<<<< Updated upstream
             else if (file1->symbol_header[i].info != 2)
+=======
+            else if (file1->symbol_header[i].ndx == 0)
+>>>>>>> Stashed changes
             {
               addSymboleOther(elf_fusion, file2, symbol, strtabFusion, j, &indexStrTab);
             }
@@ -98,6 +144,13 @@ Elf *fusion_table_symboles(Elf *file1, Elf *file2, Elf *elf_fusion)
             {
               addSymboleOther(elf_fusion, file1, symbol, strtabFusion, i, &indexStrTab);
             }
+<<<<<<< Updated upstream
+=======
+            break;
+          } else{
+            addSymboleOther(elf_fusion, file1, symbol, strtabFusion, i, &indexStrTab);
+            break;
+>>>>>>> Stashed changes
           }
         }
       }
@@ -105,7 +158,11 @@ Elf *fusion_table_symboles(Elf *file1, Elf *file2, Elf *elf_fusion)
   }
 
   // on ajoute les locaux de file2 qui ne sont pas des sections
+<<<<<<< Updated upstream
   for (int i = 0; i < file2->nb_symbol; i++)
+=======
+  for (int i = 1; i < file2->nb_symbol; i++)
+>>>>>>> Stashed changes
   {
     if (file2->symbol_header[i].info >> 4 == 0) // locaux
     {
@@ -113,9 +170,16 @@ Elf *fusion_table_symboles(Elf *file1, Elf *file2, Elf *elf_fusion)
         addSymboleOther(elf_fusion, file2, symbol, strtabFusion, i, &indexStrTab);
       } else{
         char *section = getNameSection(file2->symbol_header, file2->section_header, i);
+<<<<<<< Updated upstream
          // si cette section n'existe pas dans fusion (findsection = 0) on l'ajoute (symbole) dans fusion 
          if (findSection(elf_fusion, section) == 0) {
           addSymboleSection(elf_fusion, file2, symbol, strtabFusion, i, findSection(elf_fusion, section));
+=======
+        
+         // si cette section n'existe pas dans fusion (findsection = 0) on l'ajoute (symbole) dans fusion 
+         if (findSection(file1, section) == 0) {
+            addSymboleSection(elf_fusion, file2, symbol, strtabFusion, i, findSection(elf_fusion, section));
+>>>>>>> Stashed changes
          }
 
       }
@@ -142,9 +206,34 @@ Elf *fusion_table_symboles(Elf *file1, Elf *file2, Elf *elf_fusion)
     }
   }
   
+<<<<<<< Updated upstream
 
 
   elf_fusion->string_header = strtabFusion;
+=======
+  elf_fusion->string_header = strtabFusion;
+
+  ElfSection new_section;
+  strcpy(new_section.name, ".symtab");
+  new_section.entree.type = 2;
+  // on récupère les infos à partir de la symtab de file1
+  // on récupère la section symtab de file 1:
+  int symtabFile1_index = findSection(file1, ".symtab");
+
+  new_section.entree.addralign = file1->section_header[symtabFile1_index].entree.addralign;
+  new_section.entree.adress = file1->section_header[symtabFile1_index].entree.adress;
+  new_section.entree.entsize = file1->section_header[symtabFile1_index].entree.entsize;
+  new_section.entree.flags = file1->section_header[symtabFile1_index].entree.flags;
+  new_section.entree.info = file1->section_header[symtabFile1_index].entree.info;
+  new_section.entree.link = file1->section_header[symtabFile1_index].entree.link;
+  new_section.entree.name = file1->section_header[symtabFile1_index].entree.name;
+  new_section.entree.size = elf_fusion->nb_symbol * sizeof(ElfSymbole);
+  new_section.entree.offset = getNextOffset(elf_fusion);
+ 
+  elf_fusion = addSection(elf_fusion, new_section);
+
+
+>>>>>>> Stashed changes
   return elf_fusion;
 }
 
@@ -175,7 +264,16 @@ int main(int argc, char *argv[])
 
   affichageTableSymbole(fusion);
 
+<<<<<<< Updated upstream
+=======
+  affichageSection(fusion, false);
+
+>>>>>>> Stashed changes
   fermetureFichier(f1);
   fermetureFichier(f2);
   return 0;
 }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
