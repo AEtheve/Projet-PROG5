@@ -182,26 +182,25 @@ Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion)
     }
   }
   
-  elf_fusion->string_header = strtabFusion;
+   elf_fusion->string_header = strtabFusion;
 
   ElfSection new_section;
   strcpy(new_section.name, ".symtab");
   new_section.entree.type = 2;
-  // on récupère les infos à partir de la symtab de file1
-  // on récupère la section symtab de file 1:
   int symtabFile1_index = findSection(file1, ".symtab");
+  int strtab_index = findSection(elf_fusion, ".strtab");
 
   new_section.entree.addralign = file1->section_header[symtabFile1_index].entree.addralign;
   new_section.entree.adress = file1->section_header[symtabFile1_index].entree.adress;
   new_section.entree.entsize = file1->section_header[symtabFile1_index].entree.entsize;
   new_section.entree.flags = file1->section_header[symtabFile1_index].entree.flags;
   new_section.entree.info = file1->section_header[symtabFile1_index].entree.info;
-  new_section.entree.link = file1->section_header[symtabFile1_index].entree.link;
+  new_section.entree.link = strtab_index;
   new_section.entree.name = file1->section_header[symtabFile1_index].entree.name;
   new_section.entree.size = elf_fusion->nb_symbol * sizeof(ElfSymbole);
   new_section.entree.offset = getNextOffset(elf_fusion);
  
-  new_section.data = malloc(new_section.entree.size);
+    new_section.data = malloc(new_section.entree.size);
   for (int i = 0; i < elf_fusion->nb_symbol; i++)
   {
     memcpy(new_section.data + i * sizeof(ElfSymbole), &elf_fusion->symbol_header[i], sizeof(ElfSymbole));
