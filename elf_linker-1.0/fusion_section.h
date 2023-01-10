@@ -10,7 +10,7 @@
 
 Elf* fusionSection(Elf* elf1, Elf* elf2);
 
-
+int findSection(Elf* elf, const char* name);
 
 
 
