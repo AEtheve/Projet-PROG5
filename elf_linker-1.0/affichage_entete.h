@@ -2,10 +2,6 @@
 #define _AFFICHAGE_ENTETE_H_
 
 #include "util.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include "elf32.h"
 
 /* Recupere les valeurs d'entete du fichier au format ELF et renvoi
 un pointeur elf contenant ses valeurs */

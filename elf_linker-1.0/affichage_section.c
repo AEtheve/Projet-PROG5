@@ -1,10 +1,6 @@
 #include "affichage_section.h"
 
 
-void affichageNameAddr(uint32_t name){
-	printf("%06d ",name);
-}
-
 void affichageName(char name[], bool arm_cmd_version){
 	if (arm_cmd_version) { // arm-none-eabi
 		if (strlen(name)>17) {

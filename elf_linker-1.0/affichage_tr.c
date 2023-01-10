@@ -1,7 +1,6 @@
 #include "affichage_tr.h"
 
-char *reloc_type(uint32_t valeur)
-{
+char *reloc_type(uint32_t valeur){
     char *type;
     switch ((uint8_t)valeur){
     case 0:
@@ -251,8 +250,3 @@ void affichage_table_reimplentation(char* nom_fichier){
     fermetureFichier(f);
 }
 
-// int main(int argc, char** argv){
-
-//      affichage_table_reimplentation(argv[1]);
-//      return 0;
-// }
