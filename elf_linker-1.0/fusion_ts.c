@@ -201,7 +201,12 @@ Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion)
   new_section.entree.size = elf_fusion->nb_symbol * sizeof(ElfSymbole);
   new_section.entree.offset = getNextOffset(elf_fusion);
  
-  // elf_fusion = addSection(elf_fusion, new_section);
+  new_section.data = malloc(new_section.entree.size);
+  for (int i = 0; i < elf_fusion->nb_symbol; i++)
+  {
+    memcpy(new_section.data + i * sizeof(ElfSymbole), &elf_fusion->symbol_header[i], sizeof(ElfSymbole));
+  }
+  elf_fusion = addSection(elf_fusion, new_section);
 
 
   return elf_fusion;
