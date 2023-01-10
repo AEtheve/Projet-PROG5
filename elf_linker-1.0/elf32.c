@@ -86,6 +86,29 @@ Elf* addSection(Elf* elf, ElfSection section) {
     return elf;
 }
 
+
+
+Elf *addSymbol(Elf *elf, ElfSymbole symbole)
+{
+    // Recuperer l'indice du nouveau symbole
+
+    int index = elf->nb_symbol;
+    elf->nb_symbol++;
+
+    // Allouer la mémoire supplémentaire
+    ElfSymbole *res = realloc(elf->symbol_header, sizeof(ElfSymbole) * elf->nb_symbol);
+    if (res == NULL)
+    {
+        exit(1);
+    }
+    elf->symbol_header = res;
+
+    // Copier le contenu de symbole en bout de tableau
+    elf->symbol_header[index] = symbole;
+
+    return elf;
+}
+
 void freeElfHeader(ElfHeader* elf_header){
     if(elf_header==NULL) {
         return;
