@@ -1,1 +1,1 @@
-# dummy
+eabi-none-lib.o: eabi-none-lib.c

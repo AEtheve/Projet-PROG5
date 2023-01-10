@@ -51,11 +51,12 @@ Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2) {
     result->nb_reloc = elf1->nb_reloc;
 
     int compt = 0;
+    int testElf1 = 0;
 
     for(int i = 0; i < elf2->header->e_section_header_entry_count; i++){
         if (elf2->section_header[i].entree.type == 9){
             ElfSection* section2 = &elf2->section_header[i];
-            int testElf1 = isTheSectionInSecondTable(elf1, section2->name); 
+            testElf1 = isTheSectionInSecondTable(elf1, section2->name); 
             if (testElf1 == -1) { // Si Section de ELF2 n'est pas dans ELF1
                 ElfRelocation* tmp;
                 tmp = realloc(result->relocation_header, (result->nb_reloc+1)*sizeof(ElfRelocation));
@@ -74,41 +75,38 @@ Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2) {
                 int size1 = elf1->section_header[testElf1].entree.size;
                 int size2 = section2->entree.size;
 
-
-                result->section_header[testElf1].entree.size = size1 + size2;
-
-                // printf("size : %d - %d\n",size1, size2);
+                elf1->section_header[testElf1].entree.size = size1 + size2;
 
                 int index_relocation_elf1 = whereIsBryansSection(elf1, section2->name);
 
                 RelocationHeader* tmp;
                 tmp = (RelocationHeader*)malloc((size1 + size2)*sizeof(RelocationHeader));
+
                 //realloc(result->relocation_header[index_relocation_elf1].entree, (size1 + size2));
                 if (tmp == NULL){
                     printf("Erreur\n");
                     exit(1);
                 }
                 
-
-                
                 memcpy(tmp, elf1->relocation_header[index_relocation_elf1].entree, size1);
 
-                // printf("La : %d %d\n",size1,size2);
+                printf("TEST : %x\n",elf2->relocation_header[compt].entree->offset);
                 memcpy(tmp + size1, elf2->relocation_header[compt].entree, size2); 
 
-                              
+                
                 // printf("ICI : %d\n",size1 / elf1->section_header[testElf1].entree.entsize);
 
 
                 int cmp_tmp = 0;
-                for(int j = size1 / elf1->section_header[testElf1].entree.entsize; j < (section2->entree.size / section2->entree.entsize) ; j++){
-                    // printf("COMPT : %d - %d\n",cmp_tmp, j);
-                    // tmp[j] = elf2->relocation_header[i].entree[cmp_tmp];
-                    tmp[j].offset += size1;
+                for(int j = size1; j < (size1 + size2) ; j += 8){
+                    // (tmp + size1) = elf2->relocation_header[compt].entree;
+                    (tmp + j)->offset += size1;
+                    printf("COMPT : %x\n",(tmp + j)->offset );
                     cmp_tmp++;
                 }
 
                 result->relocation_header[index_relocation_elf1].entree = tmp;
+                // printf("FINAL : %x\n",result->relocation_header[size1/8].entree->offset);
                 elf1->section_header[testElf1].entree.link = findSymTab(result);
                 elf1->section_header[testElf1].entree.info = positionSectionWithoutRel(result, elf1->section_header[testElf1].name);
                 addSection(result, elf1->section_header[testElf1]);
@@ -142,16 +140,27 @@ int main (int argc, char** argv){
     affichageTableReimplentation(elf2);
 
     Elf* result;
-    result = fusionSection(elf1, elf2);
     printf("\n\n\nPartie res : \n");
-    result = fusionRelocation(result, elf1, elf2);
+    result = fusionSection(elf1, elf2);
+    // affichageSection(result,false);
+    printf("\n\nFusion section OK\n");
 
+    result = fusion_table_symboles(elf1, elf2, result);
+    printf("\n\nFusion table symbole OK\n");
     affichageSection(result,false);
+    // affichageTableSymbole(result);
 
+    result = fusionRelocation(result, elf1, elf2);
+    printf("\n\nFusion relocation OK\n");
+    
+    // affichageSection(elf1,false);
+    affichageSection(result,false);
+    // affichageTableSymbole(result);
     affichageTableReimplentation(result);
 
     freeElf(elf1);
     freeElf(elf2);
+    free(result);
     fermetureFichier(f1);
     fermetureFichier(f2);
     return 0;

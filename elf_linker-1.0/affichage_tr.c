@@ -245,6 +245,7 @@ void affichage_table_reimplentation(char* nom_fichier){
     elf = getTableSymboles(elf, f);
 
     elf = getTableRelocation(elf, f);
+
     affichageTableReimplentation(elf);
 
     freeElf(elf);
