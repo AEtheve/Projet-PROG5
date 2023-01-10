@@ -23,6 +23,9 @@ Contact: Guillaume.Huard@imag.fr
 #ifndef __UTIL_H__
 #define __UTIL_H__
 
+#include "elf32.h"
+
+
 int is_big_endian();
 
 #define reverse_2(x) ((((x)&0xFF)<<8)|(((x)>>8)&0xFF))
@@ -30,4 +33,12 @@ int is_big_endian();
 						((((x)>>16)&0xFF)<<8)|(((x)>>24)&0xFF))
 
 #define min(x,y) ((x)<(y)?(x):(y))
+
+
+// Fonction d'ouverture de fichier, qui renvoie un FILE*
+FILE* ouvertureFichier(char* nomFichier, char* mode);
+
+// Fonciton de fermeture de fichier 
+void fermetureFichier(FILE* fichier);
+
 #endif

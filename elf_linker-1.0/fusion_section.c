@@ -5,12 +5,9 @@ int findSection(Elf* elf, const char* name) {
     int sec_num = elf->header->e_section_header_entry_count;
 
     for(int i=0; i<sec_num; i++) {
-        // printf("comparing %s with %s: ", name, elf->section_header[i].name);
         if (!strcmp(elf->section_header[i].name, name)) {
-            // printf("1\n");
             return i;
         }
-        // printf("0\n");
     }
 
     // On peut retourner 0, l'index 0 etant tjrs utilisé pour la section nulle
@@ -117,27 +114,23 @@ Elf* fusionSection(Elf* elf1, Elf* elf2) {
 }
 
 
-/*int main(int argc, char **argv) {
-    if (argc!=3) {
-        printf("Usage: fusion <file1> <file2>\n");
-        exit(1);
-    }
-
-    FILE* file1 = ouvertureFichier(argv[1], "rb");
-    FILE* file2 = ouvertureFichier(argv[2], "rb");
+void affichageTestFusionSection(char* nom_fichier1, char* nom_fichier2, bool arm_cmd_version) {
+    FILE* file1 = ouvertureFichier(nom_fichier1, "rb");
+    FILE* file2 = ouvertureFichier(nom_fichier2, "rb");
 
     Elf* elf1 = valeurEntete(file1);
     Elf* elf2 = valeurEntete(file2);
-
-
-    
 
     valeurSection(elf1, file1);
     valeurSection(elf2, file2);
 
     Elf* result = fusionSection(elf1, elf2);
 
-    affichageSection(result, 1);
+    affichageSection(result, arm_cmd_version);
 
-    return 0;
-}*/
+    freeElf(elf1);
+    freeElf(elf2);
+    freeElf(result);
+    fermetureFichier(nom_fichier1);
+    fermetureFichier(nom_fichier2);
+}

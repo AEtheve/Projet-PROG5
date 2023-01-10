@@ -21,9 +21,22 @@ Contact: Guillaume.Huard@imag.fr
          38330 Montbonnot Saint-Martin
 */
 #include "util.h"
-#include <stdint.h>
+
 
 int is_big_endian() {
     static uint32_t one = 1;
     return ((* (uint8_t *) &one) == 0);
+}
+
+FILE* ouvertureFichier(char* nomFichier, char* mode){
+    FILE* fichier = fopen(nomFichier, mode);
+    if (fichier == NULL){
+        printf("Erreur lors de l'ouverture du fichier %s\n", nomFichier);
+        exit(1);
+    }
+    return fichier;
+}
+
+void fermetureFichier(FILE* fichier){
+    fclose(fichier);
 }

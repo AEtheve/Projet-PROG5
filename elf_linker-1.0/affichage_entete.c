@@ -1,8 +1,7 @@
 #include "affichage_entete.h"
 
 
-void printMagic(ElfHeader *header)
-{
+void printMagic(ElfHeader *header){
     printf(" Magic:   ");
     for (int i = 0; i < 16; i++)
     {
@@ -11,17 +10,7 @@ void printMagic(ElfHeader *header)
     printf("\n");
 }
 
-void printClass(ElfHeader *header)
-{
-    // printf("  Class:                             ");
-    // if (header[4] == 1){
-    //     printf("ELF32\n");
-    // } else if (header[4] == 2){
-    //     printf("ELF64\n");
-    // } else {
-    //     printf("Aucun\n");
-    // }
-
+void printClass(ElfHeader *header){
     printf("  Class:                             ");
     if (header->e_ident[4] == 1)
     {
@@ -37,19 +26,7 @@ void printClass(ElfHeader *header)
     }
 }
 
-// void printData(unsigned char *header){
-//     printf("  Data:                              ");
-//     if (header[5] == 1){
-//         printf("2's complement, little endian\n");
-//     } else if (header[5] == 2){
-//         printf("2's complement, big endian\n");
-//     } else {
-//         printf("Aucun\n");
-//     }
-// }
-
-void printData(ElfHeader *header)
-{
+void printData(ElfHeader *header){
     printf("  Data:                              ");
     if (header->e_ident[5] == 1)
     {
@@ -65,8 +42,7 @@ void printData(ElfHeader *header)
     }
 }
 
-void printVersion(ElfHeader *header)
-{
+void printVersion(ElfHeader *header){
     printf("  Version:                           ");
     if (header->e_ident[6] == 1)
     {
@@ -78,57 +54,7 @@ void printVersion(ElfHeader *header)
     }
 }
 
-// void printAbi(int val){
-//     printf("  OS/ABI:                            ");
-//     switch (val){
-//         case 0:
-//             printf("UNIX - System V\n");
-//             break;
-//         case 1:
-//             printf("HP-UX\n");
-//             break;
-//         case 2:
-//             printf("NetBSD\n");
-//             break;
-//         case 3:
-//             printf("Linux\n");
-//             break;
-//         case 6:
-//             printf("Solaris\n");
-//             break;
-//         case 7:
-//             printf("IBM AIX\n");
-//             break;
-//         case 8:
-//             printf("SGI IRIX\n");
-//             break;
-//         case 9:
-//             printf("FreeBSD\n");
-//             break;
-//         case 10:
-//             printf("CompaqTRU64\n");
-//             break;
-//         case 11:
-//             printf("Novell Modesto\n");
-//             break;
-//         case 12:
-//             printf("OpenBSD\n");
-//             break;
-//         case 64:
-//             printf("ARM\n");
-//             break;
-//         case 97:
-//             printf("ARM AArch64\n");
-//             break;
-//         default:
-//             printf("Aucun\n");
-//             break;
-//     }
-// }
-
-
-void printAbi(ElfHeader *header)
-{
+void printAbi(ElfHeader *header){
     printf("  OS/ABI:                            ");
     switch (header->e_ident[7])
     {
@@ -177,13 +103,11 @@ void printAbi(ElfHeader *header)
     }
 }
 
-void printAbiVersion(ElfHeader *header)
-{
+void printAbiVersion(ElfHeader *header){
     printf("  ABI Version:                       %d\n", header->e_ident[8]);
 }
 
-void printType(ElfHeader *header)
-{
+void printType(ElfHeader *header){
     printf("  Type:                              ");
     switch (header->e_type)
     {
@@ -214,53 +138,8 @@ void printType(ElfHeader *header)
     }
 }
 
-// void printMachine(unsigned char *header)
-// {
-//     printf("  Machine:                           ");
-//     if (header[19] == 1)
-//     {
-//         printf("AT&T WE 32100\n");
-//     }
-//     else if (header[19] == 2)
-//     {
-//         printf("SPARC\n");
-//     }
-//     else if (header[19] == 3)
-//     {
-//         printf("Intel Architecture\n");
-//     }
-//     else if (header[19] == 4)
-//     {
-//         printf("Motorola 68000\n");
-//     }
-//     else if (header[19] == 5)
-//     {
-//         printf("Motorola 88000\n");
-//     }
-//     else if (header[19] == 7)
-//     {
-//         printf("Intel 80860\n");
-//     }
-//     else if (header[19] == 8)
-//     {
-//         printf("MIPS RS3000 Big-endian\n");
-//     }
-//     else if (header[19] == 10)
-//     {
-//         printf("MIPS RS4000 Big-endian\n");
-//     }
-//     else if (header[19] == 40)
-//     {
-//         printf("ARM\n");
-//     }
-//     else
-//     {
-//         printf("\n");
-//     }
-// }
 
-void printMachine(ElfHeader *header)
-{
+void printMachine(ElfHeader *header){
     printf("  Machine:                           ");
     switch (header->e_machine)
     {
@@ -297,69 +176,58 @@ void printMachine(ElfHeader *header)
     }
 }
 
-void printVersion2(ElfHeader *header)
-{
+void printVersion2(ElfHeader *header){
     printf("  Version:                           ");
     printf("0x%x\n", header->e_version);
 }
 
-void printPointDentree(ElfHeader *header)
-{
+void printPointDentree(ElfHeader *header){
     printf("  Entry point address:               ");
     printf("0x%x\n", header->e_entry);
 }
 
 
-void printStartOfProgramHeaders(ElfHeader *header)
-{
+void printStartOfProgramHeaders(ElfHeader *header){
     printf("  Start of program headers:          ");
     printf("%d (bytes into file)\n", header->e_program_header_off);
 }
 
-void printStartOfSectionHeaders(ElfHeader *header)
-{
+void printStartOfSectionHeaders(ElfHeader *header){
     printf("  Start of section headers:          ");
     printf("%d (bytes into file)\n", header->e_section_header_off);
 }
 
-void printFlags(ElfHeader *header)
-{
+void printFlags(ElfHeader *header){
     printf("  Flags:                             ");
     printf("0x%x, Version5 EABI\n", header->e_flags);
 }
 
-void printsizeOfHeaders(ElfHeader *header)
-{
+void printsizeOfHeaders(ElfHeader *header){
     printf("  Size of this header:               ");
     printf("%d (bytes)\n", header->e_header_size);
 }
 
-void printsizeOfProgramHeaders(ElfHeader *header)
-{
+void printsizeOfProgramHeaders(ElfHeader *header){
     printf("  Size of program headers:           ");
     printf("%d (bytes)\n", header->e_program_header_entry_size);
 }
 
-void printNumberOfProgramHeaders(ElfHeader *header)
-{
+void printNumberOfProgramHeaders(ElfHeader *header){
     printf("  Number of program headers:         ");
     printf("%d\n", header->e_program_header_entry_count);
 }
 
-void printSizeOfSectionHeaders(ElfHeader *header)
-{
+void printSizeOfSectionHeaders(ElfHeader *header){
     printf("  Size of section headers:           ");
     printf("%d (bytes)\n", header->e_section_header_entry_size);
 }
 
-void printNumberOfSectionHeaders(ElfHeader *header)
-{
+void printNumberOfSectionHeaders(ElfHeader *header){
     printf("  Number of section headers:         ");
     printf("%d\n", header->e_section_header_entry_count);
 }
 
-void printSectionHeaderStringTableIndex(ElfHeader *header)
-{
+void printSectionHeaderStringTableIndex(ElfHeader *header){
     printf("  Section header string table index: ");
     printf("%d\n", header->e_section_header_string_table_index);
 }

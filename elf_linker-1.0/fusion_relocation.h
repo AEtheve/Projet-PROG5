@@ -28,6 +28,6 @@ int getSectionSize(Elf *elf,char *name);
 Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2);
 
 /* Fonction d'affichage de la table de rollacation */
-void fonctionTestRelocation (char* nom_fichier1, char* nom_fichier2);
+void affichageTestFusionRelocation (char* nom_fichier1, char* nom_fichier2);
 
 #endif

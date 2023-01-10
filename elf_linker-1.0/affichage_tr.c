@@ -3,8 +3,7 @@
 char *reloc_type(uint32_t valeur)
 {
     char *type;
-    switch ((uint8_t)valeur)
-    {
+    switch ((uint8_t)valeur){
     case 0:
         type = "R_ARM_NONE";
         break;
@@ -147,7 +146,7 @@ int getNbRelocSec(Elf* elf){
 }
 
 Elf* getTableRelocation(Elf *elf, FILE* f_bin){
-
+    
     int nb_relloc = getNbRelocSec(elf);
     int compt = 0;
     // ElfRelocation* reloc = malloc(nb_relloc * sizeof(ElfRelocation));
@@ -185,8 +184,7 @@ Elf* getTableRelocation(Elf *elf, FILE* f_bin){
     return elf;
 }
 
-void affichageTableReimplentation(Elf *elf)
-{
+void affichageTableReimplentation(Elf *elf){
     int compt=0;
     for (int i = 0; i < elf->header->e_section_header_entry_count; i++)
     {

@@ -1,17 +1,5 @@
 #include "elf32.h"
 
-FILE* ouvertureFichier(char* nomFichier, char* mode){
-    FILE* fichier = fopen(nomFichier, mode);
-    if (fichier == NULL){
-        printf("Erreur lors de l'ouverture du fichier %s\n", nomFichier);
-        exit(1);
-    }
-    return fichier;
-}
-
-void fermetureFichier(FILE* fichier){
-    fclose(fichier);
-}
 
 Elf* allocElf(){
     Elf* elf = (Elf*)malloc(sizeof(Elf));
@@ -52,7 +40,6 @@ StrTab allocStrTab(int size){
 }
 
 ElfRelocation* allocElfRelocation(int size){
-    // printf("elf relocation alloc size: %d\n", size);
     ElfRelocation* relocation = (ElfRelocation*)malloc(sizeof(ElfRelocation)*size);
     for (int i=0; i<size; i++) {
         relocation[i].entree = NULL;
@@ -61,26 +48,20 @@ ElfRelocation* allocElfRelocation(int size){
 }
 
 RelocationHeader* allocRelocationHeader(int size){
-    // printf("elf relocation header alloc size: %d\n", size);
     RelocationHeader* header = (RelocationHeader*) malloc(sizeof(RelocationHeader) * size);
     return header;
 }
 
 
 Elf* addSection(Elf* elf, ElfSection section) {
-    // Recuperer l'indice de la nouvelle section
-
     int index = elf->header->e_section_header_entry_count;
     elf->header->e_section_header_entry_count++;
 
-    // Allouer la mémoire supplémentaire
     ElfSection* res = realloc(elf->section_header, sizeof(ElfSection)*elf->header->e_section_header_entry_count);
     if (res==NULL) {
         exit(1);
     }
     elf->section_header=res;
-
-    // Copier le contenu de section en bout de tableau
     elf->section_header[index]=section;
 
     return elf;
@@ -90,12 +71,10 @@ Elf* addSection(Elf* elf, ElfSection section) {
 
 Elf *addSymbol(Elf *elf, ElfSymbole symbole)
 {
-    // Recuperer l'indice du nouveau symbole
 
     int index = elf->nb_symbol;
     elf->nb_symbol++;
 
-    // Allouer la mémoire supplémentaire
     ElfSymbole *res = realloc(elf->symbol_header, sizeof(ElfSymbole) * elf->nb_symbol);
     if (res == NULL)
     {
@@ -103,7 +82,6 @@ Elf *addSymbol(Elf *elf, ElfSymbole symbole)
     }
     elf->symbol_header = res;
 
-    // Copier le contenu de symbole en bout de tableau
     elf->symbol_header[index] = symbole;
 
     return elf;

@@ -82,46 +82,59 @@ typedef struct {
     int nb_symbol;
 } Elf;
 
-FILE* ouvertureFichier(char* nomFichier, char* mode);
 
-void fermetureFichier(FILE* fichier);
-
+/* Fonction qui renvoie un Elf* alloue dans la memoire avec tout ses attribus NULL */ 
 Elf* allocElf();
 
+/* Fonction qui renvoie un ElfHeader* alloue dans la memoire */
 ElfHeader* allocElfHeader();
 
+/* Fonction qui renvoie un SectionHeader* alloue dans la memoire */
 SectionHeader* allocElfSectionHeader();
 
+/* Fonction qui renvoie un ElfSection* alloue dans la memoire avec la section initialiser a la taille passer en parametre */
 ElfSection* allocElfSection(int size);
 
+/* Fonction qui renvoie un ElfSymbole* alloue dans la memoire avec sa taille passer en parametre */
 ElfSymbole* allocElfSymbole(int size);
 
+/* Fonction qui renvoie un StrTab alloue dans la memoire avec sa taille passer en parametre */
 StrTab allocStrTab(int size);
 
+/* Fonction qui alloue un tableau de réimplantation de la taille passée en argument et retourne un pointeur vers cette zone allouée */
 ElfRelocation* allocElfRelocation(int size);
 
+/* Fonction qui renvoie un tableau de RelocationHeader de la taille passée en arguments pour stocker toute les relocation et renvoie un pointeur */
 RelocationHeader* allocRelocationHeader(int size);
 
+/* Ajoute une section à la table des sections de la structure ELF */
 Elf* addSection(Elf* elf, ElfSection section);
 
+/* Ajoute un symbole à la table des symboles de la structure ELF */
 Elf* addSymbol(Elf* elf, ElfSymbole symbol);
 
+/* Fonction permettant la libération de la zone mémoire contenant l'entete */
 void freeElfHeader(ElfHeader* elf_header);
 
+/* Fonction permettant la libération de la zone mémoire contenant la table des symboles */
 void freeSymbolHeader(ElfSymbole *elf_symbole);
 
-
+/* Fonction permettant la libération de la zone mémoire contenant la table des sections */
 void freeElfSectionHeader(SectionHeader* section_header);
 
+/* Fonction permettant la libération de la zone mémoire contenant une section */
 void freeElfSection(ElfSection* section, Elf_Half_16b count);
 
-
+/* Fonction permettant la libération de la zone mémoire contenant la string table */
 void freeStrTab(StrTab string);
 
+/* Fonction permettant la libération de la zone mémoire contenant une entrée de la table de réimplantation */
 void freeRelocationHeader(RelocationHeader* rel);
 
+/* Fonction permettant la libération de la zone mémoire contenant la table de réimplantation */
 void freeElfRelocation(ElfRelocation* rel, int count);
 
+/* Fonction qui s'occupe de libérer toute les zones memoires utilisés par nos structures */
 void freeElf(Elf* elf);
 
 #endif

@@ -151,7 +151,7 @@ Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2) {
     return result;
 }
 
-void fonctionTestRelocation (char* nom_fichier1, char* nom_fichier2){
+void affichageTestFusionRelocation (char* nom_fichier1, char* nom_fichier2){
     FILE* f1 = ouvertureFichier(nom_fichier1, "rb");
     Elf* elf1 = valeurEntete(f1);
     elf1 = valeurSection(elf1, f1);
