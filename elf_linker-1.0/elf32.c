@@ -86,6 +86,8 @@ Elf* addSection(Elf* elf, ElfSection section) {
     return elf;
 }
 
+
+
 Elf *addSymbol(Elf *elf, ElfSymbole symbole)
 {
     // Recuperer l'indice du nouveau symbole
