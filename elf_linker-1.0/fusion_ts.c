@@ -196,7 +196,7 @@ Elf *fusion_table_symboles(Elf *file1, Elf *file2, Elf *elf_fusion)
   new_section.entree.entsize = file1->section_header[symtabFile1_index].entree.entsize;
   new_section.entree.flags = file1->section_header[symtabFile1_index].entree.flags;
   new_section.entree.info = file1->section_header[symtabFile1_index].entree.info;
-  new_section.entree.link = file1->section_header[symtabFile1_index].entree.link;
+  new_section.entree.link = findSection(elf_fusion, ".strtab");
   new_section.entree.name = file1->section_header[symtabFile1_index].entree.name;
   new_section.entree.size = elf_fusion->nb_symbol * sizeof(ElfSymbole);
   new_section.entree.offset = getNextOffset(elf_fusion);
