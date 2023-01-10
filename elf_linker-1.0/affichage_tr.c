@@ -150,7 +150,8 @@ Elf* getTableRelocation(Elf *elf, FILE* f_bin){
 
     int nb_relloc = getNbRelocSec(elf);
     int compt = 0;
-    ElfRelocation* reloc = malloc(nb_relloc * sizeof(ElfRelocation));
+    // ElfRelocation* reloc = malloc(nb_relloc * sizeof(ElfRelocation));
+    ElfRelocation* reloc = allocElfRelocation(nb_relloc);
     if (reloc==NULL){
         printf("Erreur d'allocation de mémoire");
         exit(1);
@@ -160,7 +161,8 @@ Elf* getTableRelocation(Elf *elf, FILE* f_bin){
     for (int i = 0; i < elf->header->e_section_header_entry_count; i++){
     
         if (elf->section_header[i].entree.type == 9){
-            RelocationHeader* rel_tmp = (RelocationHeader*)malloc(sizeof(RelocationHeader) * elf->section_header[i].entree.size / 8);
+            // RelocationHeader* rel_tmp = (RelocationHeader*)malloc(sizeof(RelocationHeader) * elf->section_header[i].entree.size / 8);
+            RelocationHeader* rel_tmp = allocRelocationHeader(elf->section_header[i].entree.size / 8);
 
             fseek(f_bin, elf->section_header[i].entree.offset, SEEK_SET);
 
@@ -178,7 +180,7 @@ Elf* getTableRelocation(Elf *elf, FILE* f_bin){
             compt++;
         }
     }
-
+    elf->nb_reloc = nb_relloc;
     elf->relocation_header = reloc;
     return elf;
 }
@@ -245,11 +247,13 @@ void affichage_table_reimplentation(char* nom_fichier){
     elf = getTableRelocation(elf, f);
     affichageTableReimplentation(elf);
 
+    freeElf(elf);
+
     fermetureFichier(f);
 }
 
-/*int main(int argc, char** argv){
+/* int main(int argc, char** argv){
 
      affichage_table_reimplentation(argv[1]);
      return 0;
-}*/
+} */
