@@ -24,7 +24,7 @@ Options_and_debug_example_SOURCES=$(COMMON) Options_and_debug_example.c
 
 EXTRA_DIST+=
 
-readelf_SOURCES = ./readelf.c affichage_entete.c elf32.c affichage_section.c affichage_table_symboles.c affichage_tr.c
+readelf_SOURCES = ./readelf.c affichage_entete.c affichage_section.c affichage_table_symboles.c elf32.c affichage_tr.c affichage_contenu_section.c
 
 check_PROGRAMS =
 check_PROGRAMS += test_affichage_entete
