@@ -106,7 +106,6 @@ Elf* addSection(Elf* elf, ElfSection section);
 
 Elf* addSymbol(Elf* elf, ElfSymbole symbol);
 
-
 void freeElfHeader(ElfHeader* elf_header);
 
 void freeSymbolHeader(ElfSymbole *elf_symbole);
