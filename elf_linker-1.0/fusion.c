@@ -38,13 +38,26 @@ Elf* fusionElf(Elf* elf1, Elf* elf2) {
     return result;
 }
 
-void writeElf(FILE* f_out, Elf* content) {
+WriteError writeElf(FILE* f_out, Elf* content, bool strict_mode) {
+    if (f_out==NULL) {
+        return INVALID_FILE;
+    }
+    
     // Ecriture du header
+    if (strict_mode && (content->header==NULL)) {
+        return MISSING_HEADER;
+    }
     content->header->e_section_header_string_table_index+=1;
     fwrite(content->header, sizeof(ElfHeader), 1, f_out);
 
     // Ecriture du contenu des sections
+    if (strict_mode && (content->section_header==NULL)) {
+        return MISSING_SECTION_HEADER;
+    }
     for (int i=0; i<content->header->e_section_header_entry_count-1; i++) {
+        if (strict_mode && (content->section_header[i].data==NULL) && (content->section_header[i].entree.size > 0)) {
+            return MISSING_SECTION_DATA;
+        }
         fwrite(content->section_header[i].data, content->section_header[i].entree.size, 1, f_out);
     }
 
@@ -56,5 +69,7 @@ void writeElf(FILE* f_out, Elf* content) {
     for (int i=0; i<content->header->e_section_header_entry_count-1; i++) {
         fwrite(&(content->section_header[i].entree), sizeof(SectionHeader), 1, f_out);
     }
+
+    return WRITE_OK;
 }
 

@@ -7,9 +7,10 @@
 #include "util.h"
 #include "fusion_section.h"
 #include "fusion_relocation.h"
+#include "error.h"
 
 Elf* fusionElf(Elf* elf1, Elf* elf2);
 
-void writeElf(FILE* f_out, Elf* content);
+WriteError writeElf(FILE* f_out, Elf* content, bool strict_mode);
 
 #endif
