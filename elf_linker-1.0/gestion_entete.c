@@ -1,4 +1,4 @@
-#include "affichage_entete.h"
+#include "gestion_entete.h"
 
 
 void printMagic(ElfHeader *header)
@@ -413,7 +413,7 @@ void affichageEntete(Elf* elf){
     printSectionHeaderStringTableIndex(elf->header);
 }
 
-void affichage_entete(char *nom_fichier){
+void gestion_entete(char *nom_fichier){
     FILE* f = ouvertureFichier(nom_fichier, "rb");
     Elf* elf = valeurEntete(f);
     affichageEntete(elf);
@@ -428,7 +428,7 @@ void affichage_entete(char *nom_fichier){
 //         exit(1);
 //     }
 
-//     affichage_entete(argv[1]);
+//     gestion_entete(argv[1]);
 
 //     return 0;
 // }

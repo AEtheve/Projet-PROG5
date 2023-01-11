@@ -1,12 +1,12 @@
-#ifndef _AFFICHAGE_SECTION_H_
-#define _AFFICHAGE_SECTION_H_
+#ifndef _gestion_SECTION_H_
+#define _gestion_SECTION_H_
 
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "affichage_entete.h"
+#include "gestion_entete.h"
 #include "util.h"
 #include "elf32.h"
 
@@ -20,6 +20,6 @@ void affichageSection(Elf* elf, bool arm_cmd_version);
 
 /* Recupere les valeurs de section avec valeur_section puis les affiches
 avec affichageSection */
-void affichage_section(char* nom_fichier, bool arm_cmd_version);
+void gestion_section(char* nom_fichier, bool arm_cmd_version);
 
 #endif

@@ -24,11 +24,11 @@ Contact: Guillaume.Huard@imag.fr
 #include <stdio.h>
 #include <stdlib.h>
 #include "debug.h"
-#include "affichage_entete.h"
-#include "affichage_section.h"
-#include "affichage_table_symboles.h"
-#include "affichage_contenu_section.h"
-#include "affichage_tr.h"
+#include "gestion_entete.h"
+#include "gestion_section.h"
+#include "gestion_table_symboles.h"
+#include "gestion_contenu_section.h"
+#include "gestion_tr.h"
 
 void usage(char *name) {
 	fprintf(stderr, "Usage:\n"
@@ -92,20 +92,20 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (header_flag != NULL) {
-		affichage_entete(file);
+		gestion_entete(file);
 	}
 	if (section_flag != NULL) {
-		affichage_section(file, false);
+		gestion_section(file, false);
 	}
 	if (symbol_flag != NULL) {
-		affichage_table_symboles(file, false);
+		gestion_table_symboles(file, false);
 	}
 	if (contenu_section != NULL) {
 		int select_section = atoi(contenu_section);
-		affichage_contenu_section(file, select_section);
+		gestion_contenu_section(file, select_section);
 	}
 	if (relocation_flag != NULL) {
-		affichage_table_reimplentation(file);
+		gestion_table_reimplentation(file);
 	}
 	
 

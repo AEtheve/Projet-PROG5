@@ -3,7 +3,7 @@
 #include <string.h>
 #include "CuTest/CuTest.h"
 #include "./utils.h"
-#include "../affichage_tr.h"
+#include "../gestion_tr.h"
 
 void TestAffichageTr1(CuTest *tc)
 {
@@ -13,7 +13,7 @@ void TestAffichageTr1(CuTest *tc)
         system("arm-eabi-readelf -r ./tests/file1.o > ./tests/file1_afficher_tr.expected");
     }
     writeStdout();
-    affichage_table_reimplentation("./tests/file1.o");
+    gestion_table_reimplentation("./tests/file1.o");
     RunTest("./tests/file1_afficher_tr.expected", tc);
     clearStdout();
 }
@@ -26,7 +26,7 @@ void TestAffichageTr2(CuTest *tc)
         system("arm-eabi-readelf -r ./tests/file2.o > ./tests/file2_afficher_tr.expected");
     }
     writeStdout();
-    affichage_table_reimplentation("./tests/file2.o");
+    gestion_table_reimplentation("./tests/file2.o");
     RunTest("./tests/file2_afficher_tr.expected", tc);
     clearStdout();
 }

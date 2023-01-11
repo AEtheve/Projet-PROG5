@@ -3,7 +3,7 @@
 #include <string.h>
 #include "CuTest/CuTest.h"
 #include "./utils.h"
-#include "../affichage_entete.h"
+#include "../gestion_entete.h"
 
 void TestAffichageEntete1(CuTest *tc)
 {    
@@ -13,7 +13,7 @@ void TestAffichageEntete1(CuTest *tc)
         system("arm-eabi-readelf -h ./tests/file1.o > ./tests/file1.expected");
     }
     writeStdout();
-    affichage_entete("./tests/file1.o");
+    gestion_entete("./tests/file1.o");
     clearStdout();
 }
 
@@ -25,7 +25,7 @@ void TestAffichageEntete2(CuTest *tc)
         system("arm-eabi-readelf -h ./tests/file2.o > ./tests/file2.expected");
     }
     writeStdout();
-    affichage_entete("./tests/file2.o");
+    gestion_entete("./tests/file2.o");
     RunTest("./tests/file2.expected", tc);
     clearStdout();
 }

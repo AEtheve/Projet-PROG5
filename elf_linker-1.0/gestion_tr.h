@@ -3,12 +3,12 @@
 #include <stdlib.h>
 #include "elf32.h"
 #include "util.h"
-#include "affichage_entete.h"
-#include "affichage_table_symboles.h"
-#include "affichage_section.h"
+#include "gestion_entete.h"
+#include "gestion_table_symboles.h"
+#include "gestion_section.h"
 
 Elf* getTableRelocation(Elf *elf, FILE* f_bin);
 
 void affichageTableReimplentation(Elf *elf);
 
-void affichage_table_reimplentation(char *nom_fichier);
+void gestion_table_reimplentation(char *nom_fichier);

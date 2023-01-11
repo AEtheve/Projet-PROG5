@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "affichage_table_symboles.h"
-#include "affichage_section.h"
+#include "gestion_table_symboles.h"
+#include "gestion_section.h"
 #include "util.h"
 #include "fusion_section.h"
 #include "fusion_ts.h"

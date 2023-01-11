@@ -3,7 +3,7 @@
 #include <string.h>
 #include "CuTest/CuTest.h"
 #include "./utils.h"
-#include "../affichage_contenu_section.h"
+#include "../gestion_contenu_section.h"
 
 void TestAffichageContenuSection1(CuTest *tc)
 {
@@ -13,7 +13,7 @@ void TestAffichageContenuSection1(CuTest *tc)
         system("arm-eabi-readelf -x 1 ./tests/file1.o > ./tests/file1_afficher_contenu_section_1.expected");
     }
     writeStdout();
-    affichage_contenu_section("./tests/file1.o", 1);
+    gestion_contenu_section("./tests/file1.o", 1);
     RunTest("./tests/file1_afficher_contenu_section_1.expected", tc);
     clearStdout();
 }
@@ -26,7 +26,7 @@ void TestAffichageContenuSection2(CuTest *tc)
         system("arm-eabi-readelf -x 4 ./tests/file1.o > ./tests/file1_afficher_contenu_section_4.expected");
     }
     writeStdout();
-    affichage_contenu_section("./tests/file1.o", 4);
+    gestion_contenu_section("./tests/file1.o", 4);
     RunTest("./tests/file1_afficher_contenu_section_4.expected", tc);
     clearStdout();
 }
@@ -39,7 +39,7 @@ void TestAffichageContenuSection3(CuTest *tc)
         system("arm-eabi-readelf -x 5 ./tests/file1.o > ./tests/file1_afficher_contenu_section_5.expected");
     }
     writeStdout();
-    affichage_contenu_section("./tests/file1.o", 5);
+    gestion_contenu_section("./tests/file1.o", 5);
     RunTest("./tests/file1_afficher_contenu_section_5.expected", tc);
     clearStdout();
 }

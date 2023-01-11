@@ -1,4 +1,4 @@
-#include "affichage_tr.h"
+#include "gestion_tr.h"
 
 char *reloc_type(uint32_t valeur)
 {
@@ -238,7 +238,7 @@ void affichageTableReimplentation(Elf *elf)
 
 
 
-void affichage_table_reimplentation(char* nom_fichier){
+void gestion_table_reimplentation(char* nom_fichier){
     FILE* f = ouvertureFichier(nom_fichier, "rb");
     Elf* elf = valeurEntete(f);
     elf = valeurSection(elf, f);
@@ -254,6 +254,6 @@ void affichage_table_reimplentation(char* nom_fichier){
 
 /* int main(int argc, char** argv){
 
-     affichage_table_reimplentation(argv[1]);
+     gestion_table_reimplentation(argv[1]);
      return 0;
 } */

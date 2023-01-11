@@ -1,4 +1,4 @@
-#include "affichage_section.h"
+#include "gestion_section.h"
 
 
 void affichageNameAddr(uint32_t name){
@@ -215,7 +215,7 @@ void affichageSection(Elf* elf, bool arm_cmd_version){
     
 }
 
-void affichage_section(char* nom_fichier, bool arm_cmd_version){
+void gestion_section(char* nom_fichier, bool arm_cmd_version){
     FILE* f = ouvertureFichier(nom_fichier, "rb");
     Elf* elf = valeurEntete(f);
     elf = valeurSection(elf, f);
@@ -225,7 +225,7 @@ void affichage_section(char* nom_fichier, bool arm_cmd_version){
 
 /* int main(int argc, char* argv[]){
     
-    affichage_section(argv[1],false);
+    gestion_section(argv[1],false);
     
     return 0;
 } */

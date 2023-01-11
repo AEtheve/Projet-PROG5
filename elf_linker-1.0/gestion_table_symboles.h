@@ -1,5 +1,5 @@
-#include "affichage_entete.h"
-#include "affichage_section.h"
+#include "gestion_entete.h"
+#include "gestion_section.h"
 #include "elf32.h"
 #include "util.h"
 #include <stdint.h>
@@ -13,4 +13,4 @@ Elf* getTableSymboles(Elf* elf, FILE* f_bin);
 
 void affichageTableSymbole(Elf* elf);
 
-void affichage_table_symboles(char* nom_fichier, bool arm_cmd_version);
+void gestion_table_symboles(char* nom_fichier, bool arm_cmd_version);
