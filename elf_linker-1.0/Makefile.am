@@ -24,8 +24,8 @@ Options_and_debug_example_SOURCES=$(COMMON) Options_and_debug_example.c
 
 EXTRA_DIST+=
 
-readelf_SOURCES = readelf.c gestion_entete.c gestion_section.c gestion_table_symboles.c elf32.c gestion_tr.c gestion_contenu_section.c
-fusion_SOURCES = fusion.c elf32.c gestion_section.c fusion_section.c fusion_ts.c fusion_relocation.c gestion_entete.c gestion_tr.c gestion_table_symboles.c
+readelf_SOURCES = readelf.c gestion_entete.c gestion_section.c gestion_table_symboles.c elf32.c gestion_tr.c gestion_contenu_section.c util.c
+fusion_SOURCES = fusion.c elf32.c util.c gestion_section.c fusion_section.c fusion_ts.c fusion_relocation.c gestion_entete.c gestion_tr.c gestion_table_symboles.c
 
 check_PROGRAMS =
 check_PROGRAMS += test_gestion_entete
@@ -34,9 +34,9 @@ check_PROGRAMS += test_gestion_contenu_section
 check_PROGRAMS += test_gestion_ts
 check_PROGRAMS += test_gestion_tr
 
-test_gestion_entete_SOURCES = ./gestion_entete.c tests/test_gestion_entete.c tests/CuTest/CuTest.c tests/utils.c elf32.c
-test_gestion_section_SOURCES = ./gestion_section.c ./gestion_entete.c tests/test_gestion_section.c tests/CuTest/CuTest.c tests/utils.c elf32.c
-test_gestion_contenu_section_SOURCES = ./gestion_contenu_section.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_contenu_section.c tests/CuTest/CuTest.c tests/utils.c elf32.c
-test_gestion_ts_SOURCES = ./gestion_table_symboles.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_ts.c tests/CuTest/CuTest.c tests/utils.c elf32.c
-test_gestion_tr_SOURCES = ./gestion_tr.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_tr.c tests/CuTest/CuTest.c tests/utils.c elf32.c gestion_table_symboles.c
+test_gestion_entete_SOURCES = ./gestion_entete.c tests/test_gestion_entete.c tests/CuTest/CuTest.c tests/utils.c elf32.c ./util.c
+test_gestion_section_SOURCES = ./gestion_section.c ./gestion_entete.c tests/test_gestion_section.c tests/CuTest/CuTest.c tests/utils.c elf32.c ./util.c
+test_gestion_contenu_section_SOURCES = ./gestion_contenu_section.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_contenu_section.c tests/CuTest/CuTest.c tests/utils.c elf32.c ./util.c
+test_gestion_ts_SOURCES = ./gestion_table_symboles.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_ts.c tests/CuTest/CuTest.c tests/utils.c elf32.c ./util.c
+test_gestion_tr_SOURCES = ./gestion_tr.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_tr.c tests/CuTest/CuTest.c tests/utils.c elf32.c gestion_table_symboles.c ./util.c
 TESTS = $(check_PROGRAMS)
