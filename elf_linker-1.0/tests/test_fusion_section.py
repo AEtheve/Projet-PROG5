@@ -33,7 +33,7 @@ for i in liste_comp_arm:
         liste_comp_arm.remove(i)
         
 
-subprocess.run(['gcc','test_fusion_section.c', 'gestion_section.c', 'elf32.c', 'gestion_entete.c', 'fusion_section.c'])
+subprocess.run(['gcc','./tests/test_fusion_section.c', 'gestion_section.c', 'elf32.c', 'gestion_entete.c', 'fusion_section.c', 'util.c'])
 fusion_section_gcc=subprocess.run(['./a.out', 'Examples_fusion/file1.o', 'Examples_fusion/file2.o'], capture_output=True, text=True).stdout
 fusion_section_gcc=fusion_section_gcc.split('\n')
 
