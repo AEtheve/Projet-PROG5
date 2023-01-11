@@ -4,7 +4,7 @@
 #include "gestion_section.h"
 #include "util.h"
 #include "fusion_section.h"
-#include "fusion_ts.h"
+#include "fusion_table_symboles.h"
 
 int getOffsetMax(Elf *elf_fusion){
   int offsetMax = 0;

@@ -28,7 +28,7 @@ Contact: Guillaume.Huard@imag.fr
 #include "gestion_section.h"
 #include "gestion_table_symboles.h"
 #include "gestion_contenu_section.h"
-#include "gestion_tr.h"
+#include "gestion_table_relocation.h"
 
 void usage(char *name) {
 	fprintf(stderr, "Usage:\n"

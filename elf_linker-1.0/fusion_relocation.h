@@ -1,8 +1,8 @@
 #ifndef _FUSION_RELOCATION_H_
 #define _FUSION_RELOCATION_H_
 
-#include "gestion_tr.h"
-#include "fusion_ts.h"
+#include "gestion_table_relocation.h"
+#include "fusion_table_symboles.h"
 
 /* Fonction d'écriture de la structure relocation dans data*/
 void ecritureDataRelocation(uint8_t* data, RelocationHeader* reloc, int taille);

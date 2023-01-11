@@ -1,4 +1,4 @@
-#include "gestion_tr.h"
+#include "gestion_table_relocation.h"
 
 char *reloc_type(uint32_t valeur){
     char *type;

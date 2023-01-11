@@ -8,7 +8,7 @@
 #include "gestion_table_symboles.h"
 #include "fusion_section.h"
 #include "fusion_relocation.h"
-#include "fusion_ts.h"
+#include "fusion_table_symboles.h"
 #include "error.h"
 
 Elf* fusionElf(Elf* elf1, Elf* elf2);
