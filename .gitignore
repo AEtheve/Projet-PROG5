@@ -4,3 +4,4 @@ Makefile
 .trs
 .log
 elf_linker-1.0/out.o
+elf_linker-1.0/fusion
