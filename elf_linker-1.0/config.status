@@ -424,7 +424,7 @@ Copyright (C) 2021 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/clement/Documents/GitHub/Projet-PROG5/elf_linker-1.0'
+ac_pwd='/home/theodora/Documents/GitHub/Projet-PROG5/elf_linker-1.0'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/usr/bin/mkdir -p'
@@ -604,9 +604,9 @@ S["build_vendor"]="pc"
 S["build_cpu"]="x86_64"
 S["build"]="x86_64-pc-linux-gnu"
 S["LIBOBJS"]=""
-S["LEXLIB"]=""
-S["LEX_OUTPUT_ROOT"]=""
-S["LEX"]="${SHELL} '/home/clement/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' flex"
+S["LEXLIB"]="-ll "
+S["LEX_OUTPUT_ROOT"]="lex.yy"
+S["LEX"]="flex"
 S["am__fastdepCC_FALSE"]="#"
 S["am__fastdepCC_TRUE"]=""
 S["CCDEPMODE"]="depmode=gcc3"
@@ -640,12 +640,12 @@ S["mkdir_p"]="$(MKDIR_P)"
 S["MKDIR_P"]="/usr/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]=""
-S["install_sh"]="${SHELL} /home/clement/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/install-sh"
-S["MAKEINFO"]="${SHELL} '/home/clement/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' makeinfo"
-S["AUTOHEADER"]="${SHELL} '/home/clement/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' autoheader"
-S["AUTOMAKE"]="${SHELL} '/home/clement/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' automake-1.16"
-S["AUTOCONF"]="${SHELL} '/home/clement/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' autoconf"
-S["ACLOCAL"]="${SHELL} '/home/clement/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' aclocal-1.16"
+S["install_sh"]="${SHELL} /home/theodora/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/install-sh"
+S["MAKEINFO"]="${SHELL} '/home/theodora/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' makeinfo"
+S["AUTOHEADER"]="${SHELL} '/home/theodora/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' autoheader"
+S["AUTOMAKE"]="${SHELL} '/home/theodora/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' automake-1.16"
+S["AUTOCONF"]="${SHELL} '/home/theodora/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' autoconf"
+S["ACLOCAL"]="${SHELL} '/home/theodora/Documents/GitHub/Projet-PROG5/elf_linker-1.0/build-aux/missing' aclocal-1.16"
 S["VERSION"]="1.0"
 S["PACKAGE"]="elf_linker"
 S["CYGPATH_W"]="echo"
@@ -661,12 +661,12 @@ S["ECHO_T"]=""
 S["ECHO_N"]="-n"
 S["ECHO_C"]=""
 S["DEFS"]="-DPACKAGE_NAME=\\\"ELF_Linker\\\" -DPACKAGE_TARNAME=\\\"elf_linker\\\" -DPACKAGE_VERSION=\\\"1.0\\\" -DPACKAGE_STRING=\\\"ELF_Linker\\ 1.0\\\" -DPACKAGE_BUGREPORT=\\\""\
-"Guillaume.Huard@imag.fr\\\" -DPACKAGE_URL=\\\"\\\" -DPACKAGE=\\\"elf_linker\\\" -DVERSION=\\\"1.0\\\" -DHAVE_STDIO_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_"\
-"INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_STRINGS_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_UNISTD_H=1 -DHAVE_SYS_PARAM_H=1 -DSTDC_HEADERS=1 -"\
-"DHAVE_ARPA_INET_H=1 -DHAVE_FCNTL_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_NETDB_H=1 -DHAVE_NETINET_IN_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_STRINGS_H"\
-"=1 -DHAVE_SYS_SOCKET_H=1 -DHAVE_SYS_TIME_H=1 -DHAVE_UNISTD_H=1 -DHAVE_VFORK=1 -DHAVE_GETPAGESIZE=1 -DHAVE_WORKING_VFORK=1 -DHAVE_MALLOC=1 -DHAVE_MMA"\
-"P=1 -DHAVE_REALLOC=1 -DHAVE_ALARM=1 -DHAVE_DUP2=1 -DHAVE_GETHOSTBYADDR=1 -DHAVE_GETHOSTBYNAME=1 -DHAVE_MUNMAP=1 -DHAVE_SELECT=1 -DHAVE_SOCKET=1 -DHA"\
-"VE_STRERROR=1"
+"Guillaume.Huard@imag.fr\\\" -DPACKAGE_URL=\\\"\\\" -DPACKAGE=\\\"elf_linker\\\" -DVERSION=\\\"1.0\\\" -DYYTEXT_POINTER=1 -DHAVE_STDIO_H=1 -DHAVE_STDLIB_H=1 -DHAVE"\
+"_STRING_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_STRINGS_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_UNISTD_H=1 -DHAVE_SYS_PARAM_H=1"\
+" -DSTDC_HEADERS=1 -DHAVE_ARPA_INET_H=1 -DHAVE_FCNTL_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_NETDB_H=1 -DHAVE_NETINET_IN_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H"\
+"=1 -DHAVE_STRINGS_H=1 -DHAVE_SYS_SOCKET_H=1 -DHAVE_SYS_TIME_H=1 -DHAVE_UNISTD_H=1 -DHAVE_VFORK=1 -DHAVE_GETPAGESIZE=1 -DHAVE_WORKING_VFORK=1 -DHAVE_"\
+"MALLOC=1 -DHAVE_MMAP=1 -DHAVE_REALLOC=1 -DHAVE_ALARM=1 -DHAVE_DUP2=1 -DHAVE_GETHOSTBYADDR=1 -DHAVE_GETHOSTBYNAME=1 -DHAVE_MUNMAP=1 -DHAVE_SELECT=1 -"\
+"DHAVE_SOCKET=1 -DHAVE_STRERROR=1"
 S["mandir"]="${datarootdir}/man"
 S["localedir"]="${datarootdir}/locale"
 S["libdir"]="${exec_prefix}/lib"

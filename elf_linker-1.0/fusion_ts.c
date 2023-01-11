@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "gestion_table_symboles.h"
-#include "gestion_section.h"
-#include "util.h"
-#include "fusion_section.h"
+
 #include "fusion_ts.h"
 
 int getOffsetMax(Elf *elf_fusion){
@@ -194,7 +189,7 @@ Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion)
   new_section.entree.adress = file1->section_header[symtabFile1_index].entree.adress;
   new_section.entree.entsize = file1->section_header[symtabFile1_index].entree.entsize;
   new_section.entree.flags = file1->section_header[symtabFile1_index].entree.flags;
-  new_section.entree.info = file1->section_header[symtabFile1_index].entree.info;
+  new_section.entree.info = 35;
   new_section.entree.link = strtab_index;
   new_section.entree.name = file1->section_header[symtabFile1_index].entree.name;
   
@@ -209,11 +204,13 @@ Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion)
     symbole.name = reverse_4(symbole.name);
     symbole.value = reverse_4(symbole.value);
     symbole.size = reverse_4(symbole.size);
+    symbole.ndx = reverse_2(symbole.ndx);
+    memcpy(new_section.data + i * sizeof(ElfSymbole), &symbole, sizeof(ElfSymbole));
   }
 
-  memcpy(new_section.data, elf_fusion->symbol_header, sizeof(ElfSymbole)*elf_fusion->nb_symbol);
   elf_fusion = addSection(elf_fusion, new_section);
 
 
   return elf_fusion;
 }
+

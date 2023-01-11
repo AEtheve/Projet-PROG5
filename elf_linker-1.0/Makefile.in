@@ -88,11 +88,12 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = Options_and_debug_example$(EXEEXT)
+bin_PROGRAMS = Options_and_debug_example$(EXEEXT) readelf$(EXEEXT) \
+	fusion$(EXEEXT)
 check_PROGRAMS = test_gestion_entete$(EXEEXT) \
 	test_gestion_section$(EXEEXT) \
-	test_gestion_contenu_section$(EXEEXT) \
-	test_gestion_ts$(EXEEXT) test_gestion_tr$(EXEEXT)
+	test_gestion_contenu_section$(EXEEXT) test_gestion_ts$(EXEEXT) \
+	test_gestion_tr$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/hostsubdir.m4 \
@@ -114,41 +115,53 @@ am_Options_and_debug_example_OBJECTS = $(am__objects_1) \
 Options_and_debug_example_OBJECTS =  \
 	$(am_Options_and_debug_example_OBJECTS)
 Options_and_debug_example_LDADD = $(LDADD)
+am_fusion_OBJECTS = fusion.$(OBJEXT) elf32.$(OBJEXT) util.$(OBJEXT) \
+	gestion_section.$(OBJEXT) fusion_section.$(OBJEXT) \
+	fusion_ts.$(OBJEXT) fusion_relocation.$(OBJEXT) \
+	gestion_entete.$(OBJEXT) gestion_tr.$(OBJEXT) \
+	gestion_table_symboles.$(OBJEXT)
+fusion_OBJECTS = $(am_fusion_OBJECTS)
+fusion_LDADD = $(LDADD)
+am_readelf_OBJECTS = readelf.$(OBJEXT) gestion_entete.$(OBJEXT) \
+	gestion_section.$(OBJEXT) gestion_table_symboles.$(OBJEXT) \
+	elf32.$(OBJEXT) gestion_tr.$(OBJEXT) \
+	gestion_contenu_section.$(OBJEXT) util.$(OBJEXT)
+readelf_OBJECTS = $(am_readelf_OBJECTS)
+readelf_LDADD = $(LDADD)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_test_gestion_contenu_section_OBJECTS =  \
 	./gestion_contenu_section.$(OBJEXT) \
 	./gestion_section.$(OBJEXT) ./gestion_entete.$(OBJEXT) \
 	tests/test_gestion_contenu_section.$(OBJEXT) \
 	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT) \
-	elf32.$(OBJEXT)
+	elf32.$(OBJEXT) ./util.$(OBJEXT)
 test_gestion_contenu_section_OBJECTS =  \
 	$(am_test_gestion_contenu_section_OBJECTS)
 test_gestion_contenu_section_LDADD = $(LDADD)
 am_test_gestion_entete_OBJECTS = ./gestion_entete.$(OBJEXT) \
 	tests/test_gestion_entete.$(OBJEXT) \
 	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT) \
-	elf32.$(OBJEXT)
+	elf32.$(OBJEXT) ./util.$(OBJEXT)
 test_gestion_entete_OBJECTS = $(am_test_gestion_entete_OBJECTS)
 test_gestion_entete_LDADD = $(LDADD)
 am_test_gestion_section_OBJECTS = ./gestion_section.$(OBJEXT) \
 	./gestion_entete.$(OBJEXT) \
 	tests/test_gestion_section.$(OBJEXT) \
 	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT) \
-	elf32.$(OBJEXT)
+	elf32.$(OBJEXT) ./util.$(OBJEXT)
 test_gestion_section_OBJECTS = $(am_test_gestion_section_OBJECTS)
 test_gestion_section_LDADD = $(LDADD)
 am_test_gestion_tr_OBJECTS = ./gestion_tr.$(OBJEXT) \
 	./gestion_section.$(OBJEXT) ./gestion_entete.$(OBJEXT) \
-	tests/test_gestion_tr.$(OBJEXT) \
-	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT) \
-	elf32.$(OBJEXT) gestion_table_symboles.$(OBJEXT)
+	tests/test_gestion_tr.$(OBJEXT) tests/CuTest/CuTest.$(OBJEXT) \
+	tests/utils.$(OBJEXT) elf32.$(OBJEXT) \
+	gestion_table_symboles.$(OBJEXT) ./util.$(OBJEXT)
 test_gestion_tr_OBJECTS = $(am_test_gestion_tr_OBJECTS)
 test_gestion_tr_LDADD = $(LDADD)
 am_test_gestion_ts_OBJECTS = ./gestion_table_symboles.$(OBJEXT) \
 	./gestion_section.$(OBJEXT) ./gestion_entete.$(OBJEXT) \
-	tests/test_gestion_ts.$(OBJEXT) \
-	tests/CuTest/CuTest.$(OBJEXT) tests/utils.$(OBJEXT) \
-	elf32.$(OBJEXT)
+	tests/test_gestion_ts.$(OBJEXT) tests/CuTest/CuTest.$(OBJEXT) \
+	tests/utils.$(OBJEXT) elf32.$(OBJEXT) ./util.$(OBJEXT)
 test_gestion_ts_OBJECTS = $(am_test_gestion_ts_OBJECTS)
 test_gestion_ts_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -167,12 +180,14 @@ DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/Options_and_debug_example.Po \
+	./$(DEPDIR)/debug.Po ./$(DEPDIR)/elf32.Po \
+	./$(DEPDIR)/fusion.Po ./$(DEPDIR)/fusion_relocation.Po \
+	./$(DEPDIR)/fusion_section.Po ./$(DEPDIR)/fusion_ts.Po \
 	./$(DEPDIR)/gestion_contenu_section.Po \
-	./$(DEPDIR)/gestion_entete.Po \
-	./$(DEPDIR)/gestion_section.Po \
+	./$(DEPDIR)/gestion_entete.Po ./$(DEPDIR)/gestion_section.Po \
 	./$(DEPDIR)/gestion_table_symboles.Po \
-	./$(DEPDIR)/gestion_tr.Po ./$(DEPDIR)/debug.Po \
-	./$(DEPDIR)/elf32.Po ./$(DEPDIR)/util.Po \
+	./$(DEPDIR)/gestion_tr.Po ./$(DEPDIR)/readelf.Po \
+	./$(DEPDIR)/util.Po \
 	tests/$(DEPDIR)/test_gestion_contenu_section.Po \
 	tests/$(DEPDIR)/test_gestion_entete.Po \
 	tests/$(DEPDIR)/test_gestion_section.Po \
@@ -192,16 +207,14 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(Options_and_debug_example_SOURCES) \
-	$(test_gestion_contenu_section_SOURCES) \
-	$(test_gestion_entete_SOURCES) \
-	$(test_gestion_section_SOURCES) $(test_gestion_tr_SOURCES) \
-	$(test_gestion_ts_SOURCES)
-DIST_SOURCES = $(Options_and_debug_example_SOURCES) \
-	$(test_gestion_contenu_section_SOURCES) \
-	$(test_gestion_entete_SOURCES) \
-	$(test_gestion_section_SOURCES) $(test_gestion_tr_SOURCES) \
-	$(test_gestion_ts_SOURCES)
+SOURCES = $(Options_and_debug_example_SOURCES) $(fusion_SOURCES) \
+	$(readelf_SOURCES) $(test_gestion_contenu_section_SOURCES) \
+	$(test_gestion_entete_SOURCES) $(test_gestion_section_SOURCES) \
+	$(test_gestion_tr_SOURCES) $(test_gestion_ts_SOURCES)
+DIST_SOURCES = $(Options_and_debug_example_SOURCES) $(fusion_SOURCES) \
+	$(readelf_SOURCES) $(test_gestion_contenu_section_SOURCES) \
+	$(test_gestion_entete_SOURCES) $(test_gestion_section_SOURCES) \
+	$(test_gestion_tr_SOURCES) $(test_gestion_ts_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
 	ctags-recursive dvi-recursive html-recursive info-recursive \
 	install-data-recursive install-dvi-recursive \
@@ -613,11 +626,13 @@ SUBDIRS = . Examples_fusion
 COMMON = debug.h debug.c util.h util.c
 EXTRA_DIST = filtre.pl
 Options_and_debug_example_SOURCES = $(COMMON) Options_and_debug_example.c
-test_gestion_entete_SOURCES = ./gestion_entete.c tests/test_gestion_entete.c tests/CuTest/CuTest.c tests/utils.c elf32.c
-test_gestion_section_SOURCES = ./gestion_section.c ./gestion_entete.c tests/test_gestion_section.c tests/CuTest/CuTest.c tests/utils.c elf32.c
-test_gestion_contenu_section_SOURCES = ./gestion_contenu_section.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_contenu_section.c tests/CuTest/CuTest.c tests/utils.c elf32.c
-test_gestion_ts_SOURCES = ./gestion_table_symboles.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_ts.c tests/CuTest/CuTest.c tests/utils.c elf32.c
-test_gestion_tr_SOURCES = ./gestion_tr.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_tr.c tests/CuTest/CuTest.c tests/utils.c elf32.c gestion_table_symboles.c
+readelf_SOURCES = readelf.c gestion_entete.c gestion_section.c gestion_table_symboles.c elf32.c gestion_tr.c gestion_contenu_section.c util.c
+fusion_SOURCES = fusion.c elf32.c util.c gestion_section.c fusion_section.c fusion_ts.c fusion_relocation.c gestion_entete.c gestion_tr.c gestion_table_symboles.c
+test_gestion_entete_SOURCES = ./gestion_entete.c tests/test_gestion_entete.c tests/CuTest/CuTest.c tests/utils.c elf32.c ./util.c
+test_gestion_section_SOURCES = ./gestion_section.c ./gestion_entete.c tests/test_gestion_section.c tests/CuTest/CuTest.c tests/utils.c elf32.c ./util.c
+test_gestion_contenu_section_SOURCES = ./gestion_contenu_section.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_contenu_section.c tests/CuTest/CuTest.c tests/utils.c elf32.c ./util.c
+test_gestion_ts_SOURCES = ./gestion_table_symboles.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_ts.c tests/CuTest/CuTest.c tests/utils.c elf32.c ./util.c
+test_gestion_tr_SOURCES = ./gestion_tr.c ./gestion_section.c ./gestion_entete.c tests/test_gestion_tr.c tests/CuTest/CuTest.c tests/utils.c elf32.c gestion_table_symboles.c ./util.c
 TESTS = $(check_PROGRAMS)
 all: all-recursive
 
@@ -705,6 +720,14 @@ clean-checkPROGRAMS:
 Options_and_debug_example$(EXEEXT): $(Options_and_debug_example_OBJECTS) $(Options_and_debug_example_DEPENDENCIES) $(EXTRA_Options_and_debug_example_DEPENDENCIES) 
 	@rm -f Options_and_debug_example$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(Options_and_debug_example_OBJECTS) $(Options_and_debug_example_LDADD) $(LIBS)
+
+fusion$(EXEEXT): $(fusion_OBJECTS) $(fusion_DEPENDENCIES) $(EXTRA_fusion_DEPENDENCIES) 
+	@rm -f fusion$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(fusion_OBJECTS) $(fusion_LDADD) $(LIBS)
+
+readelf$(EXEEXT): $(readelf_OBJECTS) $(readelf_DEPENDENCIES) $(EXTRA_readelf_DEPENDENCIES) 
+	@rm -f readelf$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(readelf_OBJECTS) $(readelf_LDADD) $(LIBS)
 ./$(am__dirstamp):
 	@$(MKDIR_P) .
 	@: > ./$(am__dirstamp)
@@ -735,6 +758,7 @@ tests/CuTest/CuTest.$(OBJEXT): tests/CuTest/$(am__dirstamp) \
 	tests/CuTest/$(DEPDIR)/$(am__dirstamp)
 tests/utils.$(OBJEXT): tests/$(am__dirstamp) \
 	tests/$(DEPDIR)/$(am__dirstamp)
+./util.$(OBJEXT): ./$(am__dirstamp) $(DEPDIR)/$(am__dirstamp)
 
 test_gestion_contenu_section$(EXEEXT): $(test_gestion_contenu_section_OBJECTS) $(test_gestion_contenu_section_DEPENDENCIES) $(EXTRA_test_gestion_contenu_section_DEPENDENCIES) 
 	@rm -f test_gestion_contenu_section$(EXEEXT)
@@ -777,13 +801,18 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Options_and_debug_example.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/elf32.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fusion.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fusion_relocation.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fusion_section.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fusion_ts.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gestion_contenu_section.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gestion_entete.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gestion_section.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gestion_table_symboles.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gestion_tr.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/elf32.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelf.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_gestion_contenu_section.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_gestion_entete.Po@am__quote@ # am--include-marker
@@ -1365,13 +1394,18 @@ clean-am: clean-binPROGRAMS clean-checkPROGRAMS clean-generic \
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 		-rm -f ./$(DEPDIR)/Options_and_debug_example.Po
+	-rm -f ./$(DEPDIR)/debug.Po
+	-rm -f ./$(DEPDIR)/elf32.Po
+	-rm -f ./$(DEPDIR)/fusion.Po
+	-rm -f ./$(DEPDIR)/fusion_relocation.Po
+	-rm -f ./$(DEPDIR)/fusion_section.Po
+	-rm -f ./$(DEPDIR)/fusion_ts.Po
 	-rm -f ./$(DEPDIR)/gestion_contenu_section.Po
 	-rm -f ./$(DEPDIR)/gestion_entete.Po
 	-rm -f ./$(DEPDIR)/gestion_section.Po
 	-rm -f ./$(DEPDIR)/gestion_table_symboles.Po
 	-rm -f ./$(DEPDIR)/gestion_tr.Po
-	-rm -f ./$(DEPDIR)/debug.Po
-	-rm -f ./$(DEPDIR)/elf32.Po
+	-rm -f ./$(DEPDIR)/readelf.Po
 	-rm -f ./$(DEPDIR)/util.Po
 	-rm -f tests/$(DEPDIR)/test_gestion_contenu_section.Po
 	-rm -f tests/$(DEPDIR)/test_gestion_entete.Po
@@ -1428,13 +1462,18 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
 		-rm -f ./$(DEPDIR)/Options_and_debug_example.Po
+	-rm -f ./$(DEPDIR)/debug.Po
+	-rm -f ./$(DEPDIR)/elf32.Po
+	-rm -f ./$(DEPDIR)/fusion.Po
+	-rm -f ./$(DEPDIR)/fusion_relocation.Po
+	-rm -f ./$(DEPDIR)/fusion_section.Po
+	-rm -f ./$(DEPDIR)/fusion_ts.Po
 	-rm -f ./$(DEPDIR)/gestion_contenu_section.Po
 	-rm -f ./$(DEPDIR)/gestion_entete.Po
 	-rm -f ./$(DEPDIR)/gestion_section.Po
 	-rm -f ./$(DEPDIR)/gestion_table_symboles.Po
 	-rm -f ./$(DEPDIR)/gestion_tr.Po
-	-rm -f ./$(DEPDIR)/debug.Po
-	-rm -f ./$(DEPDIR)/elf32.Po
+	-rm -f ./$(DEPDIR)/readelf.Po
 	-rm -f ./$(DEPDIR)/util.Po
 	-rm -f tests/$(DEPDIR)/test_gestion_contenu_section.Po
 	-rm -f tests/$(DEPDIR)/test_gestion_entete.Po

@@ -2,7 +2,6 @@
 
 void ecritureDataRelocation(uint8_t* data, RelocationHeader* reloc, int taille){
     for(int i=0; i < taille/8; i++){
-        printf("TAILE %d\n",taille);
         reloc[i].info = reverse_4(reloc[i].info);
         reloc[i].offset = reverse_4(reloc[i].offset);
     }
@@ -10,7 +9,6 @@ void ecritureDataRelocation(uint8_t* data, RelocationHeader* reloc, int taille){
     memcpy(data, reloc, taille);
 
     for(int i=0; i < taille/8; i++){
-        printf("TAILE %d\n",taille);
         reloc[i].info = reverse_4(reloc[i].info);
         reloc[i].offset = reverse_4(reloc[i].offset);
     }
