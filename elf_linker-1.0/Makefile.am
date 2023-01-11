@@ -14,7 +14,7 @@ SUBDIRS=
 SUBDIRS+=. Examples_fusion
 
 bin_PROGRAMS=
-bin_PROGRAMS+=Options_and_debug_example readelf
+bin_PROGRAMS+=Options_and_debug_example readelf fusion
 
 
 COMMON=debug.h debug.c util.h util.c
@@ -24,7 +24,8 @@ Options_and_debug_example_SOURCES=$(COMMON) Options_and_debug_example.c
 
 EXTRA_DIST+=
 
-readelf_SOURCES = ./readelf.c gestion_entete.c gestion_section.c gestion_table_symboles.c elf32.c gestion_tr.c gestion_contenu_section.c
+readelf_SOURCES = readelf.c gestion_entete.c gestion_section.c gestion_table_symboles.c elf32.c gestion_tr.c gestion_contenu_section.c
+fusion_SOURCES = fusion.c elf32.c gestion_section.c fusion_section.c fusion_ts.c fusion_relocation.c gestion_entete.c gestion_tr.c gestion_table_symboles.c
 
 check_PROGRAMS =
 check_PROGRAMS += test_gestion_entete
