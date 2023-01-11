@@ -11,9 +11,6 @@ Elf* fusionElf(Elf* elf1, Elf* elf2) {
     // fusion tables de reimplantation
     result = fusionRelocation(result, elf1, elf2);
 
-    affichageSection(result, false);
-
-
     //  Remplissage header
     memcpy(result->header->e_ident, elf1->header->e_ident, HEADER_IDENT_SIZE);
     result->header->e_type=elf1->header->e_type;
