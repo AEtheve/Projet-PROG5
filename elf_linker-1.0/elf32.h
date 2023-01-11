@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "util.h"
 
 
 
@@ -136,5 +137,9 @@ void freeElfRelocation(ElfRelocation* rel, int count);
 
 /* Fonction qui s'occupe de libérer toute les zones memoires utilisés par nos structures */
 void freeElf(Elf* elf);
+
+void writeHeader(ElfHeader* header, FILE* f_out);
+
+void writeSectionHeader(SectionHeader* section_header, FILE* f_out);
 
 #endif

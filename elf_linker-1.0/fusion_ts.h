@@ -27,7 +27,7 @@ void addSymboleOther(Elf *dest, Elf *source, ElfSymbole symbol, StrTab strtab, i
 void addSymboleSection(Elf *dest, Elf *source, ElfSymbole symbol, StrTab strtab, int index, int section);
 
 /* Fonction qui prend en arguments deux ELF: elf1 et elf2 et fusionne leur table des symboles dans elf_fusion qui est renvoyée */
-Elf *fusion_table_symboles(Elf *file1, Elf *file2, Elf *elf_fusion);
+Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion);
 
 /* Fonction d'affichage pour tester la fusion des tables de symboles */
 void affichageTestFusionSymbole(char* nom_fichier1, char* nom_fichier2);

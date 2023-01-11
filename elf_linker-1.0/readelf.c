@@ -27,49 +27,54 @@ Contact: Guillaume.Huard@imag.fr
 #include "affichage_entete.h"
 #include "affichage_section.h"
 #include "affichage_table_symboles.h"
+#include "affichage_contenu_section.h"
 #include "affichage_tr.h"
 
 void usage(char *name) {
 	fprintf(stderr, "Usage:\n"
-		"%s [ --help ] [ --h file ] [ --S file ] [ --s file ] [ --x file ]\n\n"
-		, name);
+		"%s [ --help ] [ --f <fichier> ] [ --h ] [ --S ] [ --s ] [ --x <section> ] [ --r ]\n", name);
 }
 
 int main(int argc, char *argv[]) {
 	int opt;
-	char *option1, *option2, *option3, *option4;
+	char *header_flag, *section_flag, *symbol_flag, *relocation_flag, *contenu_section, *file;
 
 	struct option longopts[] = {
-		{ "h", required_argument, NULL, '1' },
-		{ "S", required_argument, NULL, '2' },
-		{ "s", required_argument, NULL, '3' },
+		{ "h", no_argument, NULL, '1' },
+		{ "S", no_argument, NULL, '2' },
+		{ "s", no_argument, NULL, '3' },
 		{ "x", required_argument, NULL, '4' },
+		{ "r", no_argument, NULL, '5' },
+		{ "f", required_argument, NULL, 'f'},
         { "help", no_argument, NULL, 'h'},
 		{ NULL, 0, NULL, 0 }
 	};
+	file = NULL;
+	header_flag = NULL;
+	section_flag = NULL;
+	symbol_flag = NULL;
+    contenu_section = NULL;
 
-	option1 = NULL;
-	option2 = NULL;
-    option3 = NULL;
-    option4 = NULL;
-	while ((opt = getopt_long(argc, argv, "1:2:3:4:h", longopts, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "1:2:3:4:5:s:f:h", longopts, NULL)) != -1) {
 		switch(opt) {
 		case '1':
-			option1 = optarg;
-			affichage_entete(option1);
+			header_flag = "true";
 			break;
 		case '2':
-			option2 = optarg;
-            affichage_section(option2,false);
+			section_flag = "true";
 			break;
         case '3':
-            option3 = optarg;
-            affichage_table_symboles(option3,false);
-            break;
-        case '4':
-            option4 = optarg;
-            affichage_table_reimplentation(option4);
-            break;
+			symbol_flag = "true";
+			break;
+		case '4':
+			contenu_section = optarg;
+			break;
+		case '5':
+			relocation_flag = "true";
+			break;
+		case 'f':
+			file = optarg;
+			break;
 		case 'h':
 			usage(argv[0]);
 			exit(0);
@@ -79,6 +84,31 @@ int main(int argc, char *argv[]) {
 			exit(1);
 		}
 	}
+
+	if (file == NULL) {
+		fprintf(stderr, "Il faut spécifier un fichier objet à charger avec le flag --f !\n\n");
+		usage(argv[0]);
+		exit(1);
+	}
+
+	if (header_flag != NULL) {
+		affichage_entete(file);
+	}
+	if (section_flag != NULL) {
+		affichage_section(file, false);
+	}
+	if (symbol_flag != NULL) {
+		affichage_table_symboles(file, false);
+	}
+	if (contenu_section != NULL) {
+		int select_section = atoi(contenu_section);
+		affichage_contenu_section(file, select_section);
+	}
+	if (relocation_flag != NULL) {
+		affichage_table_reimplentation(file);
+	}
+	
+
 
 	return 0;
 }

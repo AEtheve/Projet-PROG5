@@ -102,6 +102,12 @@ Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2) {
                 result->nb_reloc++;
                 section2->entree.link = findSymTab(result);
                 section2->entree.info = positionSectionWithoutRel(result, section2->name);
+
+                section2->entree.offset = getNextOffset(result);
+
+                section2->data = malloc(section2->entree.size);
+                memcpy(section2->data, tmp, section2->entree.size);
+
                 addSection(result, *section2);
             } else { 
                 /* Fusion des sections de ELF1 et ELF2 */
@@ -143,6 +149,11 @@ Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2) {
                 result->relocation_header[index_relocation_elf1].entree = tmp;
                 elf1->section_header[testElf1].entree.link = findSymTab(result);
                 elf1->section_header[testElf1].entree.info = positionSectionWithoutRel(result, elf1->section_header[testElf1].name);
+                
+                elf1->section_header[testElf1].entree.offset = getNextOffset(result);
+
+                elf1->section_header[testElf1].data = malloc(size1+size2);
+                memcpy(elf1->section_header[testElf1].data, tmp, size1+size2);
                 addSection(result, elf1->section_header[testElf1]);
             }
             compt++;
@@ -166,7 +177,7 @@ void affichageTestFusionRelocation (char* nom_fichier1, char* nom_fichier2){
 
     Elf* result;
     result = fusionSection(elf1, elf2);
-    result = fusion_table_symboles(elf1, elf2, result);
+    result = fusionTableSymboles(elf1, elf2, result);
 
     result = fusionRelocation(result, elf1, elf2);
     
