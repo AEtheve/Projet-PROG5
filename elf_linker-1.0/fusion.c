@@ -75,7 +75,7 @@ WriteError writeElf(FILE* f_out, Elf* content, bool strict_mode) {
 int main(int argc, char **argv) {
     if (argc != 3)
     {
-        printf("Usage: %s <fichier1> <fichier2> \r \n", argv[0]);
+        printf("Usage: %s <fichier1> <fichier2> \n", argv[0]);
         exit(1);
     }
 
