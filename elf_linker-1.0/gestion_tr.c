@@ -1,10 +1,8 @@
 #include "gestion_tr.h"
 
-char *reloc_type(uint32_t valeur)
-{
+char *reloc_type(uint32_t valeur){
     char *type;
-    switch ((uint8_t)valeur)
-    {
+    switch ((uint8_t)valeur){
     case 0:
         type = "R_ARM_NONE";
         break;
@@ -147,7 +145,7 @@ int getNbRelocSec(Elf* elf){
 }
 
 Elf* getTableRelocation(Elf *elf, FILE* f_bin){
-
+    
     int nb_relloc = getNbRelocSec(elf);
     int compt = 0;
     // ElfRelocation* reloc = malloc(nb_relloc * sizeof(ElfRelocation));
@@ -185,8 +183,7 @@ Elf* getTableRelocation(Elf *elf, FILE* f_bin){
     return elf;
 }
 
-void affichageTableReimplentation(Elf *elf)
-{
+void affichageTableReimplentation(Elf *elf){
     int compt=0;
     for (int i = 0; i < elf->header->e_section_header_entry_count; i++)
     {
@@ -235,9 +232,6 @@ void affichageTableReimplentation(Elf *elf)
 
 
 
-
-
-
 void gestion_table_reimplentation(char* nom_fichier){
     FILE* f = ouvertureFichier(nom_fichier, "rb");
     Elf* elf = valeurEntete(f);
@@ -245,15 +239,10 @@ void gestion_table_reimplentation(char* nom_fichier){
     elf = getTableSymboles(elf, f);
 
     elf = getTableRelocation(elf, f);
+
     affichageTableReimplentation(elf);
 
     freeElf(elf);
 
     fermetureFichier(f);
 }
-
-/* int main(int argc, char** argv){
-
-     gestion_table_reimplentation(argv[1]);
-     return 0;
-} */

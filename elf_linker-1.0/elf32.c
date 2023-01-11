@@ -1,18 +1,5 @@
 #include "elf32.h"
 
-FILE* ouvertureFichier(char* nomFichier, char* mode){
-    FILE* fichier = fopen(nomFichier, mode);
-    if (fichier == NULL){
-        printf("Erreur lors de l'ouverture du fichier %s\n", nomFichier);
-        exit(1);
-    }
-    return fichier;
-}
-
-void fermetureFichier(FILE* fichier){
-    fclose(fichier);
-}
-
 Elf* allocElf(){
     Elf* elf = (Elf*)malloc(sizeof(Elf));
     elf->header=NULL;

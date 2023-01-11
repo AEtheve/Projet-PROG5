@@ -1,9 +1,6 @@
-#ifndef _gestion_CONTENU_SECTION_H_
-#define _gestion_CONTENU_SECTION_H_
+#ifndef _GESTION_CONTENU_SECTION_H_
+#define _GESTION_CONTENU_SECTION_H_
 
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "elf32.h"
 
 void affichageContenuSection(Elf* elf, FILE* f_bin, int select_section);

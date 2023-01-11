@@ -1,11 +1,7 @@
-#ifndef _gestion_ENTETE_H_
-#define _gestion_ENTETE_H_
+#ifndef _GESTION_ENTETE_H_
+#define _GESTION_ENTETE_H_
 
 #include "util.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include "elf32.h"
 
 /* Recupere les valeurs d'entete du fichier au format ELF et renvoi
 un pointeur elf contenant ses valeurs */

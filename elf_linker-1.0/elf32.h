@@ -83,9 +83,6 @@ typedef struct {
     int nb_symbol;
 } Elf;
 
-FILE* ouvertureFichier(char* nomFichier, char* mode);
-
-void fermetureFichier(FILE* fichier);
 
 Elf* allocElf();
 

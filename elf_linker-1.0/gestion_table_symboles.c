@@ -1,7 +1,6 @@
 #include "gestion_table_symboles.h"
 
-int findSymTab(Elf *elf)
-{
+int findSymTab(Elf *elf) {
     for (int i = 0; i < elf->header->e_section_header_entry_count; i++)
     {
         if (elf->section_header[i].entree.type == 2)
@@ -12,8 +11,7 @@ int findSymTab(Elf *elf)
     return -1;
 }
 
-char *afficheType(ElfSymbole *ts, int num)
-{
+char *afficheType(ElfSymbole *ts, int num) {
     char *type = malloc(10);
     switch ((ts + num)->info & 0x0f)
     {
@@ -45,8 +43,7 @@ char *afficheType(ElfSymbole *ts, int num)
     return type;
 }
 
-char *afficheBind(ElfSymbole *ts, int num)
-{
+char *afficheBind(ElfSymbole *ts, int num) {
     char *bind = malloc(10);
     switch ((ts + num)->info >> 4)
     {
@@ -72,8 +69,7 @@ char *afficheBind(ElfSymbole *ts, int num)
     return bind;
 }
 
-char *afficheVis(ElfSymbole *ts, int num)
-{
+char *afficheVis(ElfSymbole *ts, int num) {
     char *vis = malloc(10);
     switch ((ts + num)->other)
     {
@@ -105,8 +101,7 @@ char *afficheVis(ElfSymbole *ts, int num)
     return vis;
 }
 
-char *afficheNdx(int num)
-{
+char *afficheNdx(int num) {
     char *ndx = malloc(10);
     switch (num)
     {
@@ -205,9 +200,3 @@ void gestion_table_symboles(char *nom_fichier, bool arm_cmd_version)
 
     fermetureFichier(f);
 }
-
-// int main(int argc, char **argv)
-// {
-//     gestion_table_symboles(argv[1], false);
-//     return 0;
-// }

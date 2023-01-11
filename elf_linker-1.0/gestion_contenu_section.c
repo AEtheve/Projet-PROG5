@@ -73,30 +73,3 @@ void gestion_contenu_section(char* nom_fichier, int select_section){
   affichageContenuSection(elf, f, select_section);
   fermetureFichier(f);
 }
-
-// int main(int argc, char** argv){
-//   gestion_contenu_section(argv[1], 0);
-//   gestion_contenu_section(argv[1], 1);
-//   gestion_contenu_section(argv[1], 2);
-//   gestion_contenu_section(argv[1], 3);
-//   gestion_contenu_section(argv[1], 4);
-//   gestion_contenu_section(argv[1], 5);
-//   gestion_contenu_section(argv[1], 6);
-//   gestion_contenu_section(argv[1], 7);
-//   gestion_contenu_section(argv[1], 8);
-//   gestion_contenu_section(argv[1], 9);
-//   gestion_contenu_section(argv[1], 10);
-//   gestion_contenu_section(argv[1], 11);
-//   gestion_contenu_section(argv[1], 12);
-//   gestion_contenu_section(argv[1], 13);
-//   gestion_contenu_section(argv[1], 14);
-//   gestion_contenu_section(argv[1], 15);
-//   gestion_contenu_section(argv[1], 16);
-//   gestion_contenu_section(argv[1], 17);
-//   gestion_contenu_section(argv[1], 18);
-//   gestion_contenu_section(argv[1], 19);
-//   gestion_contenu_section(argv[1], 20);
-//   gestion_contenu_section(argv[1], 21);
-//   gestion_contenu_section(argv[1], 22);
-//   return 0;
-// }
