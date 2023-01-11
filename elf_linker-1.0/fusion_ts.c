@@ -197,14 +197,21 @@ Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion)
   new_section.entree.info = file1->section_header[symtabFile1_index].entree.info;
   new_section.entree.link = strtab_index;
   new_section.entree.name = file1->section_header[symtabFile1_index].entree.name;
+  
   new_section.entree.size = elf_fusion->nb_symbol * sizeof(ElfSymbole);
   new_section.entree.offset = getNextOffset(elf_fusion);
  
-    new_section.data = malloc(new_section.entree.size);
+  new_section.data = malloc(new_section.entree.size);
+
   for (int i = 0; i < elf_fusion->nb_symbol; i++)
   {
-    memcpy(new_section.data + i * sizeof(ElfSymbole), &elf_fusion->symbol_header[i], sizeof(ElfSymbole));
+    ElfSymbole symbole = elf_fusion->symbol_header[i];
+    symbole.name = reverse_4(symbole.name);
+    symbole.value = reverse_4(symbole.value);
+    symbole.size = reverse_4(symbole.size);
   }
+
+  memcpy(new_section.data, elf_fusion->symbol_header, sizeof(ElfSymbole)*elf_fusion->nb_symbol);
   elf_fusion = addSection(elf_fusion, new_section);
 
 
