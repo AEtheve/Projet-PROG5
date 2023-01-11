@@ -222,10 +222,3 @@ void gestion_section(char* nom_fichier, bool arm_cmd_version){
     affichageSection(elf, arm_cmd_version);
     fermetureFichier(f);
 }
-
-/* int main(int argc, char* argv[]){
-    
-    gestion_section(argv[1],false);
-    
-    return 0;
-} */

@@ -217,38 +217,3 @@ Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion)
 
   return elf_fusion;
 }
-
-/* int main(int argc, char *argv[])
-{
-  if (argc != 3)
-  {
-    printf("Usage: %s <fichier1> <fichier2> \r \n", argv[0]);
-    exit(1);
-  }
-
-  FILE *f1 = ouvertureFichier(argv[1], "rb");
-  FILE *f2 = ouvertureFichier(argv[2], "rb");
-
-  Elf *elf1 = valeurEntete(f1);
-  Elf *elf2 = valeurEntete(f2);
-
-  elf1 = valeurSection(elf1, f1);
-  elf2 = valeurSection(elf2, f2);
-
-  elf1 = getTableSymboles(elf1, f1);
-  elf2 = getTableSymboles(elf2, f2);
-
-
-  Elf* elf_fusion = fusionSection(elf1, elf2);
-
-  Elf *fusion = fusionTableSymboles(elf1, elf2, elf_fusion);
-
-  affichageTableSymbole(fusion);
-
-  affichageSection(fusion, false);
-
-  fermetureFichier(f1);
-  fermetureFichier(f2);
-  return 0;
-} */
-

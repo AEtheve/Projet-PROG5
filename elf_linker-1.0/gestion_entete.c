@@ -13,14 +13,6 @@ void printMagic(ElfHeader *header)
 
 void printClass(ElfHeader *header)
 {
-    // printf("  Class:                             ");
-    // if (header[4] == 1){
-    //     printf("ELF32\n");
-    // } else if (header[4] == 2){
-    //     printf("ELF64\n");
-    // } else {
-    //     printf("Aucun\n");
-    // }
 
     printf("  Class:                             ");
     if (header->e_ident[4] == 1)
@@ -37,16 +29,6 @@ void printClass(ElfHeader *header)
     }
 }
 
-// void printData(unsigned char *header){
-//     printf("  Data:                              ");
-//     if (header[5] == 1){
-//         printf("2's complement, little endian\n");
-//     } else if (header[5] == 2){
-//         printf("2's complement, big endian\n");
-//     } else {
-//         printf("Aucun\n");
-//     }
-// }
 
 void printData(ElfHeader *header)
 {
@@ -77,54 +59,6 @@ void printVersion(ElfHeader *header)
         printf("Aucun\n");
     }
 }
-
-// void printAbi(int val){
-//     printf("  OS/ABI:                            ");
-//     switch (val){
-//         case 0:
-//             printf("UNIX - System V\n");
-//             break;
-//         case 1:
-//             printf("HP-UX\n");
-//             break;
-//         case 2:
-//             printf("NetBSD\n");
-//             break;
-//         case 3:
-//             printf("Linux\n");
-//             break;
-//         case 6:
-//             printf("Solaris\n");
-//             break;
-//         case 7:
-//             printf("IBM AIX\n");
-//             break;
-//         case 8:
-//             printf("SGI IRIX\n");
-//             break;
-//         case 9:
-//             printf("FreeBSD\n");
-//             break;
-//         case 10:
-//             printf("CompaqTRU64\n");
-//             break;
-//         case 11:
-//             printf("Novell Modesto\n");
-//             break;
-//         case 12:
-//             printf("OpenBSD\n");
-//             break;
-//         case 64:
-//             printf("ARM\n");
-//             break;
-//         case 97:
-//             printf("ARM AArch64\n");
-//             break;
-//         default:
-//             printf("Aucun\n");
-//             break;
-//     }
-// }
 
 
 void printAbi(ElfHeader *header)
@@ -213,51 +147,6 @@ void printType(ElfHeader *header)
         exit(1);
     }
 }
-
-// void printMachine(unsigned char *header)
-// {
-//     printf("  Machine:                           ");
-//     if (header[19] == 1)
-//     {
-//         printf("AT&T WE 32100\n");
-//     }
-//     else if (header[19] == 2)
-//     {
-//         printf("SPARC\n");
-//     }
-//     else if (header[19] == 3)
-//     {
-//         printf("Intel Architecture\n");
-//     }
-//     else if (header[19] == 4)
-//     {
-//         printf("Motorola 68000\n");
-//     }
-//     else if (header[19] == 5)
-//     {
-//         printf("Motorola 88000\n");
-//     }
-//     else if (header[19] == 7)
-//     {
-//         printf("Intel 80860\n");
-//     }
-//     else if (header[19] == 8)
-//     {
-//         printf("MIPS RS3000 Big-endian\n");
-//     }
-//     else if (header[19] == 10)
-//     {
-//         printf("MIPS RS4000 Big-endian\n");
-//     }
-//     else if (header[19] == 40)
-//     {
-//         printf("ARM\n");
-//     }
-//     else
-//     {
-//         printf("\n");
-//     }
-// }
 
 void printMachine(ElfHeader *header)
 {
@@ -419,16 +308,3 @@ void gestion_entete(char *nom_fichier){
     affichageEntete(elf);
     fermetureFichier(f);
 }
-
-// int main(int argc, char *argv[])
-// {
-//     if (argc != 2)
-//     {
-//         printf("Usage: %s <fichier ELF>\n", argv[0]);
-//         exit(1);
-//     }
-
-//     gestion_entete(argv[1]);
-
-//     return 0;
-// }

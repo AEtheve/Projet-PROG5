@@ -148,7 +148,6 @@ Elf* getTableRelocation(Elf *elf, FILE* f_bin){
     
     int nb_relloc = getNbRelocSec(elf);
     int compt = 0;
-    // ElfRelocation* reloc = malloc(nb_relloc * sizeof(ElfRelocation));
     ElfRelocation* reloc = allocElfRelocation(nb_relloc);
     if (reloc==NULL){
         printf("Erreur d'allocation de mémoire");
@@ -159,7 +158,6 @@ Elf* getTableRelocation(Elf *elf, FILE* f_bin){
     for (int i = 0; i < elf->header->e_section_header_entry_count; i++){
     
         if (elf->section_header[i].entree.type == 9){
-            // RelocationHeader* rel_tmp = (RelocationHeader*)malloc(sizeof(RelocationHeader) * elf->section_header[i].entree.size / 8);
             RelocationHeader* rel_tmp = allocRelocationHeader(elf->section_header[i].entree.size / 8);
 
             fseek(f_bin, elf->section_header[i].entree.offset, SEEK_SET);
