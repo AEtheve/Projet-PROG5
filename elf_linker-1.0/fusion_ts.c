@@ -1,9 +1,12 @@
+<<<<<<< Updated upstream
 #include <stdio.h>
 #include <stdlib.h>
 #include "affichage_table_symboles.h"
 #include "affichage_section.h"
 #include "util.h"
 #include "fusion_section.h"
+=======
+>>>>>>> Stashed changes
 #include "fusion_ts.h"
 
 int getOffsetMax(Elf *elf_fusion){
@@ -194,7 +197,7 @@ Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion)
   new_section.entree.adress = file1->section_header[symtabFile1_index].entree.adress;
   new_section.entree.entsize = file1->section_header[symtabFile1_index].entree.entsize;
   new_section.entree.flags = file1->section_header[symtabFile1_index].entree.flags;
-  new_section.entree.info = file1->section_header[symtabFile1_index].entree.info;
+  new_section.entree.info = 35;
   new_section.entree.link = strtab_index;
   new_section.entree.name = file1->section_header[symtabFile1_index].entree.name;
   new_section.entree.size = elf_fusion->nb_symbol * sizeof(ElfSymbole);
@@ -203,8 +206,19 @@ Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion)
     new_section.data = malloc(new_section.entree.size);
   for (int i = 0; i < elf_fusion->nb_symbol; i++)
   {
+<<<<<<< Updated upstream
     memcpy(new_section.data + i * sizeof(ElfSymbole), &elf_fusion->symbol_header[i], sizeof(ElfSymbole));
   }
+=======
+    ElfSymbole symbole = elf_fusion->symbol_header[i];
+    symbole.name = reverse_4(symbole.name);
+    symbole.value = reverse_4(symbole.value);
+    symbole.size = reverse_4(symbole.size);
+    symbole.ndx = reverse_2(symbole.ndx);
+    memcpy(new_section.data + i * sizeof(ElfSymbole), &symbole, sizeof(ElfSymbole));
+  }
+
+>>>>>>> Stashed changes
   elf_fusion = addSection(elf_fusion, new_section);
 
 

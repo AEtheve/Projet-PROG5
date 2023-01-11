@@ -1,0 +1,45 @@
+
+Relocation section '.rel.text' at offset 0x554 contains 2 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000004  0000121d R_ARM_JUMP24      00000000   puts
+00000008  00000502 R_ARM_ABS32       00000000   .rodata.str1.4
+
+Relocation section '.rel.debug_info' at offset 0x564 contains 23 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000006  00000a02 R_ARM_ABS32       00000000   .debug_abbrev
+0000000c  00000d02 R_ARM_ABS32       00000000   .debug_str
+00000011  00000d02 R_ARM_ABS32       00000000   .debug_str
+00000015  00000d02 R_ARM_ABS32       00000000   .debug_str
+00000019  00000202 R_ARM_ABS32       00000000   .text
+00000021  00000c02 R_ARM_ABS32       00000000   .debug_line
+00000028  00000d02 R_ARM_ABS32       00000000   .debug_str
+0000002f  00000d02 R_ARM_ABS32       00000000   .debug_str
+00000036  00000d02 R_ARM_ABS32       00000000   .debug_str
+0000003d  00000d02 R_ARM_ABS32       00000000   .debug_str
+00000044  00000d02 R_ARM_ABS32       00000000   .debug_str
+0000004b  00000d02 R_ARM_ABS32       00000000   .debug_str
+00000052  00000d02 R_ARM_ABS32       00000000   .debug_str
+00000059  00000d02 R_ARM_ABS32       00000000   .debug_str
+00000067  00000d02 R_ARM_ABS32       00000000   .debug_str
+0000006e  00000d02 R_ARM_ABS32       00000000   .debug_str
+00000075  00000d02 R_ARM_ABS32       00000000   .debug_str
+0000007a  00000d02 R_ARM_ABS32       00000000   .debug_str
+00000081  00000202 R_ARM_ABS32       00000000   .text
+00000090  00000202 R_ARM_ABS32       00000000   .text
+0000009d  00000502 R_ARM_ABS32       00000000   .rodata.str1.4
+000000a4  00000d02 R_ARM_ABS32       00000000   .debug_str
+000000a8  00000d02 R_ARM_ABS32       00000000   .debug_str
+
+Relocation section '.rel.debug_aranges' at offset 0x61c contains 2 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000006  00000902 R_ARM_ABS32       00000000   .debug_info
+00000010  00000202 R_ARM_ABS32       00000000   .text
+
+Relocation section '.rel.debug_line' at offset 0x62c contains 1 entry:
+ Offset     Info    Type            Sym.Value  Sym. Name
+0000003b  00000202 R_ARM_ABS32       00000000   .text
+
+Relocation section '.rel.debug_frame' at offset 0x634 contains 2 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000014  00000e02 R_ARM_ABS32       00000000   .debug_frame
+00000018  00000202 R_ARM_ABS32       00000000   .text

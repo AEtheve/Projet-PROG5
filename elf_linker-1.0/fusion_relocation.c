@@ -1,5 +1,21 @@
 #include "fusion_relocation.h"
 
+<<<<<<< Updated upstream
+=======
+void ecritureDataRelocation(uint8_t* data, RelocationHeader* reloc, int taille){
+    for(int i=0; i < taille/8; i++){
+        reloc[i].info = reverse_4(reloc[i].info);
+        reloc[i].offset = reverse_4(reloc[i].offset);
+    }
+
+    memcpy(data, reloc, taille);
+
+    for(int i=0; i < taille/8; i++){
+        reloc[i].info = reverse_4(reloc[i].info);
+        reloc[i].offset = reverse_4(reloc[i].offset);
+    }
+}
+>>>>>>> Stashed changes
 
 int isTheSectionInSecondTable(Elf* elf, char *name){
     for (int i=0;i<elf->header->e_section_header_entry_count; i++){

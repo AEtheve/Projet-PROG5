@@ -1,0 +1,2 @@
+/usr/bin/arm-none-eabi-readelf
+PASS test_gestion_entete (exit status: 0)
