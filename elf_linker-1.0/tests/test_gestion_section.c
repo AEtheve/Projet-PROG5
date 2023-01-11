@@ -3,7 +3,7 @@
 #include <string.h>
 #include "CuTest/CuTest.h"
 #include "./utils.h"
-#include "../affichage_section.h"
+#include "../gestion_section.h"
 
 void TestAffichageSection(CuTest *tc)
 {
@@ -16,7 +16,7 @@ void TestAffichageSection(CuTest *tc)
     }
 
     writeStdout();
-    affichage_section("./tests/file2.o", arm_cmd_version);
+    gestion_section("./tests/file2.o", arm_cmd_version);
     RunTest("./tests/file2_section.expected", tc);
     clearStdout();
 }

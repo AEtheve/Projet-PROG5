@@ -3,7 +3,7 @@
 #include <string.h>
 #include "CuTest/CuTest.h"
 #include "./utils.h"
-#include "../affichage_table_symboles.h"
+#include "../gestion_table_symboles.h"
 
 void TestAffichageTableSymboles1(CuTest *tc)
 {
@@ -15,7 +15,7 @@ void TestAffichageTableSymboles1(CuTest *tc)
         system("arm-eabi-readelf -s ./tests/file2.o > ./tests/file2_affiche_tab_symb.expected");
     }
     writeStdout();
-    affichage_table_symboles("./tests/file2.o", arm_cmd_version);
+    gestion_table_symboles("./tests/file2.o", arm_cmd_version);
     RunTest("./tests/file2_affiche_tab_symb.expected", tc);
     clearStdout();
 }
@@ -31,7 +31,7 @@ void TestAffichageTableSymboles2(CuTest *tc)
         system("arm-eabi-readelf -s ./tests/file1.o > ./tests/file1_affiche_tab_symb.expected");
     }
     writeStdout();
-    affichage_table_symboles("./tests/file1.o", arm_cmd_version);
+    gestion_table_symboles("./tests/file1.o", arm_cmd_version);
     RunTest("./tests/file1_affiche_tab_symb.expected", tc);
     clearStdout();
 }

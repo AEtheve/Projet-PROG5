@@ -1,4 +1,4 @@
-#include "affichage_section.h"
+#include "gestion_section.h"
 
 void printAsciiLine(uint8_t *line, int size) {
   for (int k = 0; k < size; k++) {
@@ -66,7 +66,7 @@ void affichageContenuSection(Elf* elf, FILE* f_bin, int select_section){;
   }
 }
 
-void affichage_contenu_section(char* nom_fichier, int select_section){
+void gestion_contenu_section(char* nom_fichier, int select_section){
   FILE* f = ouvertureFichier(nom_fichier, "rb");
   Elf* elf = valeurEntete(f);
   elf = valeurSection(elf, f);
@@ -75,28 +75,28 @@ void affichage_contenu_section(char* nom_fichier, int select_section){
 }
 
 // int main(int argc, char** argv){
-//   affichage_contenu_section(argv[1], 0);
-//   affichage_contenu_section(argv[1], 1);
-//   affichage_contenu_section(argv[1], 2);
-//   affichage_contenu_section(argv[1], 3);
-//   affichage_contenu_section(argv[1], 4);
-//   affichage_contenu_section(argv[1], 5);
-//   affichage_contenu_section(argv[1], 6);
-//   affichage_contenu_section(argv[1], 7);
-//   affichage_contenu_section(argv[1], 8);
-//   affichage_contenu_section(argv[1], 9);
-//   affichage_contenu_section(argv[1], 10);
-//   affichage_contenu_section(argv[1], 11);
-//   affichage_contenu_section(argv[1], 12);
-//   affichage_contenu_section(argv[1], 13);
-//   affichage_contenu_section(argv[1], 14);
-//   affichage_contenu_section(argv[1], 15);
-//   affichage_contenu_section(argv[1], 16);
-//   affichage_contenu_section(argv[1], 17);
-//   affichage_contenu_section(argv[1], 18);
-//   affichage_contenu_section(argv[1], 19);
-//   affichage_contenu_section(argv[1], 20);
-//   affichage_contenu_section(argv[1], 21);
-//   affichage_contenu_section(argv[1], 22);
+//   gestion_contenu_section(argv[1], 0);
+//   gestion_contenu_section(argv[1], 1);
+//   gestion_contenu_section(argv[1], 2);
+//   gestion_contenu_section(argv[1], 3);
+//   gestion_contenu_section(argv[1], 4);
+//   gestion_contenu_section(argv[1], 5);
+//   gestion_contenu_section(argv[1], 6);
+//   gestion_contenu_section(argv[1], 7);
+//   gestion_contenu_section(argv[1], 8);
+//   gestion_contenu_section(argv[1], 9);
+//   gestion_contenu_section(argv[1], 10);
+//   gestion_contenu_section(argv[1], 11);
+//   gestion_contenu_section(argv[1], 12);
+//   gestion_contenu_section(argv[1], 13);
+//   gestion_contenu_section(argv[1], 14);
+//   gestion_contenu_section(argv[1], 15);
+//   gestion_contenu_section(argv[1], 16);
+//   gestion_contenu_section(argv[1], 17);
+//   gestion_contenu_section(argv[1], 18);
+//   gestion_contenu_section(argv[1], 19);
+//   gestion_contenu_section(argv[1], 20);
+//   gestion_contenu_section(argv[1], 21);
+//   gestion_contenu_section(argv[1], 22);
 //   return 0;
 // }

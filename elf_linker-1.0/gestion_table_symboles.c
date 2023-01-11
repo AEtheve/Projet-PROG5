@@ -1,4 +1,4 @@
-#include "affichage_table_symboles.h"
+#include "gestion_table_symboles.h"
 
 int findSymTab(Elf *elf)
 {
@@ -194,7 +194,7 @@ void affichageTableSymbole(Elf *elf)
     }
 }
 
-void affichage_table_symboles(char *nom_fichier, bool arm_cmd_version)
+void gestion_table_symboles(char *nom_fichier, bool arm_cmd_version)
 {
     FILE *f = ouvertureFichier(nom_fichier, "rb");
     Elf *elf = valeurEntete(f);
@@ -208,6 +208,6 @@ void affichage_table_symboles(char *nom_fichier, bool arm_cmd_version)
 
 // int main(int argc, char **argv)
 // {
-//     affichage_table_symboles(argv[1], false);
+//     gestion_table_symboles(argv[1], false);
 //     return 0;
 // }

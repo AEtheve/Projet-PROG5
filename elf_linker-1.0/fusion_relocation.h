@@ -1,7 +1,7 @@
 #ifndef _FUSION_RELOCATION_H_
 #define _FUSION_RELOCATION_H_
 
-#include "affichage_tr.h"
+#include "gestion_tr.h"
 #include "fusion_ts.h"
 
 

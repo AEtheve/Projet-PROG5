@@ -1,7 +1,7 @@
 #ifndef _FUSION_TS_H_
 #define _FUSION_TS_H_
 
-#include "affichage_table_symboles.h"
+#include "gestion_table_symboles.h"
 #include "fusion_section.h"
 
 /* Retourne l'offset maximal rencontré dans toutes les sections de la structure ELF passée en argument */
