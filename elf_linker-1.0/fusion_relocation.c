@@ -1,5 +1,20 @@
 #include "fusion_relocation.h"
 
+void ecritureDataRelocation(uint8_t* data, RelocationHeader* reloc, int taille){
+    for(int i=0; i < taille/8; i++){
+        printf("TAILE %d\n",taille);
+        reloc[i].info = reverse_4(reloc[i].info);
+        reloc[i].offset = reverse_4(reloc[i].offset);
+    }
+
+    memcpy(data, reloc, taille);
+
+    for(int i=0; i < taille/8; i++){
+        printf("TAILE %d\n",taille);
+        reloc[i].info = reverse_4(reloc[i].info);
+        reloc[i].offset = reverse_4(reloc[i].offset);
+    }
+}
 
 int isTheSectionInSecondTable(Elf* elf, char *name){
     for (int i=0;i<elf->header->e_section_header_entry_count; i++){
@@ -106,9 +121,9 @@ Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2) {
                 section2->entree.offset = getNextOffset(result);
 
                 section2->data = malloc(section2->entree.size);
-                memcpy(section2->data, tmp, section2->entree.size);
+                ecritureDataRelocation(section2->data, elf2->relocation_header[i].entree, section2->entree.size);
 
-                addSection(result, *section2);
+                addSection(result, *section2);  
             } else { 
                 /* Fusion des sections de ELF1 et ELF2 */
                 int size1 = elf1->section_header[testElf1].entree.size;
@@ -153,7 +168,7 @@ Elf* fusionRelocation(Elf* result, Elf* elf1, Elf* elf2) {
                 elf1->section_header[testElf1].entree.offset = getNextOffset(result);
 
                 elf1->section_header[testElf1].data = malloc(size1+size2);
-                memcpy(elf1->section_header[testElf1].data, tmp, size1+size2);
+                ecritureDataRelocation(elf1->section_header[testElf1].data, tmp, size1+size2);
                 addSection(result, elf1->section_header[testElf1]);
             }
             compt++;

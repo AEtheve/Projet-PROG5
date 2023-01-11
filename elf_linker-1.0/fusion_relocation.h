@@ -4,6 +4,8 @@
 #include "gestion_tr.h"
 #include "fusion_ts.h"
 
+/* Fonction d'écriture de la structure relocation dans data*/
+void ecritureDataRelocation(uint8_t* data, RelocationHeader* reloc, int taille);
 
 /*Retourne l'index de la section de nom passé en argument dans la table des sections de la structure ELF passée en argument */
 int isTheSectionInSecondTable(Elf* elf, char *name);
