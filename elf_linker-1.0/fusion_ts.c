@@ -209,9 +209,10 @@ Elf *fusionTableSymboles(Elf *file1, Elf *file2, Elf *elf_fusion)
     symbole.name = reverse_4(symbole.name);
     symbole.value = reverse_4(symbole.value);
     symbole.size = reverse_4(symbole.size);
+    symbole.ndx = reverse_2(symbole.ndx);
+    memcpy(new_section.data + i * sizeof(ElfSymbole), &symbole, sizeof(ElfSymbole));
   }
 
-  memcpy(new_section.data, elf_fusion->symbol_header, sizeof(ElfSymbole)*elf_fusion->nb_symbol);
   elf_fusion = addSection(elf_fusion, new_section);
 
 
